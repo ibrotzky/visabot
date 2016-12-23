@@ -1,37 +1,67 @@
 module.exports = function (Bot) {
     Bot.calculate = function (applicant, cb) {
         var ee = new calculator_EE20161119();
+        /*
+                // Determine if calculate as married or single
+                ee.married = applicant.married;
+                ee.spouseCanadianCitizen = applicant.spouseWorkInCanada;
+                ee.spouseCommingAlong = applicant.spouseCommingAlong;
+        
+                // Core/Humam Capital Factors
+                ee.age = applicant.age;
+                ee.educationLevel = applicant.educationLevel;
+                ee.firstLanguage.test = applicant.languageTest;
+                ee.firstLanguage.speaking = applicant.firstLanguage.speaking;
+                ee.firstLanguage.listening = applicant.firstLanguage.listening;
+                ee.firstLanguage.reading = applicant.firstLanguage.reading;
+                ee.firstLanguage.writting = applicant.firstLanguage.writting;
+                ee.workInCanada = applicant.workInCanada;
+                ee.workExperience = applicant.workExperience;
+        
+                // Spouse Factors
+                ee.spouseEducationLevel = applicant.spouse.educationLevel;
+                ee.spouseLanguage.test = applicant.languageTest;
+                ee.spouseLanguage.speaking = applicant.spouse.speaking;
+                ee.spouseLanguage.listening = applicant.spouse.speaking;
+                ee.spouseLanguage.reading = applicant.spouse.speaking;
+                ee.spouseLanguage.writting = applicant.spouse.writting;
+                ee.spouseWorkInCanada = applicant.spouse.workInCanada;
+        
+                // Skill Transferability Factors
+                ee.certificateFromProvince = applicant.certificateFromProvince;
+                ee.nocJobOffer = applicant.nocJobOffer;
+                ee.nomination = applicant.nomination;
+        */
 
         // Determine if calculate as married or single
-        ee.married = applicant.married;
-        ee.spouseCanadianCitizen = applicant.spouseWorkInCanada;
-        ee.spouseCommingAlong = applicant.spouseCommingAlong;
+        ee.married = true;
+        ee.spouseCanadianCitizen = false;
+        ee.spouseCommingAlong = true;
 
         // Core/Humam Capital Factors
-        ee.age = applicant.age;
-        ee.educationLevel = applicant.educationLevel;
-        ee.firstLanguage.test = applicant.languageTest;
-        ee.firstLanguage.speaking = applicant.firstLanguage.speaking;
-        ee.firstLanguage.listening = applicant.firstLanguage.listening;
-        ee.firstLanguage.reading = applicant.firstLanguage.reading;
-        ee.firstLanguage.writting = applicant.firstLanguage.writting;
-        ee.workInCanada = applicant.workInCanada;
-        ee.workExperience = applicant.workExperience;
+        ee.age = 33;
+        ee.educationLevel = educationLevel.BachelorsDegree;
+        ee.firstLanguage.test = languageTest.ielts;
+        ee.firstLanguage.speaking = 7;
+        ee.firstLanguage.listening = 8;
+        ee.firstLanguage.reading = 7;
+        ee.firstLanguage.writting = 7;
+        ee.workInCanada = 0;
+        ee.workExperience = 13;
 
-        // Spouse Factors
-        ee.spouseEducationLevel = applicant.spouse.educationLevel;
-        ee.spouseLanguage.test = applicant.languageTest;
-        ee.spouseLanguage.speaking = applicant.spouse.speaking;
-        ee.spouseLanguage.listening = applicant.spouse.speaking;
-        ee.spouseLanguage.reading = applicant.spouse.speaking;
-        ee.spouseLanguage.writting = applicant.spouse.writting;
-        ee.spouseWorkInCanada = applicant.spouse.workInCanada;
+        //Spouse Factors
+        ee.spouseEducationLevel = educationLevel.BachelorsDegree;
+        ee.spouseLanguage.test = languageTest.ielts;
+        ee.spouseLanguage.speaking = 7;
+        ee.spouseLanguage.listening = 8;
+        ee.spouseLanguage.reading = 7;
+        ee.spouseLanguage.writting = 7;
+        ee.spouseWorkInCanada = 0;
 
-        // Skill Transferability Factors
-        ee.certificateFromProvince = applicant.certificateFromProvince;
-        ee.nocJobOffer = applicant.nocJobOffer;
-        ee.nomination = applicant.nomination;
-
+        //Skill Transferability Factors
+        ee.certificateFromProvince = false;
+        ee.nocJobOffer = null;
+        ee.nomination = false;
         var scores = ee.calculate();
         //console.log(scores);
         var response = 'Your score is ' + scores.total;
@@ -1656,5 +1686,5 @@ module.exports = function (Bot) {
 
             return (result.length === 0 ? true : result);
         }
-    }    
+    }
 };
