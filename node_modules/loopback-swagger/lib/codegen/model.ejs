@@ -1,0 +1,65 @@
+<%
+function printParams() {
+    var params = [];
+    for (var j = 0; j < op.accepts.length; j++) {
+        var param = op.accepts[j];
+        var type = param.type || '*';
+        if (Array.isArray(param.type)) {
+            type = param.type[0] + '[]';
+        }
+        params.push(' * @param {' + type + '} ' + param.arg + ' ' + param.description);
+    }
+    return params.join('\n');
+}
+
+
+function printMethod() {
+    var className = modelName || 'Model';
+    var method = className + '.' + op.operationId
+            + ' = function(';
+    var params = op.accepts.map(function(a) {
+        return a.arg;
+    });
+    params.push('callback');
+    return method + params.join(', ') + ') {';
+}
+
+%>
+module.exports = function(<%- modelName || 'Model' %>) {
+<%
+var i;
+for(var i = 0; i < operations.length; i++) {
+  var op = operations[i];
+%>
+/**
+ * <%- op.description || op.summary || op.operationId %>
+<%- printParams() %>
+ * @callback {Function} callback Callback function
+ * @param {Error|string} err Error object
+ * @param {<%- op.returnType %>} result Result object
+ */
+<%- printMethod() %>
+  // Replace the code below with your implementation.
+  // Please make sure the callback is invoked.
+  process.nextTick(function() {
+    var err = new Error('Not implemented');
+    callback(err);
+  });
+  <% for(var k = 0; k < op.errorTypes.length; k++) { var et = op.errorTypes[k]; %>
+  /*
+  var err<%- k %> = new Error('<%- et.message %>');
+  err<%- k %>.statusCode = <%- et.statusCode %>;
+  return cb(err<%- k %>);
+  */ <% } %>
+}
+<% } %>
+
+<%
+for(i = 0; i < operations.length; i++) {
+    var op = operations[i];
+%>
+<%- modelName || 'Model' %>.remoteMethod('<%- op.operationId %>',
+  <%- op.printRemoting() %>
+);
+<% } %>
+}

@@ -1,0 +1,17 @@
+.idea
+.project
+.DS_Store
+*.sublime*
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.swp
+*.swo
+node_modules
+checkstyle.xml
+loopback-connector-*.tgz
+test
+.travis.yml
