@@ -35,5 +35,9 @@
   "bot": {
     "dataSource": "db",
     "public": true
+  },
+  "newsletter": {
+    "dataSource": "mongods",
+    "public": true
   }
 }
