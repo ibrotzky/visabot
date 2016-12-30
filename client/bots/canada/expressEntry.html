@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>VisaBot CRS Calculator</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <script src="scripts/expressEntry.js"></script>
+</head>
+
+<body>
+    <div id="question"></div>
+    <div id="options"></div>
+    <script>
+        var question = $("#question");
+        var options = $("#options");
+
+        var request = {
+            "customPayload": null,
+            "reply": null
+        }
+
+        request.customPayload = {
+            question: '4',
+            name: 'Bruno',
+            married: true,
+            spouseCanadianCitizen: false,
+            spouseCommingAlong: true,
+            age: 33,
+			/*educationLevel: 5,
+			firstLanguage: {
+				test: 0,
+				speaking: 7,
+				listening: 8,
+				reading: 7,
+				writing: 7
+			},
+			workInCanada: 0,
+			workExperience: 14,
+			certificateFromProvince: false,
+			validJobOffer: false,
+			nocJobOffer: null,
+			nomination: false,
+			spouseEducationLevel: 5,
+			spouseWorkInCanada: 0*/
+        };
+
+        request.reply = '33';
+
+        console.log('Request:', request);
+
+        $.ajax({
+            type: 'GET',
+            url: 'expressEntry',
+            cache: false,
+            dataType: 'json',
+            data: request
+        }).success(function (data, textStatus, jqXHR)
+        {
+            question.html(data.response);
+            options.html('');
+
+            if (data.quickReplies !== null) {
+                for (r = 0; r < data.quickReplies.length; r++) {
+                    options.html(options.html() + '<br />' + data.quickReplies[r]);
+                }
+            }
+
+
+            console.log('response:', data);
+        }).error(function (jqXHR, textStatus, errorThrown)
+        {
+            console.log('Error: ', jqXHR.responseText);
+        });
+    </script>
+</body>
+</html>
