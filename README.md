@@ -1,3 +1,3 @@
-# CanadaBot  - By The VanHack Visa Bot Team
+# VisaBot  - By The VanHack Visa Bot Team
 
 This is an Open Source Immigration Chatbot to help talent relocate. 
