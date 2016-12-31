@@ -10,8 +10,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
-    <script src="scripts/expressEntry.js"></script>
 </head>
 
 <body>
@@ -22,18 +20,18 @@
         var options = $("#options");
 
         var request = {
-            "customPayload": null,
+            "payload": null,
             "reply": null
         }
 
-        request.customPayload = {
-            question: '4',
-            name: 'Bruno',
+        request.payload = {
+            question: '1',
+            /*name: 'Bruno',
             married: true,
             spouseCanadianCitizen: false,
             spouseCommingAlong: true,
             age: 33,
-			/*educationLevel: 5,
+			educationLevel: 5,
 			firstLanguage: {
 				test: 0,
 				speaking: 7,
@@ -51,33 +49,41 @@
 			spouseWorkInCanada: 0*/
         };
 
-        request.reply = '33';
+        request.reply = "Yes";
 
         console.log('Request:', request);
 
         $.ajax({
             type: 'GET',
-            url: 'expressEntry',
+            url: '/api/canadaExpressEntryFlow/nextFlow',
             cache: false,
             dataType: 'json',
             data: request
         }).success(function (data, textStatus, jqXHR)
         {
-            question.html(data.response);
+            var responseJSON = data.responseJSON;
+
+            question.html(responseJSON.response);
             options.html('');
 
-            if (data.quickReplies !== null) {
-                for (r = 0; r < data.quickReplies.length; r++) {
-                    options.html(options.html() + '<br />' + data.quickReplies[r]);
+            if (responseJSON.quickReplies !== null) {
+                for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                    options.html(options.html() + '<br />' + responseJSON.quickReplies[r]);
                 }
             }
 
-
-            console.log('response:', data);
+            console.log('responseJSON:', responseJSON);
         }).error(function (jqXHR, textStatus, errorThrown)
         {
             console.log('Error: ', jqXHR.responseText);
         });
+
+        var questions = {
+            name: { id: '0' },
+            maritalStatus: { id: '1', question: "Hi {NAME}. Are you married or has a common-law partner?", options: ['Yes', 'No'] },
+            spouseCanadianCitizen: { id: '2i', question: "Is your spouse or common-law partner a citizen or permanent resident of Canada?", options: ['Yes', 'No'] },
+        }
     </script>
 </body>
+
 </html>

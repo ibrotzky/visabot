@@ -1,0 +1,12 @@
+{
+  "name": "canada",
+  "plural": "canada",
+  "base": "Model",
+  "idInjection": false,
+  "options": {},
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

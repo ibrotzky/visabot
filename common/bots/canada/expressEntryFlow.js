@@ -99,7 +99,7 @@ var questions = {
 	maritalStatus: { id: '1', question: "Hi {NAME}. Are you married or has a common-law partner?", options: yesNo },
 	spouseCanadianCitizen: { id: '2i', question: "Is your spouse or common-law partner a citizen or permanent resident of Canada?", options: yesNo },
 	spouseCommingAlong: { id: '2ii', question: "Will your spouse or common-law partner come with you to Canada?", options: yesNo },
-	age: { id: '3', question: "How old are you? (Only the numbers please)", options: null },
+    age: { id: '3', question: "How old are you? (Only the numbers please)", options: ['17 or less','18', '19', '20 to 29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'] },
 	educationLevel: {
 		id: '4', question: "What is your education level?", options: ['Less than secondary school (high school)',
 			'Secondary diploma (high school graduation)',
@@ -110,7 +110,7 @@ var questions = {
 			'Master\'s degree',
 			'Ph.D.']
 	},
-	canadianDegreeDiplomaCertificate: { id: '4b', question: "", options: null },
+	canadianDegreeDiplomaCertificate: { id: '4b', question: "", options: yesNo },
 	canadianEducationLevel: { id: '4c', question: "", options: null },
 	firstLanguageTest: { id: '5ii', question: "", options: null },
 	firstLanguageSpeaking: { id: '5iiS', question: "", options: null },
@@ -124,10 +124,10 @@ var questions = {
 	secondLanguageWriting: { id: '5iiiW', question: "", options: null },
 	workExperienceInCanada: { id: '6i', question: "", options: null },
 	workExperienceLastTenYears: { id: '6ii', question: "", options: null },
-	certificateQualificationProvince: { id: '7', question: "", options: null },
-	validJobOffer: { id: '8', question: "", options: null },
+	certificateQualificationProvince: { id: '7', question: "", options: yesNo },
+	validJobOffer: { id: '8', question: "", options: yesNo },
 	jobOfferNoc: { id: '8a', question: "", options: null },
-	nominationCertificate: { id: '9', question: "", options: null },
+	nominationCertificate: { id: '9', question: "", options: yesNo },
 	spouseEducationLevel: { id: '10', question: "", options: null },
 	spouseWorkExperienceInCanada: { id: '11', question: "", options: null },
 	spouseLanguageTest: { id: '12', question: "", options: null },
@@ -192,10 +192,9 @@ function validateLanguageScore(test, ability, score) {
 	return scoreValid;
 }
 
-var questionFlow = function (request) {
-	var payload = request.customPayload;
-
-	console.log('payload', request);
+var questionFlow = function (payload, reply, callback) {
+	//console.log('payload: ', payload);
+	//console.log('reply: ', reply);
 
 	if (payload === undefined || payload === '') payload = null;
 
@@ -210,7 +209,7 @@ var questionFlow = function (request) {
 		"cards": null // a cards JSON object to display a carousel to the user (see docs)
 	};
 
-	if (request === null || payload == null)
+	if (payload == null)
 	{
 		payload = {
 			question: questions.name
@@ -222,35 +221,39 @@ var questionFlow = function (request) {
 	{
 		var repeatQuestion = false;
 
+        payload.question = payload.question.toString();
+
+        var answerIndex = payload.options.indexOf(reply);
+
 		// Stores the answer in it's respective property
 		switch (payload.question)
 		{
 			case questions.name.id:
-				payload.name = request.reply;
+				payload.name = reply;
 				break;
 
 			case questions.maritalStatus.id:
-				payload.married = (request.reply === 'Yes');
+				payload.married = (answerIndex === 0);
 				break;
 
 			case questions.spouseCanadianCitizen.id:
-				payload.spouseCanadianCitizen = (request.reply === 'Yes');
+				payload.spouseCanadianCitizen = (reply === 'Yes');
 				if (!payload.spouseCanadianCitizen) payload.spouseCommingAlong = false;
 				break;
 
 			case questions.spouseCommingAlong.id:
-				payload.spouseCommingAlong = (request.reply === 'Yes');
+				payload.spouseCommingAlong = (reply === 'Yes');
 				break;
 
 			case questions.age.id:
-				if (isNaN(request.reply))
+				if (isNaN(reply))
 					repeatQuestion = true;
 				else
-					payload.age = parseInt(request.reply);
+					payload.age = parseInt(reply);
 				break;
 
 			case questions.educationLevel.id:
-				switch (request.reply)
+				switch (reply)
 				{
 					case 'Less than secondary school (high school)':
 						payload.educationLevel = educationLevel.LessThanSecondary;
@@ -294,7 +297,7 @@ var questionFlow = function (request) {
 				break;
 
 			case questions.canadianEducationLevel.id:
-				switch (request.reply)
+				switch (reply)
 				{
 					case 'Secondary (high school) or less':
 						payload.educationInCanada = educationInCanada.SecondaryOrLess;
@@ -317,7 +320,7 @@ var questionFlow = function (request) {
 			case questions.firstLanguageTest.id:
 				payload.firstLanguage = languageObject();
 
-				switch (request.reply)
+				switch (reply)
 				{
 					case 'No':
 						payload.firstLanguage.test = languageTest.none;
@@ -342,29 +345,29 @@ var questionFlow = function (request) {
 				break;
 
 			case questions.firstLanguageSpeaking.id:
-				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.speaking, request.reply))
-					payload.firstLanguage.speaking = parseFloat(request.reply);
+				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.speaking, reply))
+					payload.firstLanguage.speaking = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.firstLanguageListening.id:
-				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.listening, request.reply))
-					payload.firstLanguage.listening = parseFloat(request.reply);
+				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.listening, reply))
+					payload.firstLanguage.listening = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.firstLanguageReading.id:
-				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.reading, request.reply))
-					payload.firstLanguage.reading = parseFloat(request.reply);
+				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.reading, reply))
+					payload.firstLanguage.reading = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.firstLanguageWriting.id:
-				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.writing, request.reply))
-					payload.firstLanguage.writing = parseFloat(request.reply);
+				if (validateLanguageScore(payload.firstLanguage.test, languageAbility.writing, reply))
+					payload.firstLanguage.writing = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
@@ -372,7 +375,7 @@ var questionFlow = function (request) {
 			case questions.secondLanguageTest.id:
 				payload.secondLanguage = languageObject();
 
-				switch (request.reply)
+				switch (reply)
 				{
 					case 'No':
 						payload.secondLanguage.test = languageTest.none;
@@ -397,57 +400,57 @@ var questionFlow = function (request) {
 				break;
 
 			case questions.secondLanguageSpeaking.id:
-				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.speaking, request.reply))
-					payload.secondLanguage.speaking = parseFloat(request.reply);
+				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.speaking, reply))
+					payload.secondLanguage.speaking = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.secondLanguageListening.id:
-				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.listening, request.reply))
-					payload.secondLanguage.listening = parseFloat(request.reply);
+				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.listening, reply))
+					payload.secondLanguage.listening = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.secondLanguageReading.id:
-				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.reading, request.reply))
-					payload.secondLanguage.reading = parseFloat(request.reply);
+				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.reading, reply))
+					payload.secondLanguage.reading = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.secondLanguageWriting.id:
-				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.writing, request.reply))
-					payload.secondLanguage.writing = parseFloat(request.reply);
+				if (validateLanguageScore(payload.secondLanguage.test, languageAbility.writing, reply))
+					payload.secondLanguage.writing = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.workExperienceInCanada.id:
-				if (isNaN(request.reply))
+				if (isNaN(reply))
 					repeatQuestion = true;
 				else
-					payload.workInCanada = parseFloat(request.reply);
+					payload.workInCanada = parseFloat(reply);
 				break;
 
 			case questions.workExperienceLastTenYears.id:
-				if (isNaN(request.reply))
+				if (isNaN(reply))
 					repeatQuestion = true;
 				else
-					payload.workExperience = parseFloat(request.reply);
+					payload.workExperience = parseFloat(reply);
 				break;
 
 			case questions.certificateQualificationProvince.id:
-				payload.certificateFromProvince = (request.reply === 'Yes');
+				payload.certificateFromProvince = (reply === 'Yes');
 				break;
 
 			case questions.validJobOffer.id:
-				payload.validJobOffer = (request.reply === 'Yes');
+				payload.validJobOffer = (reply === 'Yes');
 				break;
 
 			case questions.jobOfferNoc.id:
-				switch (request.reply)
+				switch (reply)
 				{
 					case '00':
 						payload.nocJobOffer = nocList._00;
@@ -480,11 +483,11 @@ var questionFlow = function (request) {
 				break;
 
 			case questions.nominationCertificate.id:
-				payload.nomination = (request.reply === 'Yes');
+				payload.nomination = (reply === 'Yes');
 				break;
 
 			case questions.spouseEducationLevel.id:
-				switch (request.reply)
+				switch (reply)
 				{
 					case 'Less than secondary school (high school)':
 						payload.spouseEducationLevel = educationLevel.LessThanSecondary;
@@ -526,16 +529,16 @@ var questionFlow = function (request) {
 				break;
 
 			case questions.spouseWorkExperienceInCanada.id:
-				if (isNaN(request.reply))
+				if (isNaN(reply))
 					repeatQuestion = true;
 				else
-					payload.spouseWorkInCanada = parseFloat(request.reply);
+					payload.spouseWorkInCanada = parseFloat(reply);
 				break;
 
 			case questions.spouseLanguageTest.id:
 				payload.spouseLanguage = languageObject();
 
-				switch (request.reply)
+				switch (reply)
 				{
 					case 'No':
 						payload.spouseLanguage.test = languageTest.none;
@@ -560,29 +563,29 @@ var questionFlow = function (request) {
 				break;
 
 			case questions.spouseLanguageSpeaking.id:
-				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.speaking, request.reply))
-					payload.spouseLanguage.speaking = parseFloat(request.reply);
+				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.speaking, reply))
+					payload.spouseLanguage.speaking = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.spouseLanguageListening.id:
-				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.listening, request.reply))
-					payload.spouseLanguage.listening = parseFloat(request.reply);
+				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.listening, reply))
+					payload.spouseLanguage.listening = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.spouseLanguageReading.id:
-				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.reading, request.reply))
-					payload.spouseLanguage.reading = parseFloat(request.reply);
+				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.reading, reply))
+					payload.spouseLanguage.reading = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
 
 			case questions.spouseLanguageWriting.id:
-				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.writing, request.reply))
-					payload.spouseLanguage.writing = parseFloat(request.reply);
+				if (validateLanguageScore(payload.spouseLanguage.test, languageAbility.writing, reply))
+					payload.spouseLanguage.writing = parseFloat(reply);
 				else
 					repeatQuestion = true;
 				break;
@@ -624,7 +627,7 @@ var questionFlow = function (request) {
 					break;
 
 				case questions.canadianDegreeDiplomaCertificate.id:
-					if (request.reply === 'Yes')
+					if (reply === 'Yes')
 						payload.question = questions.canadianEducationLevel;
 					else
 						payload.question = questions.firstLanguageTest;
@@ -1099,9 +1102,11 @@ var questionFlow = function (request) {
 
 	responseJSON.customPayload = payload;
 
+    //console.log("responseJSON: ", responseJSON);
+
 	return responseJSON;
 }
 
 module.exports = {
-	nextFlow: questionFlow
+	questionFlow: questionFlow
 };
