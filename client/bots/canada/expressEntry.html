@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>VisaBot CRS Calculator</title>
+    <head>
+        <title>VisaBot CRS Calculator</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-</head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </head>
 
-<body>
-    <div id="question"></div>
-    <div id="options"></div>
-    <script>
+    <body>
+        <div id="question"></div>
+        <div id="options"></div>
+        <script>
         var question = $("#question");
         var options = $("#options");
 
@@ -25,14 +25,16 @@
         }
 
         request.payload = {
-            question: '1',
-            /*name: 'Bruno',
+            question: 7,
+            name: 'Bruno',
             married: true,
             spouseCanadianCitizen: false,
             spouseCommingAlong: true,
             age: 33,
 			educationLevel: 5,
-			firstLanguage: {
+            canadianDegreeDiplomaCertificate: false,
+            
+			/*firstLanguage: {
 				test: 0,
 				speaking: 7,
 				listening: 8,
@@ -49,13 +51,13 @@
 			spouseWorkInCanada: 0*/
         };
 
-        request.reply = "Yes";
+        request.reply = "Three or more years program";
 
         console.log('Request:', request);
 
         $.ajax({
             type: 'GET',
-            url: '/api/canadaExpressEntryFlow/nextFlow',
+            url: '/api/canada/expressEntry',
             cache: false,
             dataType: 'json',
             data: request
@@ -72,17 +74,12 @@
                 }
             }
 
+            console.log('question:', responseJSON.customPayload.question);
             console.log('responseJSON:', responseJSON);
         }).error(function (jqXHR, textStatus, errorThrown)
         {
             console.log('Error: ', jqXHR.responseText);
         });
-
-        var questions = {
-            name: { id: '0' },
-            maritalStatus: { id: '1', question: "Hi {NAME}. Are you married or has a common-law partner?", options: ['Yes', 'No'] },
-            spouseCanadianCitizen: { id: '2i', question: "Is your spouse or common-law partner a citizen or permanent resident of Canada?", options: ['Yes', 'No'] },
-        }
     </script>
 </body>
 
