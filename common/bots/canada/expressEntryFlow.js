@@ -10,19 +10,6 @@ var languageAbility = {
 	writing: 3
 }
 
-/**
- * Create the object with the languague test properties
- */
-function languageObject() {
-	return {
-		test: null,
-		speaking: null,
-		listening: null,
-		reading: null,
-		writing: null
-	}
-}
-
 function yesNo() {
 	return ["Yes", "No"];
 }
@@ -31,8 +18,94 @@ function yesNoAnswer(reply) {
 	return (reply === "Yes");
 }
 
-function answerIndex(question, reply) {
-	return question.options().indexOf(reply);
+function answerIndex(question, payload, reply) {
+	return question.options(payload).indexOf(reply);
+}
+
+function languageQuestion(test, payload, ability) {
+	var abilityName;
+	var testName;
+	var testSectionName;
+
+	switch (ability)
+	{
+		case languageAbility.speaking:
+			abilityName = 'speak';
+			testSectionName = 'Speaking';
+			break;
+
+		case languageAbility.listening:
+			abilityName = 'listen';
+			testSectionName = 'Listening';
+			break;
+
+		case languageAbility.reading:
+			abilityName = 'read';
+			testSectionName = 'Reading';
+			break;
+
+		case languageAbility.writing:
+			abilityName = 'write';
+			testSectionName = 'Writing';
+			break;
+	}
+
+	if (parseInt(test) === 0)
+		return "{QUOTE}How well can you " + abilityName + " English?";
+	else
+	{
+		switch (parseInt(test))
+		{
+			case answerIndex(questions.firstLanguageTest, payload, 'CELPIP'):
+				testName = "CELPIP";
+				break;
+
+			case answerIndex(questions.firstLanguageTest, payload, 'IELTS'):
+				testName = "IELTS";
+				break;
+
+			case answerIndex(questions.firstLanguageTest, payload, 'TEF'):
+				testName = "TEF";
+				break;
+		}
+
+		return "{QUOTE}What is your " + testSectionName + " Score on the " + testName + " test?";
+	}
+}
+
+function languageOptions(test, testQuestion, payload, ability) {
+	switch (parseInt(test))
+	{
+		case answerIndex(testQuestion, payload, 'No'):
+			return ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
+			break;
+
+		case answerIndex(testQuestion, payload, 'CELPIP'):
+			return ["M, 0 - 3", "4", "5", "6", "7", "8", "9", "10 - 12"];
+			break;
+
+		case answerIndex(testQuestion, payload, 'IELTS'):
+			return ["0 - 3.5", "4 - 4.5", "5", "5.5", "6", "6.5", "7", "7.5 - 9"];
+			break;
+
+		case answerIndex(testQuestion, payload, 'TEF'):
+			switch (ability)
+			{
+				case languageAbility.speaking:
+				case languageAbility.writing:
+					return ["0 - 180", "181 - 225", "226 - 270", "271 - 309", "310 - 348", "349 - 370", "371 - 392", "393 - 450"];
+					break;
+
+				case languageAbility.listening:
+					return ["0 - 144", "145 - 180", "181 - 216", "217 - 248", "249 - 279", "280 - 297", "298 - 315", "316 - 360"];
+					break;
+
+				case languageAbility.reading:
+					return ["0 - 120", "121 - 150", "151 - 180", "181 - 206", "207 - 232", "233 - 247", "248 - 262", "263 - 300"];
+					break;
+			}
+			break;
+	}
 }
 
 /**
@@ -108,7 +181,7 @@ var questions = {
 				'Master\'s degree',
 				'Ph.D.']
 		},
-		processReply: function (payload, reply) { payload.educationLevel = answerIndex(this, reply); },
+		processReply: function (payload, reply) { payload.educationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.canadianDegreeDiplomaCertificate },
 	},
 	canadianDegreeDiplomaCertificate: {
@@ -121,19 +194,52 @@ var questions = {
 	canadianEducationLevel: {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your education level in Canada?" },
-		options: function () {
+		options: function (payload) {
 			return ['High school or less',
 				'One-year or two-year program',
 				'Three or more years program'];
 		},
-		processReply: function (payload, reply) { payload.canadianEducationLevel = answerIndex(this, reply); },
+		processReply: function (payload, reply) { payload.canadianEducationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.firstLanguageTest },
 	},
 	firstLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}firstLanguageTest" },
-		options: function () { return null; },
-		processReply: function (payload, reply) { },
+		question: function (payload) { return "{QUOTE}Did you take a language test?" },
+		options: function (payload) {
+			return ['No',
+				'CELPIP',
+				'IELTS',
+				'TEF'];
+		},
+		processReply: function (payload, reply) { payload.firstLanguageTest = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.firstLanguageSpeaking },
+	},
+	firstLanguageSpeaking: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.speaking); },
+		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.speaking); },
+		processReply: function (payload, reply) { payload.firstLanguageSpeaking = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.firstLanguageListening },
+	},
+	firstLanguageListening: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.listening); },
+		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
+		processReply: function (payload, reply) { payload.firstLanguageListening = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.firstLanguageReading },
+	},
+	firstLanguageReading: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.reading); },
+		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
+		processReply: function (payload, reply) { payload.firstLanguageReading = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.firstLanguageWriting },
+	},
+	firstLanguageWriting: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.writing); },
+		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
+		processReply: function (payload, reply) { payload.firstLanguageWriting = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return null },
 	},
 }
@@ -145,61 +251,9 @@ for (q = 0; q < questionsArray.length; q++)
 	questions[questionsArray[q]].id = q;
 }
 
-function validateLanguageScore(test, ability, score) {
-	if (isNaN(score))
-		return false;
-	else
-		score = parseFloat(score);
+function validateAnswer(question, payload, reply) {
+	var options = question.options(payload);
 
-	var scoreValid = true;
-
-	switch (parseInt(test))
-	{
-		case languageTest.none:
-			if (score < 0 || score > 10)
-				scoreValid = false;
-			break;
-
-		case languageTest.celpip:
-			if (score < 0 || score > 12)
-				scoreValid = false;
-			break;
-
-		case languageTest.ielts:
-			if (score < 1 || score > 9)
-				scoreValid = false;
-			break;
-
-		case languageTest.tef:
-			switch (ability)
-			{
-				case languageAbility.speaking:
-					if (score < 0 || score > 450)
-						scoreValid = false;
-					break;
-
-				case languageAbility.listening:
-					if (score < 0 || score > 360)
-						scoreValid = false;
-					break;
-
-				case languageAbility.reading:
-					if (score < 0 || score > 300)
-						scoreValid = false;
-					break;
-
-				case languageAbility.writing:
-					if (score < 0 || score > 450)
-						scoreValid = false;
-					break;
-			}
-			break;
-	}
-
-	return scoreValid;
-}
-
-function validateAnswer(options, reply) {
 	if (options === null)
 		return true;
 	else
@@ -228,8 +282,8 @@ var questionFlow = function (payload, reply, callback) {
 		question = questions[questionsArray[payload.question]];
 		//console.log('question: ', question);
 
-		//console.log('answerValid: ', validateAnswer(question.options(), reply));
-		if (validateAnswer(question.options(), reply))
+		//console.log('answerValid: ', validateAnswer(question, payload, reply));
+		if (validateAnswer(question, payload, reply))
 		{
 			question.processReply(payload, reply);
 
