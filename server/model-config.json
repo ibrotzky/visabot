@@ -40,10 +40,6 @@
     "dataSource": "db",
     "public": true
   },
-  "canadaExpressEntryFlow": {
-    "dataSource": "db",
-    "public": true
-  },
   "newsletter": {
     "dataSource": "mongods",
     "public": true
