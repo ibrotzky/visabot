@@ -1,3 +1,5 @@
+var util = require("../../util");
+
 /**
  * Enum for Language Ability
  * @readonly
@@ -19,61 +21,73 @@ function yesNoAnswer(reply) {
 }
 
 function answerIndex(question, payload, reply) {
-	return question.options(payload).indexOf(reply);
+	var options = question.options(payload);
+
+	return (options === null ? null : question.options(payload).indexOf(reply));
 }
 
-function languageQuestion(test, payload, ability) {
+function languageQuestion(test, testQuestion, payload, ability, principalApplicant) {
 	var abilityName;
 	var testName;
 	var testSectionName;
+
+	if (principalApplicant === undefined)
+		principalApplicant = true;
 
 	switch (ability)
 	{
 		case languageAbility.speaking:
 			abilityName = 'speak';
-			testSectionName = 'Speaking';
+			testSectionName = 'speaking';
 			break;
 
 		case languageAbility.listening:
 			abilityName = 'listen';
-			testSectionName = 'Listening';
+			testSectionName = 'listening';
 			break;
 
 		case languageAbility.reading:
 			abilityName = 'read';
-			testSectionName = 'Reading';
+			testSectionName = 'reading';
 			break;
 
 		case languageAbility.writing:
 			abilityName = 'write';
-			testSectionName = 'Writing';
+			testSectionName = 'writing';
 			break;
 	}
 
 	if (parseInt(test) === 0)
-		return "{QUOTE}How well can you " + abilityName + " English?";
+		return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English?";
 	else
 	{
 		switch (parseInt(test))
 		{
-			case answerIndex(questions.firstLanguageTest, payload, 'CELPIP'):
+			case answerIndex(testQuestion, payload, 'CELPIP'):
 				testName = "CELPIP";
 				break;
 
-			case answerIndex(questions.firstLanguageTest, payload, 'IELTS'):
+			case answerIndex(testQuestion, payload, 'IELTS'):
 				testName = "IELTS";
 				break;
 
-			case answerIndex(questions.firstLanguageTest, payload, 'TEF'):
+			case answerIndex(testQuestion, payload, 'TEF'):
 				testName = "TEF";
 				break;
 		}
 
-		return "{QUOTE}What is your " + testSectionName + " Score on the " + testName + " test?";
+		return "{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?";
 	}
 }
 
 function languageOptions(test, testQuestion, payload, ability) {
+	/*
+	console.log('answer: ', test);
+	console.log('No: ', answerIndex(testQuestion, payload, 'No'));
+	console.log('CELPIP: ', answerIndex(testQuestion, payload, 'CELPIP'));
+	console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
+	console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
+	*/
 	switch (parseInt(test))
 	{
 		case answerIndex(testQuestion, payload, 'No'):
@@ -216,32 +230,334 @@ var questions = {
 	},
 	firstLanguageSpeaking: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.speaking); },
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.speaking); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.speaking); },
 		processReply: function (payload, reply) { payload.firstLanguageSpeaking = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.firstLanguageListening },
 	},
 	firstLanguageListening: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.listening); },
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
 		processReply: function (payload, reply) { payload.firstLanguageListening = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.firstLanguageReading },
 	},
 	firstLanguageReading: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.reading); },
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
 		processReply: function (payload, reply) { payload.firstLanguageReading = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.firstLanguageWriting },
 	},
 	firstLanguageWriting: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, payload, languageAbility.writing); },
+		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
 		processReply: function (payload, reply) { payload.firstLanguageWriting = answerIndex(this, payload, reply); },
-		nextQuestion: function (payload) { return null },
+		nextQuestion: function (payload) { return (payload.firstLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageTest) },
 	},
+	secondLanguageTest: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Did you take a second language test?" },
+		options: function (payload) {
+			return (payload.firstLanguageTest == 3 ? ['No',
+				'CELPIP',
+				'IELTS'] : ['No',
+					'TEF']);
+		},
+		processReply: function (payload, reply) { payload.secondLanguageTest = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return (payload.secondLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageSpeaking) },
+	},
+	secondLanguageSpeaking: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.speaking); },
+		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.speaking); },
+		processReply: function (payload, reply) { payload.secondLanguageSpeaking = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.secondLanguageListening },
+	},
+	secondLanguageListening: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.listening); },
+		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.listening); },
+		processReply: function (payload, reply) { payload.secondLanguageListening = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.secondLanguageReading },
+	},
+	secondLanguageReading: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.reading); },
+		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.reading); },
+		processReply: function (payload, reply) { payload.secondLanguageReading = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.secondLanguageWriting },
+	},
+	secondLanguageWriting: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.writing); },
+		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.writing); },
+		processReply: function (payload, reply) { payload.secondLanguageWriting = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.workExperienceInCanada },
+	},
+	workExperienceInCanada: {
+		id: null,
+		question: function (payload) { return "{QUOTE}In the last ten years, how many years of skilled work experience in Canada do you have?" },
+		options: function (payload) {
+			return ["None or less then a year",
+				"1 year",
+				"2 years",
+				"3 years",
+				"4 years",
+				"5 years or more"];
+		},
+		processReply: function (payload, reply) { payload.workExperienceInCanada = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.workExperienceLastTenYears },
+	},
+	workExperienceLastTenYears: {
+		id: null,
+		question: function (payload) { return "{QUOTE}In the last 10 years, how many years of skilled work experience do you have?" },
+		options: function (payload) {
+			return ["None or less then a year",
+				"1 year",
+				"2 years",
+				"3 years or more"];
+		},
+		processReply: function (payload, reply) { payload.workExperienceLastTenYears = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.certificateQualificationProvince },
+	},
+	certificateQualificationProvince: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you have a certificate of qualification from a Canadian province or territory?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.certificateQualificationProvince = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return questions.validJobOffer },
+	},
+	validJobOffer: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you have a valid job offer supported by a Labour Market Impact Assessment (if needed)?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.validJobOffer = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (util.parseBoolean(payload.validJobOffer) ? questions.nocJobOffer : questions.nominationCertificate) },
+	},
+	nocJobOffer: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Which NOC skill type or level is the job offer?" },
+		options: function (payload) {
+			return ["00",
+				'0, A or B',
+				'C or D'];
+		},
+		processReply: function (payload, reply) { payload.nocJobOffer = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.nominationCertificate },
+	},
+	nominationCertificate: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you have a nomination certificate from a province or territory?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.nominationCertificate = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (util.parseBoolean(payload.married) && !util.parseBoolean(payload.spouseCanadianCitizen) && util.parseBoolean(payload.spouseCommingAlong) ? questions.spouseAge : questions.calculation) },
+	},
+
+	spouseAge: {
+		id: null,
+		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
+		options: function (payload) { return ['17 or less', '18', '19', '20 to 29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'] },
+		processReply: function (payload, reply) {
+			switch (reply)
+			{
+				case '17 or less':
+					payload.spouseAge = 17;
+					break;
+
+				case '20 to 29':
+					payload.spouseAge = 20;
+					break;
+
+				case '45 or more':
+					payload.spouseAge = 45;
+					break;
+
+				default:
+					payload.spouseAge = parseInt(reply);
+					break;
+			}
+		},
+		nextQuestion: function (payload) { return questions.spouseEducationLevel },
+	},
+	spouseEducationLevel: {
+		id: null,
+		question: function (payload) { return "{QUOTE}What is your spouse or common-law partner's education level?" },
+		options: function (payload) {
+			return ['Less than high school',
+				'High school',
+				'One-year program',
+				'Two-year program',
+				'Bachelor\'s degree',
+				'Two or more degrees',
+				'Master\'s degree',
+				'Ph.D.']
+		},
+		processReply: function (payload, reply) { payload.spouseEducationLevel = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseCanadianDegreeDiplomaCertificate },
+	},
+	spouseCanadianDegreeDiplomaCertificate: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Have your spouse or common-law partner earned a Canadian degree, diploma or certificate?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.spouseCanadianDegreeDiplomaCertificate = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (payload.spouseCanadianDegreeDiplomaCertificate ? questions.spouseCanadianEducationLevel : questions.spouseFirstLanguageTest) },
+	},
+	spouseCanadianEducationLevel: {
+		id: null,
+		question: function (payload) { return "{QUOTE}What is your spouse or common-law partner's education level in Canada?" },
+		options: function (payload) {
+			return ['High school or less',
+				'One-year or two-year program',
+				'Three or more years program'];
+		},
+		processReply: function (payload, reply) { payload.spouseCanadianEducationLevel = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseFirstLanguageTest },
+	},
+	spouseFirstLanguageTest: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a language test?" },
+		options: function (payload) {
+			return ['No',
+				'CELPIP',
+				'IELTS',
+				'TEF'];
+		},
+		processReply: function (payload, reply) { payload.spouseFirstLanguageTest = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseFirstLanguageSpeaking },
+	},
+	spouseFirstLanguageSpeaking: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.speaking, false); },
+		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.speaking); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageSpeaking = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseFirstLanguageListening },
+	},
+	spouseFirstLanguageListening: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening, false); },
+		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageListening = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseFirstLanguageReading },
+	},
+	spouseFirstLanguageReading: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading, false); },
+		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageReading = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseFirstLanguageWriting },
+	},
+	spouseFirstLanguageWriting: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
+		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageTest) },
+	},
+	spouseSecondLanguageTest: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a second language test?" },
+		options: function (payload) {
+			return (payload.spouseFirstLanguageTest == 3 ? ['No',
+				'CELPIP',
+				'IELTS'] : ['No',
+					'TEF']);
+		},
+		processReply: function (payload, reply) { payload.spouseSecondLanguageTest = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return (payload.spouseSecondLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseSecondLanguageSpeaking) },
+	},
+	spouseSecondLanguageSpeaking: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.speaking, false); },
+		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.speaking); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageSpeaking = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseSecondLanguageListening },
+	},
+	spouseSecondLanguageListening: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.listening, false); },
+		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.listening); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageListening = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseSecondLanguageReading },
+	},
+	spouseSecondLanguageReading: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.reading, false); },
+		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.reading); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageReading = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseSecondLanguageWriting },
+	},
+	spouseSecondLanguageWriting: {
+		id: null,
+		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.writing, false); },
+		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.writing); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageWriting = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseWorkExperienceInCanada },
+	},
+	spouseWorkExperienceInCanada: {
+		id: null,
+		question: function (payload) { return "{QUOTE}In the last ten years, how many years of skilled work experience in Canada does your spouse or common-law partner have?" },
+		options: function (payload) {
+			return ["None or less then a year",
+				"1 year",
+				"2 years",
+				"3 years",
+				"4 years",
+				"5 years or more"];
+		},
+		processReply: function (payload, reply) { payload.spouseWorkExperienceInCanada = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseWorkExperienceLastTenYears },
+	},
+	spouseWorkExperienceLastTenYears: {
+		id: null,
+		question: function (payload) { return "{QUOTE}In the last 10 years, how many years of skilled work experience does your spouse or common-law partner have?" },
+		options: function (payload) {
+			return ["None or less then a year",
+				"1 year",
+				"2 years",
+				"3 years or more"];
+		},
+		processReply: function (payload, reply) { payload.spouseWorkExperienceLastTenYears = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.calculation },
+	},
+
+	calculation: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Calculation" },
+		options: function (payload) { return null },
+		processReply: function (payload, reply) { },
+		nextQuestion: function (payload) { return questions.starOver },
+	},
+	starOver: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you want to start over?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
+		nextQuestion: function (payload) {
+
+			if (util.parseBoolean(payload.startOver))
+			{
+				var payloadArray = Object.keys(payload);
+
+				for (p = 0; p < payloadArray.length; p++)
+				{
+					delete payload[payloadArray[p]];
+				}
+
+				return questions.name;
+			}
+			else
+				return questions.done;
+		},
+	},
+	done: {
+		id: null,
+		question: function (payload) { return "DONE" },
+		options: function (payload) { return null },
+		processReply: function (payload, reply) { },
+		nextQuestion: function (payload) { return questions.done; },
+	}
 }
 
 var questionsArray = Object.keys(questions);
@@ -287,7 +603,9 @@ var questionFlow = function (payload, reply, callback) {
 		{
 			question.processReply(payload, reply);
 
+			console.log('payload Before: ', payload);
 			question = question.nextQuestion(payload);
+			console.log('payload After: ', payload);
 		}
 	}
 	else

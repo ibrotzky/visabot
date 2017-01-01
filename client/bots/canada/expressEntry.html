@@ -16,72 +16,92 @@
         <div id="question"></div>
         <div id="options"></div>
         <script>
-        var question = $("#question");
-        var options = $("#options");
+            var question = $("#question");
+            var options = $("#options");
 
-        var request = {
-            "payload": null,
-            "reply": null
-        }
-
-        request.payload = {
-            question: 11,
-            name: 'Bruno',
-            married: true,
-            spouseCanadianCitizen: false,
-            spouseCommingAlong: true,
-            age: 33,
-			educationLevel: 5,
-            canadianDegreeDiplomaCertificate: false,
-            firstLanguageTest: 3,
-            /*firstLanguageTest: 0,
-			firstLanguage: {
-				test: 0,
-				speaking: 7,
-				listening: 8,
-				reading: 7,
-				writing: 7
-			},
-			workInCanada: 0,
-			workExperience: 14,
-			certificateFromProvince: false,
-			validJobOffer: false,
-			nocJobOffer: null,
-			nomination: false,
-			spouseEducationLevel: 5,
-			spouseWorkInCanada: 0*/
-        };
-
-        request.reply = "0 - 120";
-
-        console.log('Request:', request);
-
-        $.ajax({
-            type: 'GET',
-            url: '/api/canada/expressEntry',
-            cache: false,
-            dataType: 'json',
-            data: request
-        }).success(function (data, textStatus, jqXHR)
-        {
-            var responseJSON = data.responseJSON;
-
-            question.html(responseJSON.response);
-            options.html('');
-
-            if (responseJSON.quickReplies !== null) {
-                for (r = 0; r < responseJSON.quickReplies.length; r++) {
-                    options.html(options.html() + '<br />' + responseJSON.quickReplies[r]);
-                }
+            var request = {
+                "payload": null,
+                "reply": null
             }
 
-            console.log('question:', responseJSON.customPayload.question);
-            console.log('responseJSON:', responseJSON);
-        }).error(function (jqXHR, textStatus, errorThrown)
-        {
-            console.log('Error: ', jqXHR.responseText);
-        });
-    </script>
+
+            request.payload = {
+                question: 41,
+                name: 'Bruno',
+                married: 'true',
+                spouseCanadianCitizen: 'false',
+                spouseCommingAlong: 'true',
+                age: '33',
+                educationLevel: '4',
+                canadianDegreeDiplomaCertificate: 'false',
+                canadianEducationLevel: '',
+                firstLanguageTest: '2',
+                firstLanguageSpeaking: '6',
+                firstLanguageListening: '6',
+                firstLanguageReading: '6',
+                firstLanguageWriting: '6',
+                secondLanguageTest: '0',
+                secondLanguageSpeaking: '',
+                secondLanguageListening: '',
+                secondLanguageReading: '',
+                secondLanguageWriting: '',
+                workExperienceInCanada: '0',
+                workExperienceLastTenYears: '3',
+                certificateQualificationProvince: 'false',
+                validJobOffer: 'false',
+                nocJobOffer: '',
+                nominationCertificate: 'false',
+                spouseAge: '41',
+                spouseEducationLevel: '4',
+                spouseCanadianDegreeDiplomaCertificate: 'false',
+                spouseCanadianEducationLevel: '',
+                spouseFirstLanguageTest: '3',
+                spouseFirstLanguageSpeaking: '6',
+                spouseFirstLanguageListening: '6',
+                spouseFirstLanguageReading: '6',
+                spouseFirstLanguageWriting: '6',
+                spouseSecondLanguageTest: '0',
+                spouseSecondLanguageSpeaking: '',
+                spouseSecondLanguageListening: '',
+                spouseSecondLanguageReading: '',
+                spouseSecondLanguageWriting: '',
+                spouseWorkExperienceInCanada: '0',
+                spouseWorkExperienceLastTenYears: '3',
+                calculation: null,
+                starOver: null,
+                done: null
+            };
+
+            request.reply = "Yes";
+
+            console.log('Request:', request);
+
+            $.ajax({
+                type: 'GET',
+                url: '/api/canada/expressEntry',
+                cache: false,
+                dataType: 'json',
+                data: request
+            }).success(function (data, textStatus, jqXHR)
+            {
+                var responseJSON = data.responseJSON;
+
+                question.html(responseJSON.response);
+                options.html('');
+
+                if (responseJSON.quickReplies !== null) {
+                    for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                        options.html(options.html() + '<br />' + responseJSON.quickReplies[r]);
+                    }
+                }
+
+                console.log('question:', responseJSON.customPayload.question);
+                console.log('responseJSON:', responseJSON);
+            }).error(function (jqXHR, textStatus, errorThrown)
+            {
+                console.log('Error: ', jqXHR.responseText);
+            });
+        </script>
 </body>
 
 </html>
