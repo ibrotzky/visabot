@@ -15,7 +15,80 @@
     <body>
         <div id="question"></div>
         <div id="options"></div>
+
         <script>
+            var question = $("#question");
+            var options = $("#options");
+
+            var payload = {};
+
+            //payload = {"question":39,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":6,"firstLanguageListening":6,"firstLanguageReading":6,"firstLanguageWriting":6,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":6,"spouseFirstLanguageListening":6,"spouseFirstLanguageReading":6,"spouseFirstLanguageWriting":6,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":0};
+
+            function answerQuestion(answer)
+            {
+                var request = {
+                    "payload": payload,
+                    "reply": answer
+                }
+
+                console.log('Request:', request);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/canada/expressEntry',
+                    cache: false,
+                    dataType: 'json',
+                    data: request
+                }).success(function (data, textStatus, jqXHR)
+                {
+                    var responseJSON = data.responseJSON;
+
+                    payload = responseJSON.customPayload;
+
+                    question.html(responseJSON.response);
+                    options.html('<br />');
+
+                    if (responseJSON.quickReplies === null) {
+                        var textbox = $("<input id='reply'></input>");
+                        var button = $("<button id='reply'>Reply</button>");
+
+                        textbox.appendTo(options);
+                        button.appendTo(options);
+                        $("<span>&nbsp</span>").appendTo(options);
+
+                        button.click(function ()
+                        {
+                            answerQuestion(textbox.val());
+                        });
+                    }
+                    else {
+                        for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                            var button = $("<button id='reply" + r + "'>" + responseJSON.quickReplies[r] + "</button>");
+
+                            button.appendTo(options);
+                            $("<span>&nbsp</span>").appendTo(options);
+
+                            button.click(function ()
+                            {
+                                answerQuestion($(this).text());
+                            });
+                        }
+                    }
+
+                    console.log('question:', payload.question);
+                    console.log('responseJSON:', responseJSON);
+                    console.log('payload:', JSON.stringify(payload));
+                }).error(function (jqXHR, textStatus, errorThrown)
+                {
+                    console.log('Error: ', jqXHR.responseText);
+                });
+            }
+
+            $(window).load(function ()
+            {
+                answerQuestion(null);
+            });
+/*
             var question = $("#question");
             var options = $("#options");
 
@@ -101,7 +174,9 @@
             {
                 console.log('Error: ', jqXHR.responseText);
             });
+            */
         </script>
+
 </body>
 
 </html>

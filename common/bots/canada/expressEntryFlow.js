@@ -453,7 +453,7 @@ var questions = {
 		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing); },
 		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply); },
-		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageTest) },
+		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseSecondLanguageTest) },
 	},
 	spouseSecondLanguageTest: {
 		id: null,
@@ -525,8 +525,8 @@ var questions = {
 	calculation: {
 		id: null,
 		question: function (payload) { return "{QUOTE}Calculation" },
-		options: function (payload) { return null },
-		processReply: function (payload, reply) { },
+		options: function (payload) { return [] },
+		processReply: function (payload, reply) {  },
 		nextQuestion: function (payload) { return questions.starOver },
 	},
 	starOver: {
@@ -580,7 +580,7 @@ var questionFlow = function (payload, reply, callback) {
 	//console.log('payload: ', payload);
 	//console.log('reply: ', reply);
 
-	if (payload === undefined) payload = null;
+	if (payload === undefined) payload = {};
 
 	var responseJSON = {
 		"response": null, // what the bot will respond with (more is appended below)
@@ -592,7 +592,7 @@ var questionFlow = function (payload, reply, callback) {
 
 	var question;
 
-	if (payload !== null)
+	if (Object.keys(payload).length > 0)
 	{
 		//console.log('payload.question: ', payload.question);
 		question = questions[questionsArray[payload.question]];
@@ -603,9 +603,9 @@ var questionFlow = function (payload, reply, callback) {
 		{
 			question.processReply(payload, reply);
 
-			console.log('payload Before: ', payload);
+			//console.log('payload Before: ', payload);
 			question = question.nextQuestion(payload);
-			console.log('payload After: ', payload);
+			//console.log('payload After: ', payload);
 		}
 	}
 	else
