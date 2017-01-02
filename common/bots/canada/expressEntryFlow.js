@@ -577,8 +577,8 @@ function validateAnswer(question, payload, reply) {
 }
 
 var questionFlow = function (payload, reply, callback) {
-	//console.log('payload: ', payload);
-	//console.log('reply: ', reply);
+	console.log('payload: ', payload);
+	console.log('reply: ', reply);
 
 	if (payload === undefined) payload = {};
 
