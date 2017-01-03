@@ -10,84 +10,120 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    </head>
 
-    <body>
-        <div id="question"></div>
-        <div id="options"></div>
-
-        <script>
-            var question = $("#question");
-            var options = $("#options");
-
-            var payload = {};
-
-            //payload = {"question":39,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":6,"firstLanguageListening":6,"firstLanguageReading":6,"firstLanguageWriting":6,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":6,"spouseFirstLanguageListening":6,"spouseFirstLanguageReading":6,"spouseFirstLanguageWriting":6,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":0};
-
-            function answerQuestion(answer)
+        <style>
+            .chat
             {
-                var request = {
-                    "payload": payload,
-                    "reply": answer
+                overflow-y: scroll;
+            }
+
+            .chatHistory>.question
+            {
+                text-align: left;
+            }
+
+            .chatHistory>.answer
+            {
+                text-align: right;
+            }
+        </style>
+</head>
+
+<body>
+    <div id="chat" class="chat">
+        <div id="chatHistory" class="chatHistory"></div>
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+    </div>
+
+    <script>
+        var chat = $("#chat");
+        var chatHistory = $("#chatHistory");
+        var question = $("#question");
+        var options = $("#options");
+
+        var payload = {};
+
+        //payload = { "question": 1, "name": "Bruno" };
+
+        function answerQuestion(answer)
+        {
+            chat.find("input").attr('disabled', 'disabled');
+            chat.find("button").attr('disabled', 'disabled');
+
+            var request = {
+                "payload": payload,
+                "reply": answer
+            }
+
+            $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
+
+            if (answer !== null) {
+                $("<div class='answer'>" + answer + "</div>").appendTo(chatHistory);
+
+                $("<br />").appendTo(chatHistory);
+            }
+
+            console.log('Request:', request);
+
+            $.ajax({
+                type: 'GET',
+                url: '/api/canada/expressEntry',
+                cache: false,
+                dataType: 'json',
+                data: request
+            }).success(function (data, textStatus, jqXHR)
+            {
+                var responseJSON = data.responseJSON;
+
+                payload = responseJSON.customPayload;
+
+                question.html(responseJSON.response);
+                options.html('<br />');
+
+                if (responseJSON.quickReplies === null) {
+                    var textbox = $("<input id='reply'></input>");
+                    var button = $("<button id='reply'>Reply</button>");
+
+                    textbox.appendTo(options);
+                    $("<span>&nbsp</span>").appendTo(options);
+                    button.appendTo(options);
+
+                    button.click(function ()
+                    {
+                        if (textbox.val().trim().length > 0)
+                            answerQuestion(textbox.val());
+                    });
                 }
+                else {
+                    for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                        var button = $("<button id='reply" + r + "'>" + responseJSON.quickReplies[r] + "</button>");
 
-                console.log('Request:', request);
-
-                $.ajax({
-                    type: 'GET',
-                    url: '/api/canada/expressEntry',
-                    cache: false,
-                    dataType: 'json',
-                    data: request
-                }).success(function (data, textStatus, jqXHR)
-                {
-                    var responseJSON = data.responseJSON;
-
-                    payload = responseJSON.customPayload;
-
-                    question.html(responseJSON.response);
-                    options.html('<br />');
-
-                    if (responseJSON.quickReplies === null) {
-                        var textbox = $("<input id='reply'></input>");
-                        var button = $("<button id='reply'>Reply</button>");
-
-                        textbox.appendTo(options);
                         button.appendTo(options);
                         $("<span>&nbsp</span>").appendTo(options);
 
                         button.click(function ()
                         {
-                            answerQuestion(textbox.val());
+                            answerQuestion($(this).text());
                         });
                     }
-                    else {
-                        for (r = 0; r < responseJSON.quickReplies.length; r++) {
-                            var button = $("<button id='reply" + r + "'>" + responseJSON.quickReplies[r] + "</button>");
+                }
 
-                            button.appendTo(options);
-                            $("<span>&nbsp</span>").appendTo(options);
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
 
-                            button.click(function ()
-                            {
-                                answerQuestion($(this).text());
-                            });
-                        }
-                    }
-
-                    console.log('question:', payload.question);
-                    console.log('responseJSON:', responseJSON);
-                    console.log('payload:', JSON.stringify(payload));
-                }).error(function (jqXHR, textStatus, errorThrown)
-                {
-                    console.log('Error: ', jqXHR.responseText);
-                });
-            }
-
-            $(window).load(function ()
+                console.log('question:', payload.question);
+                console.log('responseJSON:', responseJSON);
+                console.log('payload:', JSON.stringify(payload));
+            }).error(function (jqXHR, textStatus, errorThrown)
             {
-                answerQuestion(null);
+                console.log('Error: ', jqXHR.responseText);
             });
+        }
+
+        $(window).load(function ()
+        {
+            answerQuestion(null);
+        });
 /*
             var question = $("#question");
             var options = $("#options");
@@ -175,7 +211,7 @@
                 console.log('Error: ', jqXHR.responseText);
             });
             */
-        </script>
+    </script>
 
 </body>
 
