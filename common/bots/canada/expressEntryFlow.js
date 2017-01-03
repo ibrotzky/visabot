@@ -550,13 +550,6 @@ var questions = {
 	calculation: {
 		id: null,
 		question: function (payload) { return calculate(payload); },
-		options: function (payload) { return [] },
-		processReply: function (payload, reply) { },
-		nextQuestion: function (payload) { return questions.starOver },
-	},
-	starOver: {
-		id: null,
-		question: function (payload) { return "{QUOTE}Do you want to start over?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
@@ -576,8 +569,8 @@ var questions = {
 	},
 	done: {
 		id: null,
-		question: function (payload) { return "DONE" },
-		options: function (payload) { return null },
+		question: function (payload) { return "" },
+		options: function (payload) { return [] },
 		processReply: function (payload, reply) { },
 		nextQuestion: function (payload) { return questions.done; },
 	}
@@ -731,6 +724,8 @@ function calculate(payload) {
 
 		score += '<br />If you invert roles with your spouse or common-law partner, your score is ' + calculationSpouse.total + '.';
 	}
+
+	score += "<br /><br />Would you like to start over?";
 
 	return score;
 }
