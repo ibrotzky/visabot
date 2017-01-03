@@ -34,8 +34,7 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 	if (principalApplicant === undefined)
 		principalApplicant = true;
 
-	switch (ability)
-	{
+	switch (ability) {
 		case languageAbility.speaking:
 			abilityName = 'speak';
 			testSectionName = 'speaking';
@@ -59,10 +58,8 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 
 	if (parseInt(test) === 0)
 		return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English?";
-	else
-	{
-		switch (parseInt(test))
-		{
+	else {
+		switch (parseInt(test)) {
 			case answerIndex(testQuestion, payload, 'CELPIP'):
 				testName = "CELPIP";
 				break;
@@ -88,8 +85,7 @@ function languageOptions(test, testQuestion, payload, ability) {
 	console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
 	console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
 	*/
-	switch (parseInt(test))
-	{
+	switch (parseInt(test)) {
 		case answerIndex(testQuestion, payload, 'No'):
 			return ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
 			break;
@@ -103,8 +99,7 @@ function languageOptions(test, testQuestion, payload, ability) {
 			break;
 
 		case answerIndex(testQuestion, payload, 'TEF'):
-			switch (ability)
-			{
+			switch (ability) {
 				case languageAbility.speaking:
 				case languageAbility.writing:
 					return ["0 - 180", "181 - 225", "226 - 270", "271 - 309", "310 - 348", "349 - 370", "371 - 392", "393 - 450"];
@@ -161,8 +156,7 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old are you?" },
 		options: function (payload) { return ['17 or less', '18', '19', '20 to 29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'] },
 		processReply: function (payload, reply) {
-			switch (reply)
-			{
+			switch (reply) {
 				case '17 or less':
 					payload.age = 17;
 					break;
@@ -232,28 +226,28 @@ var questions = {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.speaking); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.speaking); },
-		processReply: function (payload, reply) { payload.firstLanguageSpeaking = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.firstLanguageSpeaking = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.firstLanguageListening },
 	},
 	firstLanguageListening: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
-		processReply: function (payload, reply) { payload.firstLanguageListening = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.firstLanguageListening = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.firstLanguageReading },
 	},
 	firstLanguageReading: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
-		processReply: function (payload, reply) { payload.firstLanguageReading = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.firstLanguageReading = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.firstLanguageWriting },
 	},
 	firstLanguageWriting: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
-		processReply: function (payload, reply) { payload.firstLanguageWriting = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.firstLanguageWriting = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return (payload.firstLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageTest) },
 	},
 	secondLanguageTest: {
@@ -272,28 +266,28 @@ var questions = {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.speaking); },
 		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.speaking); },
-		processReply: function (payload, reply) { payload.secondLanguageSpeaking = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.secondLanguageSpeaking = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.secondLanguageListening },
 	},
 	secondLanguageListening: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.listening); },
 		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.listening); },
-		processReply: function (payload, reply) { payload.secondLanguageListening = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.secondLanguageListening = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.secondLanguageReading },
 	},
 	secondLanguageReading: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.reading); },
 		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.reading); },
-		processReply: function (payload, reply) { payload.secondLanguageReading = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.secondLanguageReading = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.secondLanguageWriting },
 	},
 	secondLanguageWriting: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.writing); },
 		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.writing); },
-		processReply: function (payload, reply) { payload.secondLanguageWriting = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.secondLanguageWriting = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.workExperienceInCanada },
 	},
 	workExperienceInCanada: {
@@ -360,8 +354,7 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
 		options: function (payload) { return ['17 or less', '18', '19', '20 to 29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'] },
 		processReply: function (payload, reply) {
-			switch (reply)
-			{
+			switch (reply) {
 				case '17 or less':
 					payload.spouseAge = 17;
 					break;
@@ -417,7 +410,7 @@ var questions = {
 	},
 	spouseFirstLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a language test?" },
+		question: function (payload) { return "{QUOTE}Will your spouse or common-law partner take a language test?" },
 		options: function (payload) {
 			return ['No',
 				'CELPIP',
@@ -425,34 +418,34 @@ var questions = {
 				'TEF'];
 		},
 		processReply: function (payload, reply) { payload.spouseFirstLanguageTest = answerIndex(this, payload, reply); },
-		nextQuestion: function (payload) { return questions.spouseFirstLanguageSpeaking },
+		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseFirstLanguageSpeaking) },
 	},
 	spouseFirstLanguageSpeaking: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.speaking, false); },
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.speaking); },
-		processReply: function (payload, reply) { payload.spouseFirstLanguageSpeaking = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageSpeaking = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageListening },
 	},
 	spouseFirstLanguageListening: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening, false); },
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening); },
-		processReply: function (payload, reply) { payload.spouseFirstLanguageListening = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageListening = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageReading },
 	},
 	spouseFirstLanguageReading: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading, false); },
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading); },
-		processReply: function (payload, reply) { payload.spouseFirstLanguageReading = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageReading = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageWriting },
 	},
 	spouseFirstLanguageWriting: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing); },
-		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseSecondLanguageTest) },
 	},
 	spouseSecondLanguageTest: {
@@ -471,28 +464,28 @@ var questions = {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.speaking, false); },
 		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.speaking); },
-		processReply: function (payload, reply) { payload.spouseSecondLanguageSpeaking = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageSpeaking = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseSecondLanguageListening },
 	},
 	spouseSecondLanguageListening: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.listening, false); },
 		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.listening); },
-		processReply: function (payload, reply) { payload.spouseSecondLanguageListening = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageListening = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseSecondLanguageReading },
 	},
 	spouseSecondLanguageReading: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.reading, false); },
 		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.reading); },
-		processReply: function (payload, reply) { payload.spouseSecondLanguageReading = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageReading = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseSecondLanguageWriting },
 	},
 	spouseSecondLanguageWriting: {
 		id: null,
 		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.writing, false); },
 		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.writing); },
-		processReply: function (payload, reply) { payload.spouseSecondLanguageWriting = answerIndex(this, payload, reply); },
+		processReply: function (payload, reply) { payload.spouseSecondLanguageWriting = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseWorkExperienceInCanada },
 	},
 	spouseWorkExperienceInCanada: {
@@ -519,14 +512,46 @@ var questions = {
 				"3 years or more"];
 		},
 		processReply: function (payload, reply) { payload.spouseWorkExperienceLastTenYears = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseCertificateQualificationProvince },
+	},
+	spouseCertificateQualificationProvince: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you have a certificate of qualification from a Canadian province or territory?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.spouseCertificateQualificationProvince = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return questions.spouseValidJobOffer },
+	},
+	spouseValidJobOffer: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you have a valid job offer supported by a Labour Market Impact Assessment (if needed)?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.spouseValidJobOffer = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (util.parseBoolean(payload.spouseValidJobOffer) ? questions.spouseNocJobOffer : questions.spouseNominationCertificate) },
+	},
+	spouseNocJobOffer: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Which NOC skill type or level is the job offer?" },
+		options: function (payload) {
+			return ["00",
+				'0, A or B',
+				'C or D'];
+		},
+		processReply: function (payload, reply) { payload.spouseNocJobOffer = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseNominationCertificate },
+	},
+	spouseNominationCertificate: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Do you have a nomination certificate from a province or territory?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.spouseNominationCertificate = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return questions.calculation },
 	},
 
 	calculation: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Calculation" },
+		question: function (payload) { return calculate(payload); },
 		options: function (payload) { return [] },
-		processReply: function (payload, reply) {  },
+		processReply: function (payload, reply) { },
 		nextQuestion: function (payload) { return questions.starOver },
 	},
 	starOver: {
@@ -536,12 +561,10 @@ var questions = {
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
 
-			if (util.parseBoolean(payload.startOver))
-			{
+			if (util.parseBoolean(payload.startOver)) {
 				var payloadArray = Object.keys(payload);
 
-				for (p = 0; p < payloadArray.length; p++)
-				{
+				for (p = 0; p < payloadArray.length; p++) {
 					delete payload[payloadArray[p]];
 				}
 
@@ -562,8 +585,7 @@ var questions = {
 
 var questionsArray = Object.keys(questions);
 
-for (q = 0; q < questionsArray.length; q++)
-{
+for (q = 0; q < questionsArray.length; q++) {
 	questions[questionsArray[q]].id = q;
 }
 
@@ -576,9 +598,9 @@ function validateAnswer(question, payload, reply) {
 		return (options.indexOf(reply) >= 0);
 }
 
-var questionFlow = function (payload, reply, callback) {
-	console.log('payload: ', payload);
-	console.log('reply: ', reply);
+function questionFlow(payload, reply, callback) {
+	//console.log('payload: ', payload);
+	//console.log('reply: ', reply);
 
 	if (payload === undefined) payload = {};
 
@@ -592,15 +614,13 @@ var questionFlow = function (payload, reply, callback) {
 
 	var question;
 
-	if (Object.keys(payload).length > 0)
-	{
+	if (Object.keys(payload).length > 0) {
 		//console.log('payload.question: ', payload.question);
 		question = questions[questionsArray[payload.question]];
 		//console.log('question: ', question);
 
 		//console.log('answerValid: ', validateAnswer(question, payload, reply));
-		if (validateAnswer(question, payload, reply))
-		{
+		if (validateAnswer(question, payload, reply)) {
 			question.processReply(payload, reply);
 
 			//console.log('payload Before: ', payload);
@@ -608,8 +628,7 @@ var questionFlow = function (payload, reply, callback) {
 			//console.log('payload After: ', payload);
 		}
 	}
-	else
-	{
+	else {
 		question = questions.name;
 	}
 	//console.log('nextQuestion: ', question);
@@ -624,6 +643,96 @@ var questionFlow = function (payload, reply, callback) {
 
 	//console.log("responseJSON: ", responseJSON);
 	return responseJSON;
+}
+
+function calculate(payload) {
+	var calculator = require("./expressEntryCalculator");
+
+	var score = "{QUOTE}";
+
+	var parametersUser = {};
+	var calculationUser;
+
+	var parametersSpouse = {};
+	var calculationSpouse;
+
+	// Calculate for the Principal Applicant
+	parametersUser.married = util.parseBoolean(payload.married);
+	parametersUser.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
+	parametersUser.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
+	parametersUser.age = parseInt(payload.age);
+	parametersUser.educationLevel = parseInt(payload.educationLevel);
+	if (payload.canadianEducationLevel !== undefined) parametersUser.educationInCanada = parseInt(payload.canadianEducationLevel);
+	parametersUser.firstLanguage = calculator.languageObject();
+	parametersUser.firstLanguage.test = parseInt(payload.firstLanguageTest);
+	parametersUser.firstLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
+	parametersUser.firstLanguage.listening = parseInt(payload.firstLanguageListening);
+	parametersUser.firstLanguage.reading = parseInt(payload.firstLanguageReading);
+	parametersUser.firstLanguage.writing = parseInt(payload.firstLanguageWriting);
+	parametersUser.secondLanguage = calculator.languageObject();
+	parametersUser.secondLanguage.test = (parametersUser.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.secondLanguageTest) : calculator.languageTest.tef);
+	parametersUser.secondLanguage.speaking = (payload.secondLanguageSpeaking === undefined ? 0 : parseInt(payload.secondLanguageSpeaking));
+	parametersUser.secondLanguage.listening = (payload.secondLanguageListening === undefined ? 0 : parseInt(payload.secondLanguageListening));
+	parametersUser.secondLanguage.reading = (payload.secondLanguageReading === undefined ? 0 : parseInt(payload.secondLanguageReading));
+	parametersUser.secondLanguage.writing = (payload.secondLanguageWriting === undefined ? 0 : parseInt(payload.secondLanguageWriting));
+	parametersUser.workInCanada = parseInt(payload.workExperienceInCanada);
+	parametersUser.workExperience = parseInt(payload.workExperienceLastTenYears);
+	parametersUser.certificateFromProvince = util.parseBoolean(payload.certificateQualificationProvince);
+	if (payload.nocJobOffer !== undefined) parametersUser.nocJobOffer = parseInt(payload.nocJobOffer);
+	parametersUser.nomination = util.parseBoolean(payload.nominationCertificate);
+	if (payload.spouseEducationLevel !== undefined) parametersUser.spouseEducationLevel = parseInt(payload.spouseEducationLevel);
+	if (payload.spouseWorkExperienceInCanada !== undefined) parametersUser.spouseWorkInCanada = parseInt(payload.spouseWorkExperienceInCanada);
+	parametersUser.spouseLanguage = calculator.languageObject();
+	parametersUser.spouseLanguage.test = parseInt(payload.spouseFirstLanguageTest);
+	parametersUser.spouseLanguage.speaking = (payload.spouseFirstLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseFirstLanguageSpeaking));
+	parametersUser.spouseLanguage.listening = (payload.spouseFirstLanguageListening === undefined ? 0 : parseInt(payload.spouseFirstLanguageListening));
+	parametersUser.spouseLanguage.reading = (payload.spouseFirstLanguageReading === undefined ? 0 : parseInt(payload.spouseFirstLanguageReading));
+	parametersUser.spouseLanguage.writing = (payload.spouseFirstLanguageWriting === undefined ? 0 : parseInt(payload.spouseFirstLanguageWriting));
+
+	calculationUser = calculator.calculate(parametersUser);
+
+	score += "Your score is " + calculationUser.total + ".";
+
+	//Calculate Inverting the roles
+	if (util.parseBoolean(payload.spouseCommingAlong)) {
+		parametersSpouse.married = util.parseBoolean(payload.married);
+		parametersSpouse.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
+		parametersSpouse.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
+		parametersSpouse.age = parseInt(payload.spouseAge);
+		parametersSpouse.educationLevel = parseInt(payload.spouseEducationLevel);
+		if (payload.spouseCanadianEducationLevel !== undefined) parametersSpouse.educationInCanada = parseInt(payload.spouseCanadianEducationLevel);
+		parametersSpouse.firstLanguage = calculator.languageObject();
+		parametersSpouse.firstLanguage.test = parseInt(payload.spouseFirstLanguageTest);
+		parametersSpouse.firstLanguage.speaking = parseInt(payload.spouseFirstLanguageSpeaking);
+		parametersSpouse.firstLanguage.listening = parseInt(payload.spouseFirstLanguageListening);
+		parametersSpouse.firstLanguage.reading = parseInt(payload.spouseFirstLanguageReading);
+		parametersSpouse.firstLanguage.writing = parseInt(payload.spouseFirstLanguageWriting);
+		parametersSpouse.secondLanguage = calculator.languageObject();
+		parametersSpouse.secondLanguage.test = (parametersSpouse.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.spouseSecondLanguageTest) : calculator.languageTest.tef);
+		parametersSpouse.secondLanguage.speaking = (payload.spouseSecondLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseSecondLanguageSpeaking));
+		parametersSpouse.secondLanguage.listening = (payload.spouseSecondLanguageListening === undefined ? 0 : parseInt(payload.spouseSecondLanguageListening));
+		parametersSpouse.secondLanguage.reading = (payload.spouseSecondLanguageReading === undefined ? 0 : parseInt(payload.spouseSecondLanguageReading));
+		parametersSpouse.secondLanguage.writing = (payload.spouseSecondLanguageWriting === undefined ? 0 : parseInt(payload.spouseSecondLanguageWriting));
+		parametersSpouse.workInCanada = parseInt(payload.spouseWorkExperienceInCanada);
+		parametersSpouse.workExperience = parseInt(payload.spouseWorkExperienceLastTenYears);
+		parametersSpouse.certificateFromProvince = util.parseBoolean(payload.spouseCertificateQualificationProvince);
+		if (payload.nocJobOffer !== undefined) parametersSpouse.nocJobOffer = parseInt(payload.spouseNocJobOffer);
+		parametersSpouse.nomination = util.parseBoolean(payload.spouseNominationCertificate);
+		parametersSpouse.spouseEducationLevel = parseInt(payload.educationLevel);
+		parametersSpouse.spouseWorkInCanada = parseInt(payload.workExperienceInCanada);
+		parametersSpouse.spouseLanguage = calculator.languageObject();
+		parametersSpouse.spouseLanguage.test = parseInt(payload.firstLanguageTest);
+		parametersSpouse.spouseLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
+		parametersSpouse.spouseLanguage.listening = parseInt(payload.firstLanguageListening);
+		parametersSpouse.spouseLanguage.reading = parseInt(payload.firstLanguageReading);
+		parametersSpouse.spouseLanguage.writing = parseInt(payload.firstLanguageWriting);
+
+		calculationSpouse = calculator.calculate(parametersSpouse);
+
+		score += '<br />If you invert roles with your spouse or common-law partner, your score is ' + calculationSpouse.total + '.';
+	}
+
+	return score;
 }
 
 module.exports = {

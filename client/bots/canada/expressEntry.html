@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <title>VisaBot CRS Calculator</title>
+<head>
+    <title>VisaBot CRS Calculator</title>
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-        <style>
-            .chat
-            {
-                overflow-y: scroll;
-            }
-
+    <script src="expressEntryCalculator.js"></script>
+    <style>
             .chatHistory>.question
             {
                 text-align: left;
@@ -44,10 +40,9 @@
 
         var payload = {};
 
-        //payload = { "question": 1, "name": "Bruno" };
+        payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
-        function answerQuestion(answer)
-        {
+        function answerQuestion(answer) {
             chat.find("input").attr('disabled', 'disabled');
             chat.find("button").attr('disabled', 'disabled');
 
@@ -64,8 +59,7 @@
                 cache: false,
                 dataType: 'json',
                 data: request
-            }).success(function (data, textStatus, jqXHR)
-            {
+            }).success(function (data, textStatus, jqXHR) {
                 $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
 
                 if (answer !== null) {
@@ -89,8 +83,7 @@
                     $("<span>&nbsp</span>").appendTo(options);
                     button.appendTo(options);
 
-                    button.click(function ()
-                    {
+                    button.click(function () {
                         if (textbox.val().trim().length > 0)
                             answerQuestion(textbox.val());
                     });
@@ -102,8 +95,7 @@
                         button.appendTo(options);
                         $("<span>&nbsp</span>").appendTo(options);
 
-                        button.click(function ()
-                        {
+                        button.click(function () {
                             answerQuestion($(this).text());
                         });
                     }
@@ -114,8 +106,7 @@
                 console.log('question:', payload.question);
                 console.log('responseJSON:', responseJSON);
                 console.log('payload:', JSON.stringify(payload));
-            }).error(function (jqXHR, textStatus, errorThrown)
-            {
+            }).error(function (jqXHR, textStatus, errorThrown) {
                 chat.find("input").removeAttr('disabled');
                 chat.find("button").removeAttr('disabled');
 
@@ -123,99 +114,75 @@
             });
         }
 
-        $(window).load(function ()
-        {
+        $(window).load(function () {
             answerQuestion(null);
         });
-/*
-            var question = $("#question");
-            var options = $("#options");
 
-            var request = {
-                "payload": null,
-                "reply": null
+
+
+
+        /*parseBoolean = function (str) {
+            if (str === undefined || str === null) {
+                return false;
             }
-
-
-            request.payload = {
-                question: 41,
-                name: 'Bruno',
-                married: 'true',
-                spouseCanadianCitizen: 'false',
-                spouseCommingAlong: 'true',
-                age: '33',
-                educationLevel: '4',
-                canadianDegreeDiplomaCertificate: 'false',
-                canadianEducationLevel: '',
-                firstLanguageTest: '2',
-                firstLanguageSpeaking: '6',
-                firstLanguageListening: '6',
-                firstLanguageReading: '6',
-                firstLanguageWriting: '6',
-                secondLanguageTest: '0',
-                secondLanguageSpeaking: '',
-                secondLanguageListening: '',
-                secondLanguageReading: '',
-                secondLanguageWriting: '',
-                workExperienceInCanada: '0',
-                workExperienceLastTenYears: '3',
-                certificateQualificationProvince: 'false',
-                validJobOffer: 'false',
-                nocJobOffer: '',
-                nominationCertificate: 'false',
-                spouseAge: '41',
-                spouseEducationLevel: '4',
-                spouseCanadianDegreeDiplomaCertificate: 'false',
-                spouseCanadianEducationLevel: '',
-                spouseFirstLanguageTest: '3',
-                spouseFirstLanguageSpeaking: '6',
-                spouseFirstLanguageListening: '6',
-                spouseFirstLanguageReading: '6',
-                spouseFirstLanguageWriting: '6',
-                spouseSecondLanguageTest: '0',
-                spouseSecondLanguageSpeaking: '',
-                spouseSecondLanguageListening: '',
-                spouseSecondLanguageReading: '',
-                spouseSecondLanguageWriting: '',
-                spouseWorkExperienceInCanada: '0',
-                spouseWorkExperienceLastTenYears: '3',
-                calculation: null,
-                starOver: null,
-                done: null
-            };
-
-            request.reply = "Yes";
-
-            console.log('Request:', request);
-
-            $.ajax({
-                type: 'GET',
-                url: '/api/canada/expressEntry',
-                cache: false,
-                dataType: 'json',
-                data: request
-            }).success(function (data, textStatus, jqXHR)
-            {
-                var responseJSON = data.responseJSON;
-
-                question.html(responseJSON.response);
-                options.html('');
-
-                if (responseJSON.quickReplies !== null) {
-                    for (r = 0; r < responseJSON.quickReplies.length; r++) {
-                        options.html(options.html() + '<br />' + responseJSON.quickReplies[r]);
-                    }
+            else {
+                if (typeof str !== 'string') {
+                    str = str.toString();
                 }
 
-                console.log('question:', responseJSON.customPayload.question);
-                console.log('responseJSON:', responseJSON);
-            }).error(function (jqXHR, textStatus, errorThrown)
-            {
-                console.log('Error: ', jqXHR.responseText);
-            });
-            */
-    </script>
+                if (isNaN(str)) {
+                    switch (str.toLowerCase()) {
+                        case "true":
+                            return true;
+                        case "false":
+                            return false;
+                        default:
+                            throw new Error("Boolean.parse: Cannot convert string '" + str + "' to boolean.");
+                    }
+                }
+                else {
+                    if (str === '0') {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+            }
+        }
 
+        var parametersUser = {};
+        var calculationUser;
+
+        parametersUser.married = parseBoolean(payload.married);
+        if (payload.canadianEducationLevel !== undefined) parametersUser.spouseCanadianCitizen = parseBoolean(payload.spouseCanadianCitizen);
+        if (payload.canadianEducationLevel !== undefined) parametersUser.spouseCommingAlong = parseBoolean(payload.spouseCommingAlong);
+        parametersUser.age = parseInt(payload.age);
+        parametersUser.educationLevel = parseInt(payload.educationLevel);
+        if (payload.canadianEducationLevel !== undefined) parametersUser.educationInCanada = parseInt(payload.canadianEducationLevel);
+        parametersUser.firstLanguage = languageObject();
+        parametersUser.firstLanguage.test = parseInt(payload.firstLanguageTest);
+        parametersUser.firstLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
+        parametersUser.firstLanguage.listening = parseInt(payload.firstLanguageListening);
+        parametersUser.firstLanguage.reading = parseInt(payload.firstLanguageReading);
+        parametersUser.firstLanguage.writing = parseInt(payload.firstLanguageWriting);
+        if (parametersUser.secondLanguageTest != 0) {
+            parametersUser.secondLanguage = languageObject();
+            parametersUser.secondLanguage.test = (parametersUser.firstLanguage.test === languageTest.tef ? parseInt(payload.firstLanguageTest) : languageTest.tef);
+            parametersUser.secondLanguage.speaking = parseInt(payload.secondLanguageSpeaking);
+            parametersUser.secondLanguage.listening = parseInt(payload.secondLanguageListening);
+            parametersUser.secondLanguage.reading = parseInt(payload.secondLanguageReading);
+            parametersUser.secondLanguage.writing = parseInt(payload.secondLanguageWriting);
+        }
+        parametersUser.workInCanada = parseInt(payload.workExperienceInCanada);
+        parametersUser.workExperience = parseInt(payload.workExperienceLastTenYears);
+        parametersUser.certificateFromProvince = parseBoolean(payload.certificateQualificationProvince);
+        parametersUser.certificateFromProvince = parseBoolean(payload.certificateQualificationProvince);
+        if (payload.nocJobOffer !== undefined) parametersUser.nocJobOffer = parseInt(payload.nocJobOffer);
+        parametersUser.nomination = parseBoolean(payload.nominationCertificate);
+
+        calculationUser = calculate(parametersUser);*/
+    </script>
 </body>
 
 </html>
