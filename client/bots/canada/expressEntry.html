@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>VisaBot CRS Calculator</title>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div id="question"></div>
+        <div id="options"></div>
+
+        <script>
+            var question = $("#question");
+            var options = $("#options");
+
+            var payload = {};
+
+            //payload = {"question":39,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":6,"firstLanguageListening":6,"firstLanguageReading":6,"firstLanguageWriting":6,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":6,"spouseFirstLanguageListening":6,"spouseFirstLanguageReading":6,"spouseFirstLanguageWriting":6,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":0};
+
+            function answerQuestion(answer)
+            {
+                var request = {
+                    "payload": payload,
+                    "reply": answer
+                }
+
+                console.log('Request:', request);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/canada/expressEntry',
+                    cache: false,
+                    dataType: 'json',
+                    data: request
+                }).success(function (data, textStatus, jqXHR)
+                {
+                    var responseJSON = data.responseJSON;
+
+                    payload = responseJSON.customPayload;
+
+                    question.html(responseJSON.response);
+                    options.html('<br />');
+
+                    if (responseJSON.quickReplies === null) {
+                        var textbox = $("<input id='reply'></input>");
+                        var button = $("<button id='reply'>Reply</button>");
+
+                        textbox.appendTo(options);
+                        button.appendTo(options);
+                        $("<span>&nbsp</span>").appendTo(options);
+
+                        button.click(function ()
+                        {
+                            answerQuestion(textbox.val());
+                        });
+                    }
+                    else {
+                        for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                            var button = $("<button id='reply" + r + "'>" + responseJSON.quickReplies[r] + "</button>");
+
+                            button.appendTo(options);
+                            $("<span>&nbsp</span>").appendTo(options);
+
+                            button.click(function ()
+                            {
+                                answerQuestion($(this).text());
+                            });
+                        }
+                    }
+
+                    console.log('question:', payload.question);
+                    console.log('responseJSON:', responseJSON);
+                    console.log('payload:', JSON.stringify(payload));
+                }).error(function (jqXHR, textStatus, errorThrown)
+                {
+                    console.log('Error: ', jqXHR.responseText);
+                });
+            }
+
+            $(window).load(function ()
+            {
+                answerQuestion(null);
+            });
+/*
+            var question = $("#question");
+            var options = $("#options");
+
+            var request = {
+                "payload": null,
+                "reply": null
+            }
+
+
+            request.payload = {
+                question: 41,
+                name: 'Bruno',
+                married: 'true',
+                spouseCanadianCitizen: 'false',
+                spouseCommingAlong: 'true',
+                age: '33',
+                educationLevel: '4',
+                canadianDegreeDiplomaCertificate: 'false',
+                canadianEducationLevel: '',
+                firstLanguageTest: '2',
+                firstLanguageSpeaking: '6',
+                firstLanguageListening: '6',
+                firstLanguageReading: '6',
+                firstLanguageWriting: '6',
+                secondLanguageTest: '0',
+                secondLanguageSpeaking: '',
+                secondLanguageListening: '',
+                secondLanguageReading: '',
+                secondLanguageWriting: '',
+                workExperienceInCanada: '0',
+                workExperienceLastTenYears: '3',
+                certificateQualificationProvince: 'false',
+                validJobOffer: 'false',
+                nocJobOffer: '',
+                nominationCertificate: 'false',
+                spouseAge: '41',
+                spouseEducationLevel: '4',
+                spouseCanadianDegreeDiplomaCertificate: 'false',
+                spouseCanadianEducationLevel: '',
+                spouseFirstLanguageTest: '3',
+                spouseFirstLanguageSpeaking: '6',
+                spouseFirstLanguageListening: '6',
+                spouseFirstLanguageReading: '6',
+                spouseFirstLanguageWriting: '6',
+                spouseSecondLanguageTest: '0',
+                spouseSecondLanguageSpeaking: '',
+                spouseSecondLanguageListening: '',
+                spouseSecondLanguageReading: '',
+                spouseSecondLanguageWriting: '',
+                spouseWorkExperienceInCanada: '0',
+                spouseWorkExperienceLastTenYears: '3',
+                calculation: null,
+                starOver: null,
+                done: null
+            };
+
+            request.reply = "Yes";
+
+            console.log('Request:', request);
+
+            $.ajax({
+                type: 'GET',
+                url: '/api/canada/expressEntry',
+                cache: false,
+                dataType: 'json',
+                data: request
+            }).success(function (data, textStatus, jqXHR)
+            {
+                var responseJSON = data.responseJSON;
+
+                question.html(responseJSON.response);
+                options.html('');
+
+                if (responseJSON.quickReplies !== null) {
+                    for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                        options.html(options.html() + '<br />' + responseJSON.quickReplies[r]);
+                    }
+                }
+
+                console.log('question:', responseJSON.customPayload.question);
+                console.log('responseJSON:', responseJSON);
+            }).error(function (jqXHR, textStatus, errorThrown)
+            {
+                console.log('Error: ', jqXHR.responseText);
+            });
+            */
+        </script>
+
+</body>
+
+</html>
