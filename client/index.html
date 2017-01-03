@@ -82,18 +82,11 @@ font-family: 'Titillium Web' ;font-weight: 600;
 
 <div class="clearfix colelem" id="u175-6">
   <!-- content -->
-  <h2>I’m still under construction, but if you’d like to be</h2>
-  <h2>the first to get access to me, let me know your email!</h2>
-  <div id="success" style="display: none;"> 
-    <br />
-    <h2>Your email was registered successfully.</h2>
-    <h2>I'm still learning a few things and</h2>
-    <h2>I'll get in touch with you pretty soon.</h2>
-    <br />
-  </div>
+  <h2 style="font-size: 20px">I’m still under construction, but if you’d like to try out my beta version,</h2>
+  <h2 style="font-size: 20px">just let me know your email and I'll let you know when I'm ready to roll!</h2>
   <div id="error" style="display: none;"> 
     <br />
-    <h2>Unfortunately there was an error registering your email. :-(</h2>
+    <h2 style="font-size: 20px">Unfortunately there was an error registering your email. :-(</h2>
     <br />
   </div>
 </div>
@@ -107,10 +100,10 @@ font-family: 'Titillium Web' ;font-weight: 600;
     <input class="wrapped-input" type="email" spellcheck="false" id="widgetu199_input" name="Email" tabindex="1"/><label class="wrapped-input fld-prompt" id="widgetu199_prompt" for="widgetu199_input"><span class="actAsPara">your@email.com</span></label>
     </span>
   </div>
-  <button class="submit-btn NoWrap rounded-corners clearfix grpelem" id="u193-4" value="notify me" tabindex="2" onclick="notifyMe();">
+  <button class="submit-btn NoWrap rounded-corners clearfix grpelem" id="u193-4" value="try me out" tabindex="2" onclick="notifyMe();">
 <!-- content -->
 <div style="margin-top:-22px;height:22px;">
-<h2>notify me</h2>
+<h2>try me out</h2>
 </div>
 </button>
 </div>
@@ -126,8 +119,8 @@ font-family: 'Titillium Web' ;font-weight: 600;
     <div class="clearfix" id="u135_align_to_page">
       <div class="clearfix colelem" id="u178-6">
         <!-- content -->
-        <h2>Don’t worry, I won’t send you spam. I don’t like ir either.</h2>
-        <h2>(It’s actually illegal to do that here in Canada!)</h2>
+        <h2 style="font-size: 20px">Don’t worry, I won’t send you spam. I don’t like ir either.</h2>
+        <h2 style="font-size: 20px">(It’s actually illegal to do that here in Canada!)</h2>
       </div>
       <div class="clearfix colelem" id="u181-4">
         <!-- content -->
@@ -175,8 +168,6 @@ font-family: 'Titillium Web' ;font-weight: 600;
       data: {email: email.val()}
     }).success(function (data, textStatus, jqXHR)
     {
-        alert("You'll be redirected to our beta bot for Express Entry now. Enjoy. :)");
-      
         window.location ="bots/canada/expressEntry.html";  
     }).error(function (jqXHR, textStatus, errorThrown)
     {
