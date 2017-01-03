@@ -175,10 +175,9 @@ font-family: 'Titillium Web' ;font-weight: 600;
       data: {email: email.val()}
     }).success(function (data, textStatus, jqXHR)
     {
-      divForm.hide();
-      divSuccess.show();
-      divIllegal.css('visibility', 'hidden');
-    
+        alert("You'll be redirected to our beta bot for Express Entry now. Enjoy. :)");
+      
+        window.location ="bots/canada/expressentry.html";  
     }).error(function (jqXHR, textStatus, errorThrown)
     {
       divForm.hide();
