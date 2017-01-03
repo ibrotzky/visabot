@@ -1,0 +1,427 @@
+.round{-webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%;}
+.clear{clear: both;}
+
+.comments{
+    float: left;
+    width: 100%;
+    text-align: left;
+    padding: 30px 0;
+}
+
+.comments > header{
+    display: block;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.comments > header h1{
+    font-size: 1.6em;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.comments > header h1 span{
+    display: block;
+    font-size: 0.7em;
+    font-weight: 600;
+    text-transform: none;
+}
+
+.comments_count{
+    float: left;
+    width: 100%;
+    padding: 10px;
+    text-transform: uppercase;
+    text-align: center;
+    background: #eee;
+    font-size: 0.8em;
+    color: #999;
+}
+
+.comments_single{
+    float: left;
+    width: 100%;
+    padding: 30px 0 20px 0;
+    border-top: 5px solid #ccc;
+}
+
+.comments_single_avatar{
+    float: left;
+    width: 10%;
+}
+
+.comments_single_avatar img{
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.comments_single_content{
+    float: right;
+    width: 90%;
+    padding-left: 30px;
+}
+
+.comments_single header{
+    display: block;
+    width: 100%;
+}
+
+.comments_single header h1{
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.comments_single_comment{
+    float: left;
+    width: 100%;
+    margin: 10px 0 20px 0;
+    font-size: 0.9em;
+    color: #333;
+    font-weight: 400;
+}
+
+.comments_single_ui{
+    display: block;
+    width: 100%;
+    font-size: 0.875em;
+    color: #777;
+}
+
+.comments_single_ui span{
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.comments_single_ui .stars{
+    color: #555;
+}
+
+.comments_single_ui .liked,
+.comments_single_ui .date{
+    color: #cecece;
+}
+
+.comments_single_ui .like{
+    color: #0077b3;
+    cursor: pointer;
+}
+
+.comments_single_ui .response{
+    color: #00B594;
+    cursor: pointer;
+}
+
+.comments_single_ui .like:hover,
+.comments_single_ui .response:hover{
+    text-decoration: underline;
+}
+
+.comments_single_likes{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #eee;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.comments_single_likes:before{
+    content: "♥";
+    margin-right: 8px;
+    color: #C63D3A;
+}
+
+.comments_single form{
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.comments > form{
+    float: left;
+    width: 100%;
+    background: #f3f3f3;
+    border-top: 5px solid #ccc;
+    padding: 20px;
+}
+
+.comments > form label span,
+.comments_single label span{
+    font-size: 1.4em;
+    font-variant: small-caps;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.comments > form textarea,
+.comments_single form textarea{
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.comments > form select,
+.comments_single form select{
+    width: auto;
+}
+
+.comments > form img,
+.comments > form .btn,
+.comments_single form img,
+.comments_single form .btn{
+    float: right;
+}
+
+.comments > form img,
+.comments_single form img{
+    height: 25px;
+    margin-top: 6px;
+    margin-left: 10px;
+    display: none;
+}
+
+.comment_response{
+    border-top: 1px dotted #ccc;
+    margin: 0;
+    padding: 30px 0 10px 0;
+}
+
+.comment_response:last-child{
+    padding-bottom: 0;
+}
+
+.comments > form .wc_close{
+    display: none;
+}
+
+.comments .label{
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.comments .label span{
+    font-size: 1em;
+}
+
+.comments .label_50 label{
+    float: left;
+    width: 49%;
+}
+
+.comments .label_50 label:nth-of-type(2n+0){
+    margin-left: 2%;
+}
+
+.comments > form .btn,
+.comments_single form .btn{
+    margin-left: 16px;
+}
+
+.comments input,
+.comments select{
+    border: 1px solid #ccc;
+}
+
+.ajax_response{
+    display: none;
+}
+
+.comment_login_box{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+}
+
+.comment_login_content{
+    width: 500px;
+    max-width: 90%;
+    background: #fff;
+    margin: 4% auto;
+}
+
+.comment_login_content input{
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+    font-weight: 300;
+}
+
+.comment_login_content header{
+    background: #00B594;
+    color: #eee;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.comment_login_content header h1{
+    font-weight: bold;
+    line-height: 1.3;
+    text-transform: capitalize;
+}
+
+.comment_login_content header p{
+    font-size: 0.8em;
+}
+
+.comment_login_content header .trigger{
+    margin: 10px 0 0 0;
+}
+
+.comment_login_close{
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    padding: 5px 11px;
+    font-size: 0.8em;
+    background: #C63D3A;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.comment_login_close:hover{
+    background: #F45563;
+}
+
+.comment_login_fields{
+    padding: 30px 30px 15px 30px;
+}
+
+.comment_login_fields label{
+    float: left;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.comment_login_fields span{
+    font-size: 0.8em;
+    display: block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    color: #999;
+}
+
+.comment_login_actions{
+    padding: 20px;
+    background: #f2f2f2;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+.comment_login_actions img{
+    height: 26px;
+    margin-left: 10px;
+    margin-top: -3px;
+    display: none;
+}
+
+.comment_login_actions .btn{
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 10px 0;
+    width: 80%;
+}
+
+.comment_login_fields .comment_login_create,
+.comment_login_fields .comment_login_join{
+    display: none;
+}
+
+.comment_recover_back,
+.comment_recover_password{
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.comment_recover_password:hover{
+    text-decoration: none;
+}
+
+.comment_recover_label{
+    padding: 30px;
+    background: #fbfbfb;
+    display: none;
+}
+
+.comment_recover_label span{
+    font-size: 0.9em;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.comment_recover_label b{
+    font-size: 1.5em;
+    text-transform: lowercase;
+}
+
+.comment_recover_label input{
+    text-align: center;
+}
+
+.comment_recover_label .comment_recover_back,
+.comment_recover_label .comment_recover_password{
+    text-align: center;
+    margin: 20px 0 0 0;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #999;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.comment_recover_label .comment_recover_back{
+    margin-left: 10px;
+}
+.comment_recover_label .comment_recover_back:hover,
+.comment_recover_label .comment_recover_password:hover{
+    text-decoration: underline;
+}
+
+@media (max-width: 900px){
+    .comments > form select,
+    .comments_single form select{
+        float: left;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .comments > form img,
+    .comments_single form img{
+        float: none;
+    }
+
+    .comments > form .btn,
+    .comments_single form .btn{
+        float: left;
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+}
+
+@media (max-width: 600px){
+    .comments_single_avatar{
+        display: none;
+    }
+
+    .comments_single_content{
+        float: left;
+        width: 100%;
+        padding-left: 0;
+    }
+}

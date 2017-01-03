@@ -1,0 +1,83 @@
+.box33,
+.box25{width: 100%;}
+.label_50 .label{
+    width: 100%;
+    margin-left: 0 !important;
+}
+.dashboard_content{
+    float: left;
+    width: 100%;
+    padding: 10px;
+}
+.dashboard_fix{
+    min-width: 320px;
+}
+
+.dashboard_search article p,
+.dashboard_search article h1{
+    width: 50%;
+    padding: 20px;
+}
+
+.dashboard_search article h1{
+    text-align: center;
+}
+
+.dashboard_orders .order span{
+    width: 40%;
+    font-size: 0.875em;
+}
+.dashboard_orders .order span:nth-of-type(3n+0){
+    display: none;
+}
+
+.wc_order_create_item header{
+    width: 70%;
+    padding-left: 0;
+}
+
+.wc_order_create_item img{
+    display: none;
+}
+
+.wc_order_create_item .add .btn,
+.wc_order_create_item .add select{
+    width: 100%;
+}
+
+.wc_order_create_item .add select{
+    border: 1px solid #ccc;
+    border-bottom: 0;
+}
+
+.wc_ordercreate_totalcart{
+    text-align: center;
+}
+
+.wc_ordercreate_totalcart p{
+    width: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.student_gerent_orders h1.row,
+.student_gerent_orders .row{
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px dotted #ccc;
+    padding: 10px;
+}
+
+.wc_ead_chart_range{
+    margin-bottom: 20px;
+}
+
+.wc_ead_chart_range_picker span{
+    display: none;
+}
+
+.wc_ead_chart_change,
+.wc_ead_chart_range{
+    width: 100%;
+    text-align: center;
+}

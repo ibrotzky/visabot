@@ -1,0 +1,5 @@
+<ul class="workcontrol_sharebar">
+    <li class='workcontrol_socialshare_item workcontrol_socialshare_facebook'><a target='_blank' class="wc_view wc_fb" title='Compartilhar!' href='<?= BASE . "{$URLSHARE}"; ?>'><img alt='Compartilhar!' title='Compartilhar!' src='_img/icons/facebook.png'/><span>00</span></a></li>
+    <li class='workcontrol_socialshare_item workcontrol_socialshare_googleplus'><a target='_blank' class="wc_view wc_gp" title='Compartilhar!' href='<?= BASE . "{$URLSHARE}"; ?>'><img alt='Compartilhar!' title='Compartilhar!' src='_img/icons/googleplus.png'/><span>00</span></a></li>
+    <li class='workcontrol_socialshare_item workcontrol_socialshare_twitter'><a target='_blank' class="wc_view wc_tw" title='Compartilhar!' href='<?= BASE . "{$URLSHARE}"; ?>'><img alt='Compartilhar!' title='Compartilhar!' src='_img/icons/twitter.png'/></a></li>
+</ul>

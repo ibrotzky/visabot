@@ -1,0 +1,84 @@
+.workcontrol_socialshare{
+    display: block;
+    width: 100%;
+    padding: 20px 15px;
+    background: #fbfbfb;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+}
+
+.workcontrol_socialshare_cta{
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.875em;
+    text-shadow: 1px 1px 0px #eee;
+    color: #ccc;
+}
+
+.workcontrol_socialshare_item{
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 5px;
+}
+
+.workcontrol_socialshare_item span{
+    vertical-align: middle;
+    font-size: 0.875em;
+    color: #fff;
+    padding-left: 8px;
+    text-transform: uppercase;
+}
+
+.workcontrol_socialshare_item img{
+    width: 22px;
+    max-width: 100%;
+}
+
+.workcontrol_socialshare_item a{
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px;
+    background: #ccc;
+    transition-duration: 0.3s;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.workcontrol_socialshare_facebook a{
+    background: #5B74A9;
+}
+
+.workcontrol_socialshare_facebook a:hover{
+    background: #3B5998;
+}
+
+.workcontrol_socialshare_googleplus a{
+    background: #E4564B;
+}
+
+.workcontrol_socialshare_googleplus a:hover{
+    background: #CB3D38;
+}
+
+.workcontrol_socialshare_twitter a{
+    background: #059FF5;
+}
+
+.workcontrol_socialshare_twitter a:hover{
+    background: #0083B6;
+}
+
+@media (max-width: 48em){
+    .workcontrol_socialshare_cta{
+        display: none;
+    }
+    
+    .workcontrol_socialshare{
+        text-align: center;
+    }
+}

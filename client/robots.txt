@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /_app/
+Disallow: /_cdn/
+Disallow: /admin/
+Disallow: /cache/
+Disallow: /themes/
+

@@ -1,0 +1,426 @@
+.login_box{
+    width: 600px;
+    background: #fff;
+    margin: 0 auto;
+    max-width: 90%;
+    box-shadow: 0px 1px 3px 1px #ccc;
+    -moz-box-shadow: 0px 1px 3px 1px #ccc;
+    -webkit-box-shadow: 0px 1px 3px 1px #ccc;
+}
+
+.login_box header{
+    padding: 30px 20px;
+    text-align: center;
+    background: #f4f4f4;
+}
+
+.login_box header h1{
+    font-size: 2.4em;
+    font-weight: bold;
+    color: #888;
+    line-height: 1.1;
+    margin-bottom: 5px;
+}
+
+.login_box header p{
+    font-size: 0.7em;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.login_box .trigger{
+    text-align: center;
+}
+
+.login_box .trigger a{
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+}
+
+.login_box .trigger a:hover{
+    text-decoration: underline;
+}
+
+/*FORMS*/
+.account_form_fields{
+    padding: 30px 30px 15px 30px;
+}
+
+.account_form_fields .legend{
+    display: block;
+    width: 100%;
+    font-size: 1.5em;
+    margin: 30px 0 10px 0;
+}
+
+.account_form_fields label{
+    display: block;
+    margin-bottom: 15px;
+}
+
+.account_form_fields label span{
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 1em;
+}
+
+.account_form_fields label input{
+    font-size: 1.1em;
+}
+
+.account_form_fields label .input{
+    padding: 10px;
+    border: 2px solid #ccc;
+    color: #555;
+}
+
+.account_form_fields input{
+    border: 2px solid #ccc;
+}
+
+.account_form_actions{
+    padding: 30px 0;
+    text-align: center;
+    background: #f4f4f4;
+}
+
+.account_form_actions .btn{
+    display: inline-block;
+    margin: 0 auto;
+    font-weight: 600;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    padding: 10px 40px;
+}
+
+.account_form_actions img{
+    height: 26px;
+    margin-top: -5px;
+    margin-left: 10px;
+    display: none;
+}
+
+.account_form_actions a{
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: 300;
+    color: #555;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.account_form_actions a:hover{
+    text-decoration: underline;
+}
+
+.account_form_actions .create{
+    margin-left: 30px;
+    font-weight: 400;
+    color: #333;
+}
+
+.account_box{
+    display: inline-block;
+    width: 70%;
+    background: #fff;
+    vertical-align: top;
+}
+
+.account_box .trigger{
+    font-size: 1em;
+}
+
+.account_box .trigger a{
+    color: inherit;
+    font-weight: bold;
+}
+
+.account_box .paginator{
+    text-align: center;
+    margin: 15px 0 0 0;
+}
+
+
+.workcontrol_account_sidebar{
+    width: 30%;
+    padding-right: 30px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.workcontrol_account_sidebar header{
+    padding: 30px 0;
+    background: #f4f4f4;
+    text-align: center;
+}
+
+.workcontrol_account_sidebar header h1{
+    font-size: 1.2em;
+    font-weight: 300;
+}
+
+.workcontrol_account_sidebar header p{
+    font-size: 1em;
+}
+
+.workcontrol_account_sidebar_nav{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+}
+
+.workcontrol_account_sidebar_nav li{
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.workcontrol_account_sidebar_nav li a{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-transform: uppercase;
+    color: #555;
+    font-size: 0.875em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.workcontrol_account_sidebar_nav li .logoff{
+    color: #C63D3A;
+}
+
+.workcontrol_account_sidebar_nav li a:before{
+    content: "▪";
+    margin-right: 10px;
+}
+
+.workcontrol_account_sidebar_nav li .active,
+.workcontrol_account_sidebar_nav li .active:hover{
+    background: #eee;
+    border-color: #eee;
+    color: #333;
+    cursor: default;
+}
+
+.workcontrol_account_sidebar_nav li .active:before{
+    content: "➔";
+    margin-right: 10px;
+}
+
+.workcontrol_account_sidebar_nav li a:hover{
+    background: #f4f4f4;
+}
+
+.workcontrol_account_view{
+    padding: 30px;
+}
+
+.account_user_avatar{
+    width: 120px;
+    height: 120px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.account_box .account_form_callback{
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 15px;
+    width: 500px;
+    max-width: 100%;
+}
+
+.account_box .account_form_callback .trigger{
+    text-align: left;
+}
+
+.wc_account_title{
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #888;
+    padding-bottom: 5px;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #f2f2f2;
+}
+
+.wc_account_title span{
+    border-bottom: 3px solid #888;
+    padding-bottom: 5px;
+}
+
+.wc_spacer{
+    padding: 2px;
+    margin: 30px 0;
+    background: #fbfbfb;
+}
+
+.workcontrol_account_home p{
+    display: inline-block;
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #eee;
+}
+
+.workcontrol_account_home p b{
+    font-weight: 300;
+    color: #999;
+}
+
+.workcontrol_account_home .btn{
+    font-size: 0.8em;
+    font-weight: 400;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.wc_account_order{
+    font-size: 0.875em;
+    padding: 15px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.wc_account_order p{
+    display: inline-block;
+    width: 20%;
+    color: #888;
+    text-align: center;
+}
+
+.wc_account_order p:first-of-type{
+    text-align: left;
+}
+
+.wc_account_order a{
+    color: #000;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.wc_account_order a:hover{
+    text-decoration: underline;
+}
+
+.wc_order_addr{
+    margin: 0 0 20px 0;
+    font-size: 0.875em;
+    padding: 10px;
+    border: 1px solid #f2f2f2;
+}
+
+.wc_order_addr b{
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.workcontrol_order_completed_card{
+    display: block;
+    width: 100%;
+}
+
+.workcontrol_order_completed_card p{
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+    font-weight: bold;
+    color: #888;
+    font-size: 0.875em;
+}
+
+.workcontrol_order_completed_card a{
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.workcontrol_order_completed_card a:hover{
+    text-decoration: underline;
+}
+
+.workcontrol_order_completed_card.items img{
+    display: inline-block;
+    vertical-align: middle;
+    width: 15%;
+}
+
+.workcontrol_order_completed_card.items .product span{
+    display: inline-block;
+    vertical-align: middle;
+    width: 85%;
+    padding-left: 5%;
+}
+
+.workcontrol_order_completed_card.items {
+    border-bottom: 1px solid #eee;
+}
+
+.workcontrol_order_completed_card.items p{
+    font-weight: 300;
+    color: #000;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 20px 0;
+}
+
+.workcontrol_order_completed_card .product{
+    width: 40%;
+    text-align: left;
+}
+
+.workcontrol_order_completed_card.total{
+    display: block;
+    text-align: right;
+    padding-top: 30px;
+    color: #888;
+    font-size: 1.3em;
+    font-weight: 300;
+}
+
+.workcontrol_order_completed_card.total b{
+    display: inline-block;
+    width: 200px;
+    font-weight: 300;
+}
+
+.workcontrol_order_completed_card.total .wc_cart_price b,
+.workcontrol_order_completed_card.total .wc_cart_price{
+    font-weight: 400;
+    color: #000;
+}
+
+@media (max-width: 62em){
+    .account_box,
+    .workcontrol_account_sidebar{
+        width: 100%;
+        padding: 0;
+    }
+
+    .workcontrol_account_sidebar_nav li{
+        display: inline-block;
+        width: 50%;
+    }
+
+}
+
+@media (max-width: 42em){
+    .workcontrol_account_home p{
+        width: 100%;
+    }
+
+    .wc_account_order p{
+        width: 50%;
+        padding: 10px 0 0 0;
+    }
+    .wc_account_order p:first-of-type{
+        width: 100%;
+        padding: 10px;
+        background: #f2f2f2;
+    }
+}

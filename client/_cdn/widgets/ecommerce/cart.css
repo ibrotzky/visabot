@@ -1,0 +1,1340 @@
+.wc_cart_add .cart_more{
+    display: inline-block;
+    margin: 0;
+    font-size: 1em;
+    background: #eee;
+    padding: 0;
+    width: 22px;
+    text-align: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    outline: none;
+    vertical-align: middle;
+}
+
+.wc_cart_add .less{
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    height: 48px;
+    vertical-align: bottom;
+}
+
+.wc_cart_add .plus{
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+    height: 48px;
+    vertical-align: bottom;
+}
+
+.wc_cart_add input{
+    display: inline-block;
+    width: 50px;
+    padding: 11px 0;
+    font-size: 1.1em;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-right: none;
+    height: 48px;
+    vertical-align: bottom;
+}
+
+.wc_cart_size_select{
+    display: inline-block;
+    padding: 12px;
+    border: 1px solid #ccc;
+    background: #eee;
+    margin-right: 10px;
+    vertical-align: middle;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    cursor: pointer;
+}
+
+.wc_cart_size_select_true,
+.wc_cart_size_select:hover{
+    color: #008068;
+    border-color: #008068;
+    background: none;
+}
+
+.wc_cart_size_select input{
+    display: none;
+}
+
+.wc_cart_add button{
+    display: inline-block;
+    font-size: 0.875em;
+    text-transform: uppercase;
+    max-width: 70%;
+    padding: 0 15px;
+    margin-left: 10px;
+    height: 48px;
+    vertical-align: bottom;
+}
+
+.wc_cart_add_btn.btn{
+    padding: 15px 30px;
+}
+
+.wc_cart_related > h1{
+    font-size: 1em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: bold;
+    margin: 25px 0 10px 0;
+}
+
+.wc_related_product{
+    padding: 20px;
+    background: #fbfbfb;
+    text-align: center;
+    font-size: 0.65em;
+    margin: 0 !important;
+}
+
+.wc_related_product img{
+    margin-bottom: 15px;
+}
+
+.wc_cart_list{
+    display: block;
+    width: 100%;
+    color: #fff;
+    text-decoration: none;
+    padding: 15px 20px;
+    cursor: pointer;
+}
+
+.wc_cart_callback{
+    position: fixed;
+    width: 400px;
+    max-width: 100%;
+    right: -100%;
+    top: 0;
+    padding: 15px;
+    z-index: 99;
+}
+
+.wc_cart_callback .trigger{
+    margin: 0;
+}
+
+.wc_cart_manager{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5) url(load_w.gif) center center no-repeat;
+    z-index: 999;
+    display: none;
+}
+
+.wc_cart_manager_content{
+    display: none;
+    width: 600px;
+    max-width: 90%;
+    margin: 12% auto 0 auto;
+    background: #fff;
+}
+
+.wc_cart_manager_header{
+    text-align: center;
+    padding: 20px 0;
+    background: #008068;
+    color: #fff;
+    font-size: 1.4em;
+    font-weight: 300;
+}
+
+.wc_cart_manager_info{
+    padding: 45px;
+    font-size: 1.1em;
+}
+
+.wc_cart_manager_actions{
+    display: block;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    background: #f2f2f2;
+}
+
+.wc_cart_manager_actions .btn{
+    font-weight: 600;
+    font-size: 0.7em;
+    text-transform: uppercase;
+}
+
+.wc_cart_manager_actions .wc_cart_close{
+    float: left;
+}
+
+.wc_cart_manager_actions .wc_cart_finish{
+    float: right;
+}
+
+.wc_cart_load{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5) url(load_w.gif) center center no-repeat;
+    z-index: 999;
+    display: none;
+}
+
+.workcontrol_cart{
+    padding: 10px 0 30px 0;
+}
+
+.workcontrol_cart > header{
+    margin-bottom: 20px;
+}
+
+.workcontrol_cart > header h1{
+    font-size: 2.2em;
+    color: #555;
+    font-weight: 100;
+}
+
+.workcontrol_cart > header span{
+    color: #008068;
+    font-weight: 400;
+}
+
+.workcontrol_cart_clean{
+    padding: 50px 20px;
+    background: #eee;
+    text-align: center;
+}
+
+.workcontrol_cart_clean p{
+    margin-bottom: 20px;
+}
+
+.workcontrol_cart_clean .title{
+    font-size: 1.5em;
+    color: #888;
+}
+
+.workcontrol_cart_clean .title span{
+    display: block;
+    margin-bottom: 5px;
+    font-size: 3em;
+}
+
+.workcontrol_cart_clean .btn{
+    padding: 15px 30px;
+}
+
+.workcontrol_cart_list{
+    border: 1px solid #eee;
+}
+
+.workcontrol_cart_list p{
+    display: inline-block;
+    width: 22.5%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.workcontrol_cart_list p img{
+    padding: 3px;
+    background: #fff;
+}
+
+.workcontrol_cart_list p:last-child,
+.workcontrol_cart_list p:first-child{
+    width: 5%;
+}
+
+.workcontrol_cart_list .item{
+    padding: 0 0 0 20px;
+    text-align: left;
+}
+
+.workcontrol_cart_list_header{
+    padding: 20px 0;
+    font-size: 0.8em;
+    color: #555;
+    background: #f2f2f2;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+.workcontrol_cart_list_item{
+    font-size: 0.875em;
+    padding: 10px 0;
+    display: block;
+    border-top: 1px solid #eee;
+}
+
+.workcontrol_cart_list_item a{
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.workcontrol_cart_list_item a:hover{
+    text-decoration: underline;
+}
+
+.workcontrol_cart_list_item input{
+    width: 50px;
+    text-align: center;
+    font-size: 0.8em;
+    padding: 8px 0;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-right: none;
+    background: #fbfbfb;
+    outline: none;
+    height: 34px;
+    vertical-align: middle;
+}
+
+.workcontrol_cart_list_item .change{
+    padding: 8px 0;
+    width: 20px;
+    background: #eee;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    outline: none;
+}
+
+.workcontrol_cart_list_item .wc_cart_change_less{
+    border-right: 0;
+    border-radius: 3px 0 0 3px;
+    height: 34px;
+    vertical-align: middle;
+}
+
+.workcontrol_cart_list_item .wc_cart_change_plus{
+    border-left: 0;
+    border-radius: 0 3px 3px 0;
+    height: 34px;
+    vertical-align: middle;
+}
+
+.workcontrol_cart_list_item .stock{
+    font-size: 0.8em;
+    color: #ccc;
+    margin-left: 20px;
+}
+
+.workcontrol_cart_list_item .discount{
+    display: block;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.wc_cart_remove{
+    display: inline-block;
+    padding: 5px 8px;
+    background: #ccc;
+    color: #fff;
+    font-size: 0.7em;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.wc_cart_remove:hover{
+    background: #F45563;
+}
+
+.wc_cart_total_forms{
+    display: block;
+    width: 100%;
+    text-align: right;
+}
+
+.wc_cart_total_cupom,
+.wc_cart_total_shipment{
+    display: inline-block;
+    padding: 20px;
+    border-top: none;
+    background: #f2f2f2;
+    font-size: 0.875em;
+    vertical-align: top;
+}
+
+.wc_cart_total_cupom p,
+.wc_cart_total_shipment p{
+    display: inline-block;
+    text-align: right;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.wc_cart_total_cupom input,
+.wc_cart_total_shipment input{
+    display: inline-block;
+    width: auto;
+    border: 1px solid #eee;
+    border-right: none;
+    font-size: 1em;
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.wc_cart_total_cupom button,
+.wc_cart_total_shipment button{
+    display: inline-block;
+    padding: 6px 0;
+    width: 80px;
+    border: 1px solid #999;
+    border-left: none;
+    background: #999;
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.wc_cart_total_cupom button:hover,
+.wc_cart_total_shipment button:hover{
+    background: #5fa961;
+    border-color: #5fa961; 
+}
+
+.wc_cart_total_cupom img,
+.wc_cart_total_shipment img{
+    display: inline-block;
+    vertical-align: middle;
+    height: 22px;
+    margin-left: 10px;
+    display: none;
+}
+
+.wc_cart_total_shipment_result .shiptag:first-child{
+    margin-top: 18px;
+}
+
+.wc_cart_total_shipment_result .shiptag{
+    display: block;
+    margin: 0;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: 300;
+    width: 100%;
+    padding: 10px;
+    background: #fbfbfb;
+    border-top: 2px solid #f2f2f2;
+}
+
+.wc_cart_total_shipment_result .shiptag input{
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 1em;
+    vertical-align: middle;
+}
+
+.wc_cart_total_price{
+    margin-top: 30px;
+    display: block;
+    width: 100%;
+    text-align: right;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.wc_cart_total_price p{
+    display: inline-block;
+    width: 20%;
+    padding: 15px;
+    border: 1px solid #eee;
+}
+
+.wc_cart_total_price .wc_cart_discount{
+    border-left: 0;
+    border-right: 0;
+}
+
+.wc_cart_actions{
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+.wc_cart_actions .btn{
+    font-size: 1em;
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.wc_cart_actions .btn_green{
+    margin-left: 20px;
+}
+
+/*WORKCONTROL ORDER*/
+.workcontrol_order{
+    padding-top: 30px;
+    border-top: 1px solid #f2f2f2;
+    display: block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.workcontrol_order_forms{
+    display: inline-block;
+    width: 70%;
+    padding-right: 3%;
+    vertical-align: top;
+}
+
+.workcontrol_order_forms form{
+    display: block;
+    width: 100%;
+}
+
+.workcontrol_order_forms label span{
+    display: block;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #888;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.workcontrol_order_forms label{
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+
+.workcontrol_order_forms .label50{
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+}
+
+.workcontrol_order_forms .label50:nth-of-type(2n+0){
+    margin-left: 4%;
+}
+
+.workcontrol_order_forms input{
+    font-size: 1.2em;
+    font-weight: 400;
+    color: #000;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    vertical-align: top;
+}
+
+.workcontrol_order_forms .wc_order_error{
+    display: block;
+    font-size: 0.875em;
+    font-weight: 500;
+    color: #F45563;
+    margin-top: 10px;
+    display: none;
+}
+
+.workcontrol_order_forms .wc_order_error a{
+    color: #769977;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.workcontrol_order_forms .wc_order_error a:hover{
+    color: #00B594;
+}
+
+.workcontrol_order_forms_actions{
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    text-align: right;
+}
+
+.workcontrol_order_forms .wc_button_cart{
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 15px 30px;
+    vertical-align: middle;
+}
+
+.workcontrol_order_forms_actions img{
+    display: none;
+    vertical-align: middle;
+    height: 28px;
+    margin-left: 15px;
+}
+
+.workcontrol_order_details{
+    display: inline-block;
+    width: 30%;
+    padding: 20px;
+    background: #f4f4f4;
+    vertical-align: top;
+}
+
+.workcontrol_order_details > h1{
+    font-size: 1.2em;
+    font-weight: 500;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+}
+
+.workcontrol_order_details > h1 span{
+    border-bottom: 5px solid #ccc;
+    padding-bottom: 11px;
+}
+
+.workcontrol_order_details p{
+    display: block;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dotted #ccc;
+    color: #999;
+}
+
+.workcontrol_order_details p span,
+.workcontrol_order_details p img{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.workcontrol_order_details p span{
+    width: 90%;
+    padding-left: 5%;
+    font-size: 0.875em;
+    font-weight: 300;
+}
+
+.workcontrol_order_details p img{
+    width: 10%;
+}
+
+.workcontrol_order_details_total{
+    font-size: 0.9em;
+    text-align: right;
+    color: #999;
+}
+
+.workcontrol_order_details_total div{
+    margin-top: 5px;
+}
+
+.workcontrol_order_details_total b{
+    display: inline-block;
+    font-weight: 400;
+    width: 50%;
+    color: #555;
+}
+
+.workcontrol_order_details_total .wc_cart_price,
+.workcontrol_order_details_total .wc_cart_price b{
+    font-weight: 600;
+}
+
+.workcontrol_order_details_total .wc_cart_price b{
+    color: #5fa961;
+}
+
+.workcontrol_order_details article .title{
+    font-size: 0.8em;
+    font-weight: 300;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.workcontrol_order_details article .row{
+    font-weight: 300;
+    font-size: 0.875em;
+    color: #555;
+    margin: 0;
+    padding: 5px 0;
+    border: none;
+}
+
+.workcontrol_order_back{
+    display: block;
+    width: 100%;
+    text-align: right;
+    margin-top: 30px;
+    padding-top: 10px;
+    border-top: 1px dotted #f2f2f2;
+}
+
+.workcontrol_order_back a{
+    text-decoration: none;
+    color: #ccc;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+.workcontrol_order_back a:hover{
+    color: #333;
+}
+
+.workcontrol_shipment{
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.worcontrol_useraddr{
+    padding: 20px;
+    background: #fbfbfb;
+    cursor: pointer;
+    margin: 0 !important;
+}
+
+.worcontrol_useraddr:hover{
+    background: #eee;
+}
+
+.workcontrol_order_addrs{
+    margin-bottom: 30px;
+}
+
+.wc_cart_total_shipment_tag{
+    font-size: 1.3em;
+    font-weight: 300;
+    display: none;
+}
+
+.workcontrol_order_newaddr{
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.workcontrol_order_newaddr_form{
+    display: none;
+}
+
+.workcontrol_order h2{
+    font-size: 1.4em;
+    font-weight: 300;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #fbfbfb;
+}
+
+.worcontrol_useraddr input{
+    float: right;
+    margin-top: 4px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.worcontrol_useraddr div{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.875em;
+    color: #000;
+    font-weight: 300;
+}
+
+.worcontrol_useraddr p{
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.worcontrol_useraddr .title{
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.workcontrol_shipment .shiptag{
+    display: block;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 20px;
+    background: #fbfbfb;
+    vertical-align: middle;
+    font-size: 0.875em;
+    color: #000;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.workcontrol_shipment .shiptag:hover{
+    background: #eee;
+}
+
+.workcontrol_shipment .shiptag input{
+    width: auto;
+    float: right;
+    margin-top: 3px;
+}
+
+.workcontrol_pagseguro{
+    display: block;
+    width: 100%;
+}
+
+.workcontrol_pagseguro_logo{
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px dotted #eee;
+}
+
+.workcontrol_pagseguro label{
+    margin: 0;
+    vertical-align: top !important;
+}
+
+.workcontrol_pagseguro select{
+    margin-top: 2px;
+    font-size: 1.2em;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    padding: 13px;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: #fff url(PagSeguroWc/select.png) no-repeat;  /* Imagem de fundo (Seta) */
+    background-position: right 5px center;  /*Posição da imagem do background*/
+}
+
+.workcontrol_pay_tabs{
+    display: block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.workcontrol_pay_tabs li{
+    display: inline-block;
+    padding: 15px 15px 10px 15px;
+    width: 50%;
+    background: #f2f2f2;
+    border-bottom: 5px solid #ccc;
+    cursor: pointer;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.workcontrol_pay_tabs li:hover{
+    border-color: #999;
+}
+
+.workcontrol_pay_tabs .active:hover,
+.workcontrol_pay_tabs .active{
+    border-color: #008068;
+    color: #008068;
+}
+
+.workcontrol_pay_tabs .active:before{
+    content: "✓ ";
+}
+
+.workcontrol_pagseguro .labelline{
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .labelactions{
+    margin: 40px 0;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .span,
+.workcontrol_pagseguro label span{
+    font-size: 1em;
+    text-transform: uppercase;
+    color: #555;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.workcontrol_pagseguro .label70{
+    display: inline-block;
+    width: 70%;
+    padding-right: 30px;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .label50{
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .labelDate input{
+    text-align: center;
+}
+
+.workcontrol_pagseguro .labelDate .month{
+    display: inline-block;
+    width: 50%;
+    padding-right: 15px;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .labelDate .year{
+    display: inline-block;
+    width: 50%;
+    padding-left: 15px;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .label30{
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .label50{
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
+
+.workcontrol_pagseguro .label50.first{
+    padding-right: 15px;
+}
+
+.workcontrol_pagseguro .label50.last{
+    padding-left: 15px;
+}
+
+.workcontrol_cardnumber{
+    background-position: center right 4px;
+    background-repeat: no-repeat;
+    background-image: url(PagSeguroWc/nocard.png);
+}
+
+form#billet,
+.workcontrol_pagseguro_billet{
+    display: none;
+}
+
+.workcontrol_pagseguro_billet h3{
+    font-size: 1.4em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+.workcontrol_pagseguro_billet p{
+    font-size: 1.1em;
+    font-weight: 300;
+    margin-bottom: 15px;
+}
+
+.workcontrol_pagseguro_billet h4{
+    font-size: 1.2em;
+    font-weight: 400;
+    color: #000;
+}
+
+.workcontrol_pagseguro_billet h4 b{
+    color: #5fa961;
+}
+
+.workcontrol_load{
+    display: none;
+    text-align: center;
+    color: #fff;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.workcontrol_load .load_message{
+    position: absolute;
+    width: 100%;
+    top: 35%;
+    margin-top: 20px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    text-align: center;
+    background: url(load_w.gif) center top no-repeat;
+    background-size: 40px;
+    padding-top: 40px;
+}
+
+.workcontrol_load_content{
+    display: none;
+    color: #555;
+    font-weight: 300;
+    font-size: 1.2em;
+    text-align: center;
+    width: 500px;
+    padding: 30px;
+    background: #fff;
+    max-width: 85%;
+    margin: 0 auto;
+    top: 35%;
+    position: relative;
+    z-index: 999;
+}
+
+.workcontrol_load_close{
+    margin-top: 20px;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 10px;
+    background: #999;
+    color: #fff;
+    font-size: 0.6em;
+    text-transform: uppercase;
+}
+
+.workcontrol_load_close:hover{
+    background: #F45563;
+}
+
+.workcontrol_load_content img{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.workcontrol_load_content p{
+    display: block;
+    margin: 10px 0 0 0;
+}
+
+.workcontrol_load_content .min{
+    font-size: 0.7em;
+}
+
+.workcontrol_load_content .big{
+    font-size: 1.1em;
+    color: #F45563;
+    font-weight: bold;
+}
+
+.workcontrol_carddata{
+    display: block;
+    margin-top: 40px;
+    font-size: 0.875em;
+    padding: 20px;
+    background: #eee;
+
+}
+
+.workcontrol_carddata h3{
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.workcontrol_carddata label span{
+    margin: 15px 0 5px 0;
+}
+
+.workcontrol_trigger_order{
+    font-size: 1em;
+    padding: 25px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.workcontrol_trigger_order > b{
+    font-size: 1.4em;
+}
+
+.workcontrol_trigger_order p{
+    margin-top: 15px;
+}
+
+.workcontrol_order_completed{
+    display: block;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.workcontrol_order_completed header{
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.workcontrol_order_completed header h1 span{
+    font-size: 1.4em;
+    font-weight: 300;
+    margin-top: 4px;
+}
+
+.workcontrol_order_completed header a{
+    font-size: 0.875em;
+    padding: 10px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.workcontrol_order_completed header span,
+.workcontrol_order_completed header a{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.workcontrol_order_completed_card{
+    display: block;
+    width: 100%;
+}
+
+.workcontrol_order_completed_card p{
+    display: inline-block;
+    width: 20%;
+    text-align: center;
+    font-weight: bold;
+    color: #888;
+    font-size: 0.875em;
+}
+.workcontrol_order_completed_card.items img{
+    display: inline-block;
+    vertical-align: middle;
+    width: 15%;
+}
+
+.workcontrol_order_completed_card.items .product span{
+    display: inline-block;
+    vertical-align: middle;
+    width: 85%;
+    padding-left: 5%;
+}
+
+.workcontrol_order_completed_card.items {
+    border-bottom: 1px solid #eee;
+}
+
+.workcontrol_order_completed_card.items p{
+    font-weight: 300;
+    color: #000;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 20px 0;
+}
+
+.workcontrol_order_completed_card .product{
+    width: 40%;
+    text-align: left;
+}
+
+.workcontrol_order_completed_card.total{
+    display: block;
+    text-align: right;
+    padding-top: 30px;
+    color: #888;
+    font-size: 1.3em;
+    font-weight: 300;
+}
+
+.workcontrol_order_completed_card.total b{
+    display: inline-block;
+    width: 200px;
+    font-weight: 300;
+}
+
+.workcontrol_order_completed_card.total .wc_cart_price b,
+.workcontrol_order_completed_card.total .wc_cart_price{
+    font-weight: 400;
+    color: #000;
+}
+
+.wc_cart_tag{
+    display: inline-block;
+    vertical-align: middle;
+    padding: 3px 6px !important;
+    font-size: 0.65em;
+    text-transform: uppercase;
+    background: #fff;
+    border: 1px solid #eee;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.wc_cart_outsale{
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #F45563;
+    color: #F45563;
+}
+
+/*992*/
+@media (max-width: 62em){
+    .wc_cart_total_cupom,
+    .wc_cart_total_shipment{
+        width: 50%;
+    }
+
+    .wc_cart_total_price p{
+        width: 50%;
+        display: inline-block;
+        margin-left: 5px;
+    }
+
+    .wc_cart_total_price .wc_cart_discount{
+        border: none;
+        border-left: 1px solid #f2f2f2;
+        border-right: 1px solid #f2f2f2;
+    }
+
+    .workcontrol_cart_list_header p:first-of-type,
+    .workcontrol_cart_list_item p:first-of-type{
+        display: none;
+    }
+
+    .workcontrol_cart_list_header p:last-of-type,
+    .workcontrol_cart_list_item p:last-of-type{
+        width: 10%;
+    }
+
+    .workcontrol_cart_list_header p,
+    .workcontrol_cart_list_item p{
+        width: 19%;
+    }
+
+    .workcontrol_cart_list_header .item,
+    .workcontrol_cart_list_item .item{
+        width: 33%;
+    }
+
+    .workcontrol_cart_list_item .stock{
+        display: none;
+    }
+
+    .workcontrol_order_forms{
+        width: 100%;
+        padding: 0;
+    }
+
+    .workcontrol_order_details{
+        display: none;
+    }
+}
+
+/*768*/
+@media (max-width: 48em){
+    .wc_cart_total_cupom{
+        padding-bottom: 0;
+    }
+
+    .wc_cart_total_cupom,
+    .wc_cart_total_shipment{
+        width: 100%;
+    }
+
+    .wc_cart_total_price p{
+        width: 100%;
+        display: block;
+        margin-left: 0;
+    }
+
+    .wc_cart_actions{
+        text-align: center;
+    }
+
+    .workcontrol_cart_list_header{
+        display: none;
+    }
+
+    .workcontrol_cart_list_item{
+        padding: 0;
+    }
+
+    .workcontrol_cart_list_item p{
+        width: 30%;
+        padding: 10px;
+    }
+
+    .workcontrol_cart_list_item .item{
+        width: 100%;
+        padding: 20px;
+        background: #f2f2f2;
+    }
+    .workcontrol_pagseguro .wc_button_cart{
+        float: none;
+        width: 100%;
+    }
+
+    .workcontrol_pagseguro .labelline{
+        margin: 0;
+    }
+
+    .workcontrol_pagseguro .label50.first,
+    .workcontrol_pagseguro .label50.last,
+    .workcontrol_pagseguro .label70,
+    .workcontrol_pagseguro .label50,
+    .workcontrol_pagseguro .label30{
+        width: 100%;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+
+    .workcontrol_carddata label,
+    .workcontrol_carddata .label50{
+        margin: 0 !important;
+    }
+
+    .workcontrol_carddata{
+        margin: 0;
+        margin-bottom: 30px;
+    }
+}
+
+/*640*/
+@media (max-width: 42em){
+    .wc_cart_add button{
+        margin-top: 20px;
+    }  
+}
+
+/*480*/
+@media (max-width: 30em){    
+    .wc_cart_total_cupom,
+    .wc_cart_total_shipment,
+    .wc_cart_total_price{
+        width: 100%;
+        text-align: center;
+    }
+
+    .wc_cart_total_shipment .shiptag{
+        text-align: center;
+    }
+
+    .wc_cart_actions .btn{
+        display: block;
+        margin: 0;
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .wc_cart_change{
+        width: 35px !important;
+    }
+
+    .wc_cart_actions .btn:first-of-type{
+        margin: 0 0 20px 0;
+    }
+}

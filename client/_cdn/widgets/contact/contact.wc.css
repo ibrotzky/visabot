@@ -1,0 +1,156 @@
+/*
+ To change this license header, choose License Headers in Project Properties.
+ To change this template file, choose Tools | Templates
+ and open the template in the editor.
+
+ Created on : 23/06/2016, 12:59:15
+ Author     : Robson V. Leite <robsonvleite.com>
+*/
+
+.wc_contact_modal{
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 101;
+}
+
+.wc_contact_modal_content{
+    display: block;
+    width: 540px;
+    max-width: 90%;
+    margin: 5% auto 0 auto;
+    background: #fff;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    position: relative;
+    padding: 30px;
+    min-height: 200px;
+}
+
+.wc_contact_close{
+    position: absolute;
+    right: -12px;
+    top: -12px;
+    padding: 7px 12px;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background: #cf7171;
+    cursor: pointer;
+    border: 2px solid #fff;
+    font-size: 0.875em;
+}
+
+.wc_contact_close:hover{
+    background: #F45563;
+}
+
+.wc_contact_modal_content header{
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.wc_contact_modal_content h1{
+    font-size: 1.5em;
+    font-weight: 300;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 6px;
+}
+
+.wc_contact_modal_content h1 span{
+    border-bottom: 5px solid #ccc;
+    padding-bottom: 6px;
+}
+
+.wc_contact_modal_form{
+    padding-bottom: 5px;
+}
+
+.wc_contact_modal_form label{
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.wc_contact_modal_legend{
+    font-size: 0.875em;
+    color: #888;
+    font-variant: small-caps;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.wc_contact_modal_form input,
+.wc_contact_modal_form textarea{
+    font-size: 0.875em;
+    padding: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.wc_contact_modal_button{
+    text-align: center;
+    border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+}
+
+.wc_contact_modal_button .btn,
+.wc_contact_modal_button img{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.wc_contact_modal_button .btn{
+    padding: 10px 20px;
+    font-size: 1em;
+}
+
+.wc_contact_modal_button img{
+    margin-left: 10px;
+    display: none;
+}
+
+.wc_contact_error{
+    padding: 12px;
+    background: #cf7171;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 0.875em;
+    font-weight: 400;
+    display: none;
+    text-align: center;
+    text-shadow: 1px 1px 0 #713B3B;
+}
+
+.wc_contant_sended{
+    text-align: center;
+}
+
+.wc_contant_sended .h2{
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #008B6F;
+}
+
+.wc_contant_sended .h2 span{
+    display: inline-block;
+    background: #008B6F;
+    margin-bottom: 10px;
+    font-size: 2em;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 50%;
+}
+
+.wc_contant_sended p{
+    margin-top: 15px;
+}
