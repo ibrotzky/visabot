@@ -55,49 +55,8 @@ var languageTest = {
  */
 var nocList = {
 	_00: 0,
-	_0: 1,
-	A: 2,
-	B: 3,
-	C: 4,
-	D: 5
-}
-
-Boolean.parse = function (str) {
-	if (str === undefined || str === null)
-	{
-		return false;
-	}
-	else
-	{
-		if (typeof str !== 'string')
-		{
-			str = str.toString();
-		}
-
-		if (isNaN(str))
-		{
-			switch (str.toLowerCase())
-			{
-				case "true":
-					return true;
-				case "false":
-					return false;
-				default:
-					throw new Error("Boolean.parse: Cannot convert string '" + str + "' to boolean.");
-			}
-		}
-		else
-		{
-			if (str === '0')
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-	}
+	AB0: 1,
+	CD: 2
 }
 
 /**
@@ -109,41 +68,13 @@ function languageObject() {
 		 * Use the languageTest enum
 		 */
 		test: null,
-		/** None: 0 to 10
-		 * 
-		 * CELPIP: 0 to 12
-		 * 
-		 * IELTS: 0.0 to 9.0
-		 * 
-		 * TEF: 0 to 450
-		 */
+		/** 0 to 10 */
 		speaking: null,
-		/** None: 0 to 10
-		 * 
-		 * CELPIP: 0 to 12
-		 * 
-		 * IELTS: 0.0 to 9.0
-		 * 
-		 * TEF: 0 to 360
-		 */
+		/** 0 to 10 */
 		listening: null,
-		/** None: 0 to 10
-		 * 
-		 * CELPIP: 0 to 12
-		 * 
-		 * IELTS: 0.0 to 9.0
-		 * 
-		 * TEF: 0 to 300
-		 */
+		/** 0 to 10 */
 		reading: null,
-		/** None: 0 to 10
-		 * 
-		 * CELPIP: 0 to 12
-		 * 
-		 * IELTS: 0.0 to 9.0
-		 * 
-		 * TEF: 0 to 450
-		 */
+		/** 0 to 10 */
 		writing: null
 	}
 }
@@ -384,48 +315,6 @@ function calculateAge() {
 	}
 
 	return 0;
-}
-
-/**
- * Calculates the CLB levels for the CELPIP test.
- * 
- * @param {object} language Pass the first or second language object
- * @param {boolean} principalApplicant Indicates if the score is for the principal applicant 
- * @param {boolean} firstLanguage Indicates if the score is for the first or second language 
- * 
- * @returns {object} Returns the CLB levels for each skill. 
- *
- * @author Bruno Miranda
- */
-function calculateCelpip(language, principalApplicant, firstLanguage) {
-	var clbs = {
-		speaking: language.speaking,
-		listening: language.listening,
-		reading: language.reading,
-		writing: language.writing
-	}
-
-	if (clbs.speaking <= 3)
-		clbs.speaking = 0;
-	else if (clbs.speaking >= 10)
-		clbs.speaking = 10;
-
-	if (clbs.listening <= 3)
-		clbs.listening = 0;
-	else if (clbs.listening >= 10)
-		clbs.listening = 10;
-
-	if (clbs.reading <= 3)
-		clbs.reading = 0;
-	else if (clbs.reading >= 10)
-		clbs.reading = 10;
-
-	if (clbs.writing <= 3)
-		clbs.writing = 0;
-	else if (clbs.writing >= 10)
-		clbs.writing = 10;
-
-	return result;
 }
 
 /**
@@ -788,171 +677,6 @@ var calculateForeignWorkExperienceTransferability = function (clb7Count, clb9Cou
 }
 
 /**
- * Calculates the CLB levels for the IELTS test.
- * 
- * @param {object} language Pass the first or second language object
- * @param {boolean} principalApplicant Indicates if the score is for the principal applicant 
- * @param {boolean} firstLanguage Indicates if the score is for the first or second language 
- * 
- * @returns {object} Returns the CLB levels for each skill. 
- *
- * @author Bruno Miranda
- */
-var calculateIelts = function (language, principalApplicant, firstLanguage) {
-	var clbs = {
-		speaking: 0,
-		listening: 0,
-		reading: 0,
-		writing: 0
-	}
-
-	var score;
-	var clb;
-
-	score = language.speaking;
-	clb = 0;
-	switch (true)
-	{
-		case score === 4.5:
-			clb = 4;
-			break;
-
-		case score === 5:
-			clb = 5;
-			break;
-
-		case score === 5.5:
-			clb = 6;
-			break;
-
-		case score === 6:
-			clb = 7;
-			break;
-
-		case score === 6.5:
-			clb = 8;
-			break;
-
-		case score === 7:
-			clb = 9;
-			break;
-
-		case score >= 7.5:
-			clb = 10;
-			break;
-
-	}
-	clbs.speaking = clb;
-
-	score = language.listening;
-	clb = 0;
-	switch (true)
-	{
-		case score === 4.5:
-			clb = 4;
-			break;
-
-		case score === 5:
-			clb = 5;
-			break;
-
-		case score === 5.5:
-			clb = 6;
-			break;
-
-		case score >= 6 && score < 7.5:
-			clb = 7;
-			break;
-
-		case score === 7.5:
-			clb = 8;
-			break;
-
-		case score === 8:
-			clb = 9;
-			break;
-
-		case score >= 8.5:
-			clb = 10;
-			break;
-
-	}
-	clbs.listening = clb;
-
-	score = language.reading;
-	clb = 0;
-	switch (true)
-	{
-		case score === 3.5:
-			clb = 4;
-			break;
-
-		case score >= 4 && score < 5:
-			clb = 5;
-			break;
-
-		case score >= 5 && score < 6:
-			clb = 6;
-			break;
-
-		case score === 6:
-			clb = 7;
-			break;
-
-		case score === 6.5:
-			clb = 8;
-			break;
-
-		case score >= 7 && score < 8:
-			clb = 9;
-			break;
-
-		case score >= 8:
-			clb = 10;
-			break;
-
-	}
-	clbs.reading = clb;
-
-	score = language.writing;
-	clb = 0;
-	switch (true)
-	{
-		case score >= 4 && score < 5:
-			clb = 4;
-			break;
-
-		case score === 5:
-			clb = 5;
-			break;
-
-		case score === 5.5:
-			clb = 6;
-			break;
-
-		case score === 6:
-			clb = 7;
-			break;
-
-		case score === 6.5:
-			clb = 8;
-			break;
-
-		case score === 7:
-			clb = 9;
-			break;
-
-		case score >= 7.5:
-			clb = 10;
-			break;
-
-	}
-	clbs.writing = clb;
-
-	return clbs;
-}
-
-/**
  * Calculates the score for the Job Offer
  * 
  * @returns {Number} Returns the ammount of points given. 
@@ -965,9 +689,7 @@ var calculateJobOffer = function () {
 		case nocList._00:
 			return 200;
 
-		case nocList._0:
-		case nocList.A:
-		case nocList.B:
+		case nocList.AB0:
 			return 50;
 
 	}
@@ -994,26 +716,7 @@ var calculateLanguage = function (principalApplicant, firstLanguage) {
 	else
 		language = calculatorParameters.spouseLanguage;
 
-	switch (language.test)
-	{
-		case languageTest.none:
-			clbs = language;
-			break;
-
-		case languageTest.celpip:
-			clbs = calculateCelpip(language, principalApplicant, firstLanguage);
-			break;
-
-		case languageTest.ielts:
-			clbs = calculateIelts(language, principalApplicant, firstLanguage);
-			break;
-
-		case languageTest.tef:
-			clbs = calculateTef(language, principalApplicant, firstLanguage);
-			break;
-	}
-
-	return calculateCLBs(clbs, principalApplicant, firstLanguage);
+	return calculateCLBs(language, principalApplicant, firstLanguage);
 }
 
 /**
@@ -1053,26 +756,7 @@ var calculateSkillTransferabilityFactors = function () {
 		subTotal: 0
 	}
 
-	var clbs;
-
-	switch (calculatorParameters.firstLanguage.test)
-	{
-		case languageTest.none:
-			clbs = calculatorParameters.firstLanguage;
-			break;
-
-		case languageTest.celpip:
-			clbs = calculateCelpip(calculatorParameters.firstLanguage, true, true);
-			break;
-
-		case languageTest.ielts:
-			clbs = calculateIelts(calculatorParameters.firstLanguage, true, true);
-			break;
-
-		case languageTest.tef:
-			clbs = calculateTef(calculatorParameters.firstLanguage, true, true);
-			break;
-	}
+	var clbs = calculatorParameters.firstLanguage;
 
 	var clb5Count = 0;
 
@@ -1166,171 +850,6 @@ var calculateSpouseFactors = function () {
 }
 
 /**
-	 * Calculates the CLB levels for the TEF test.
-	 * 
-	 * @param {object} language Pass the first or second language object
-	 * @param {boolean} principalApplicant Indicates if the score is for the principal applicant 
-	 * @param {boolean} firstLanguage Indicates if the score is for the first or second language 
-	 * 
-	 * @returns {object} Returns the CLB levels for each skill. 
-	 *
-	 * @author Bruno Miranda
-	 */
-function calculateTef(language, principalApplicant, firstLanguage) {
-	var clbs = {
-		speaking: 0,
-		listening: 0,
-		reading: 0,
-		writing: 0
-	}
-
-	var score;
-	var clb;
-
-	score = language.speaking;
-	clb = 0;
-	switch (true)
-	{
-		case score >= 181 && score <= 225:
-			clb = 4;
-			break;
-
-		case score >= 226 && score <= 270:
-			clb = 5;
-			break;
-
-		case score >= 271 && score <= 309:
-			clb = 6;
-			break;
-
-		case score >= 310 && score <= 348:
-			clb = 7;
-			break;
-
-		case score >= 349 && score <= 370:
-			clb = 8;
-			break;
-
-		case score >= 371 && score <= 392:
-			clb = 9;
-			break;
-
-		case score >= 393 && score <= 415:
-			clb = 10;
-			break;
-
-	}
-	clbs.speaking = clb;
-
-	score = language.listening;
-	clb = 0;
-	switch (true)
-	{
-		case score >= 145 && score <= 180:
-			clb = 4;
-			break;
-
-		case score >= 181 && score <= 216:
-			clb = 5;
-			break;
-
-		case score >= 217 && score <= 248:
-			clb = 6;
-			break;
-
-		case score >= 249 && score <= 279:
-			clb = 7;
-			break;
-
-		case score >= 280 && score <= 297:
-			clb = 8;
-			break;
-
-		case score >= 298 && score <= 315:
-			clb = 9;
-			break;
-
-		case score >= 316 && score <= 333:
-			clb = 10;
-			break;
-
-	}
-	clbs.listening = clb;
-
-	score = language.reading;
-	clb = 0;
-	switch (true)
-	{
-		case score >= 121 && score <= 150:
-			clb = 4;
-			break;
-
-		case score >= 151 && score <= 180:
-			clb = 5;
-			break;
-
-		case score >= 181 && score <= 206:
-			clb = 6;
-			break;
-
-		case score >= 207 && score <= 232:
-			clb = 7;
-			break;
-
-		case score >= 233 && score <= 247:
-			clb = 8;
-			break;
-
-		case score >= 248 && score <= 262:
-			clb = 9;
-			break;
-
-		case score >= 263 && score <= 277:
-			clb = 10;
-			break;
-
-	}
-	clbs.reading = clb;
-
-	score = language.writing;
-	clb = 0;
-	switch (true)
-	{
-		case score >= 181 && score <= 225:
-			clb = 4;
-			break;
-
-		case score >= 226 && score <= 270:
-			clb = 5;
-			break;
-
-		case score >= 271 && score <= 309:
-			clb = 6;
-			break;
-
-		case score >= 310 && score <= 348:
-			clb = 7;
-			break;
-
-		case score >= 349 && score <= 370:
-			clb = 8;
-			break;
-
-		case score >= 371 && score <= 392:
-			clb = 9;
-			break;
-
-		case score >= 393 && score <= 415:
-			clb = 10;
-			break;
-
-	}
-	clbs.writing = clb;
-
-	return clbs;
-}
-
-/**
  * Calculates the score for the work experience in Canada.
  * 
  * @param {boolean} principalApplicant Indicates if the score is for the principal applicant 
@@ -1382,57 +901,6 @@ function calculateWorkInCanada(principalApplicant) {
 	}
 
 	return 0;
-}
-
-/**
- * Adjust the parameters values in case they came from a json and are all strings
- * 
- * @author Bruno Miranda 
- */
-function adjustParameters() {
-	if (calculatorParameters.married !== null) calculatorParameters.married = Boolean.parse(calculatorParameters.married);
-	if (calculatorParameters.spouseCanadianCitizen !== null) calculatorParameters.spouseCanadianCitizen = Boolean.parse(calculatorParameters.spouseCanadianCitizen);
-	if (calculatorParameters.spouseCommingAlong !== null) calculatorParameters.spouseCommingAlong = Boolean.parse(calculatorParameters.spouseCommingAlong);
-
-	if (calculatorParameters.age !== null) calculatorParameters.age = (isNaN(calculatorParameters.age) ? null : parseFloat(calculatorParameters.age));
-
-	if (calculatorParameters.educationLevel !== null) calculatorParameters.educationLevel = (isNaN(calculatorParameters.educationLevel) ? null : parseInt(calculatorParameters.educationLevel));
-	if (calculatorParameters.educationInCanada !== null) calculatorParameters.educationInCanada = (isNaN(calculatorParameters.educationInCanada) ? null : parseInt(calculatorParameters.educationInCanada));
-
-	if (calculatorParameters.firstLanguage.test !== null) calculatorParameters.firstLanguage.test = (isNaN(calculatorParameters.firstLanguage.test) ? null : parseInt(calculatorParameters.firstLanguage.test));
-	if (calculatorParameters.firstLanguage.speaking !== null) calculatorParameters.firstLanguage.speaking = (isNaN(calculatorParameters.firstLanguage.speaking) ? null : parseFloat(calculatorParameters.firstLanguage.speaking));
-	if (calculatorParameters.firstLanguage.listening !== null) calculatorParameters.firstLanguage.listening = (isNaN(calculatorParameters.firstLanguage.listening) ? null : parseFloat(calculatorParameters.firstLanguage.listening));
-	if (calculatorParameters.firstLanguage.reading !== null) calculatorParameters.firstLanguage.reading = (isNaN(calculatorParameters.firstLanguage.reading) ? null : parseFloat(calculatorParameters.firstLanguage.reading));
-	if (calculatorParameters.firstLanguage.writing !== null) calculatorParameters.firstLanguage.writing = (isNaN(calculatorParameters.firstLanguage.writing) ? null : parseFloat(calculatorParameters.firstLanguage.writing));
-
-	if (calculatorParameters.secondLanguage.test !== null) calculatorParameters.secondLanguage.test = (isNaN(calculatorParameters.secondLanguage.test) ? null : parseInt(calculatorParameters.secondLanguage.test));
-	if (calculatorParameters.secondLanguage.speaking === '') calculatorParameters.secondLanguage.speaking = null;
-	if (calculatorParameters.secondLanguage.listening === '') calculatorParameters.secondLanguage.listening = null;
-	if (calculatorParameters.secondLanguage.reading === '') calculatorParameters.secondLanguage.reading = null;
-	if (calculatorParameters.secondLanguage.writing === '') calculatorParameters.secondLanguage.writing = null;
-	if (calculatorParameters.secondLanguage.speaking !== null) calculatorParameters.secondLanguage.speaking = (isNaN(calculatorParameters.secondLanguage.speaking) ? null : parseFloat(calculatorParameters.secondLanguage.speaking));
-	if (calculatorParameters.secondLanguage.listening !== null) calculatorParameters.secondLanguage.listening = (isNaN(calculatorParameters.secondLanguage.listening) ? null : parseFloat(calculatorParameters.secondLanguage.listening));
-	if (calculatorParameters.secondLanguage.reading !== null) calculatorParameters.secondLanguage.reading = (isNaN(calculatorParameters.secondLanguage.reading) ? null : parseFloat(calculatorParameters.secondLanguage.reading));
-	if (calculatorParameters.secondLanguage.writing !== null) calculatorParameters.secondLanguage.writing = (isNaN(calculatorParameters.secondLanguage.writing) ? null : parseFloat(calculatorParameters.secondLanguage.writing));
-
-	if (calculatorParameters.workInCanada !== null) calculatorParameters.workInCanada = (isNaN(calculatorParameters.workInCanada) ? null : parseFloat(calculatorParameters.workInCanada));
-	if (calculatorParameters.workExperience !== null) calculatorParameters.workExperience = (isNaN(calculatorParameters.workExperience) ? null : parseFloat(calculatorParameters.workExperience));
-	if (calculatorParameters.certificateFromProvince !== null) calculatorParameters.certificateFromProvince = Boolean.parse(calculatorParameters.certificateFromProvince);
-	if (calculatorParameters.nocJobOffer !== null) calculatorParameters.nocJobOffer = (isNaN(calculatorParameters.nocJobOffer) ? null : parseInt(calculatorParameters.nocJobOffer));
-	if (calculatorParameters.nomination !== null) calculatorParameters.nomination = Boolean.parse(calculatorParameters.nomination);
-
-	if (calculatorParameters.spouseEducationLevel !== null) calculatorParameters.spouseEducationLevel = (isNaN(calculatorParameters.spouseEducationLevel) ? null : parseInt(calculatorParameters.spouseEducationLevel));
-	if (calculatorParameters.spouseWorkInCanada !== null) calculatorParameters.spouseWorkInCanada = (isNaN(calculatorParameters.spouseWorkInCanada) ? null : parseFloat(calculatorParameters.spouseWorkInCanada));
-
-	if (calculatorParameters.spouseLanguage.test !== null) calculatorParameters.spouseLanguage.test = (isNaN(calculatorParameters.spouseLanguage.test) ? null : parseInt(calculatorParameters.spouseLanguage.test));
-	if (calculatorParameters.spouseLanguage.speaking === '') calculatorParameters.spouseLanguage.speaking = null;
-	if (calculatorParameters.spouseLanguage.listening === '') calculatorParameters.spouseLanguage.listening = null;
-	if (calculatorParameters.spouseLanguage.reading === '') calculatorParameters.spouseLanguage.reading = null;
-	if (calculatorParameters.spouseLanguage.writing === '') calculatorParameters.spouseLanguage.writing = null;
-	if (calculatorParameters.spouseLanguage.speaking !== null) calculatorParameters.spouseLanguage.speaking = (isNaN(calculatorParameters.spouseLanguage.speaking) ? null : parseFloat(calculatorParameters.spouseLanguage.speaking));
-	if (calculatorParameters.spouseLanguage.listening !== null) calculatorParameters.spouseLanguage.listening = (isNaN(calculatorParameters.spouseLanguage.listening) ? null : parseFloat(calculatorParameters.spouseLanguage.listening));
-	if (calculatorParameters.spouseLanguage.reading !== null) calculatorParameters.spouseLanguage.reading = (isNaN(calculatorParameters.spouseLanguage.reading) ? null : parseFloat(calculatorParameters.spouseLanguage.reading));
-	if (calculatorParameters.spouseLanguage.writing !== null) calculatorParameters.spouseLanguage.writing = (isNaN(calculatorParameters.spouseLanguage.writing) ? null : parseFloat(calculatorParameters.spouseLanguage.writing));
 }
 
 /**
@@ -1610,13 +1078,7 @@ function calculate(parameters) {
 	if (parameters.spouseWorkInCanada !== undefined) calculatorParameters.spouseWorkInCanada = parameters.spouseWorkInCanada;
 	if (parameters.spouseLanguage !== undefined) calculatorParameters.spouseLanguage = parameters.spouseLanguage;
 
-	//console.log('parameter: ', parameters);
-	adjustParameters();
-	//console.log('calculatorParameters: ', calculatorParameters);
-
 	var valid = validate();
-
-	console.log('valid: ', valid);
 
 	if (valid === true)
 	{
@@ -1634,10 +1096,19 @@ function calculate(parameters) {
 	}
 	else
 	{
+		console.log('valid: ', valid);
+
 		return valid;
 	}
 }
 
 module.exports = {
-	calculate: calculate
+	calculate: calculate,
+	calculatorParameters: calculatorParameters,
+	educationInCanada: educationInCanada,
+	educationLevel: educationLevel,
+	languageTest: languageTest,
+	languageObject: languageObject,
+	nocList: nocList,
+	scores: scores
 };
