@@ -56,14 +56,6 @@
                 "reply": answer
             }
 
-            $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
-
-            if (answer !== null) {
-                $("<div class='answer'>" + answer + "</div>").appendTo(chatHistory);
-
-                $("<br />").appendTo(chatHistory);
-            }
-
             console.log('Request:', request);
 
             $.ajax({
@@ -74,6 +66,14 @@
                 data: request
             }).success(function (data, textStatus, jqXHR)
             {
+                $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
+
+                if (answer !== null) {
+                    $("<div class='answer'>" + answer + "</div>").appendTo(chatHistory);
+
+                    $("<br />").appendTo(chatHistory);
+                }
+
                 var responseJSON = data.responseJSON;
 
                 payload = responseJSON.customPayload;
@@ -116,6 +116,9 @@
                 console.log('payload:', JSON.stringify(payload));
             }).error(function (jqXHR, textStatus, errorThrown)
             {
+                chat.find("input").removeAttr('disabled');
+                chat.find("button").removeAttr('disabled');
+
                 console.log('Error: ', jqXHR.responseText);
             });
         }
