@@ -1,11 +1,10 @@
 var calculator = require("./calculator");
 
-
 function analyse(parameters, score) {
     if (parameters.provincialNomination)
         return "<br /><br />Since you were nominated by a province or territory, you already have enough points to pass the next draw. Welcome to Canada! :)";
     
-    var analysis = "<br /><br />Here are some things you could do to improve your score. I'll break it down into the three categories for the Express Entry Proccess.";
+    var analysis = "<br /><br />Here are some things you could do to improve your score.<br /><br />";
 
     var federalSkilledWorker = validateFederalSkilledWorker(parameters);
     var skilledTrade = validateSkilledTrade(parameters);
@@ -13,7 +12,9 @@ function analyse(parameters, score) {
 
     if (federalSkilledWorker && skilledTrade && canadianExperience)
     {
-        
+        analysis = "You are eligible to all three programs: Federal Skilled Worker, Skilled Trade and Canadian Experience.<br />"
+
+
     }
 
     /*
@@ -29,6 +30,8 @@ function analyse(parameters, score) {
     //analysis += canadianExperience(parameters, score);
 
     //var analysisParameters = JSON.parse(JSON.stringify(parameters));
+
+    analysis = "";
 
     return analysis;
 }
