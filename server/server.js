@@ -17,7 +17,7 @@ app.start = function () {
 
     var phpServer = require('node-php-server');
 
-    // Create a PHP Server 
+    /*// Create a PHP Server 
     phpServer.createServer({
       port: 8000,
       hostname: '127.0.0.1',
@@ -29,7 +29,7 @@ app.start = function () {
     });
 
     // Close server 
-    //phpServer.close();
+    //phpServer.close();*/
   });
 };
 
