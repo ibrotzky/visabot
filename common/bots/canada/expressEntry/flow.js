@@ -12,18 +12,31 @@ var languageAbility = {
 	writing: 3
 }
 
-function yesNo() {
-	return ["Yes", "No"];
-}
-
-function yesNoAnswer(reply) {
-	return (reply === "Yes");
+function ageOptions(payload) {
+	return ['17 or less', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'];
 }
 
 function answerIndex(question, payload, reply) {
 	var options = question.options(payload);
 
 	return (options === null ? null : question.options(payload).indexOf(reply));
+}
+
+function canadianEducationLevelOptions(payload) {
+	return ['High school or less',
+		'One-year or two-year program',
+		'Three or more years program'];
+}
+
+function educationLevelOptions(payload) {
+	return ['Less than high school',
+		'High school',
+		'One-year program',
+		'Two-year program',
+		'Bachelor\'s degree',
+		'Two or more degrees',
+		'Master\'s degree',
+		'Ph.D.'];
 }
 
 function languageQuestion(test, testQuestion, payload, ability, principalApplicant) {
@@ -34,8 +47,7 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 	if (principalApplicant === undefined)
 		principalApplicant = true;
 
-	switch (ability)
-	{
+	switch (ability) {
 		case languageAbility.speaking:
 			abilityName = 'speak';
 			testSectionName = 'speaking';
@@ -59,10 +71,8 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 
 	if (parseInt(test) === 0)
 		return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English?";
-	else
-	{
-		switch (parseInt(test))
-		{
+	else {
+		switch (parseInt(test)) {
 			case answerIndex(testQuestion, payload, 'CELPIP'):
 				testName = "CELPIP";
 				break;
@@ -88,8 +98,7 @@ function languageOptions(test, testQuestion, payload, ability) {
 	console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
 	console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
 	*/
-	switch (parseInt(test))
-	{
+	switch (parseInt(test)) {
 		case answerIndex(testQuestion, payload, 'No'):
 			return ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
 			break;
@@ -103,8 +112,7 @@ function languageOptions(test, testQuestion, payload, ability) {
 			break;
 
 		case answerIndex(testQuestion, payload, 'TEF'):
-			switch (ability)
-			{
+			switch (ability) {
 				case languageAbility.speaking:
 				case languageAbility.writing:
 					return ["0 - 180", "181 - 225", "226 - 270", "271 - 309", "310 - 348", "349 - 370", "371 - 392", "393 - 450"];
@@ -120,6 +128,39 @@ function languageOptions(test, testQuestion, payload, ability) {
 			}
 			break;
 	}
+}
+
+function nocJobOfferOptions(payload) {
+	return ["00",
+				'0',
+				'A',
+				'B',
+				'C',
+				'D'];
+}
+
+function workExperienceInCanadaOptions(payload) {
+	return ["None or less then a year",
+		"1 year",
+		"2 years",
+		"3 years",
+		"4 years",
+		"5 years or more"];
+}
+
+function workExperienceLastTenYearsOptions(payload) {
+	return ["None or less then a year",
+				"1 year",
+				"2 years",
+				"3 years or more"];
+}
+
+function yesNo() {
+	return ["Yes", "No"];
+}
+
+function yesNoAnswer(reply) {
+	return (reply === "Yes");
 }
 
 /**
@@ -159,10 +200,9 @@ var questions = {
 	age: {
 		id: null,
 		question: function (payload) { return "{QUOTE}How old are you?" },
-		options: function (payload) { return ['17 or less', '18', '19', '20 to 29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'] },
+		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply)
-			{
+			switch (reply) {
 				case '17 or less':
 					payload.age = 17;
 					break;
@@ -185,16 +225,7 @@ var questions = {
 	educationLevel: {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your education level?" },
-		options: function (payload) {
-			return ['Less than high school',
-				'High school',
-				'One-year program',
-				'Two-year program',
-				'Bachelor\'s degree',
-				'Two or more degrees',
-				'Master\'s degree',
-				'Ph.D.']
-		},
+		options: educationLevelOptions,
 		processReply: function (payload, reply) { payload.educationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.canadianDegreeDiplomaCertificate },
 	},
@@ -208,11 +239,7 @@ var questions = {
 	canadianEducationLevel: {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your education level in Canada?" },
-		options: function (payload) {
-			return ['High school or less',
-				'One-year or two-year program',
-				'Three or more years program'];
-		},
+		options: canadianEducationLevelOptions,
 		processReply: function (payload, reply) { payload.canadianEducationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.firstLanguageTest },
 	},
@@ -299,26 +326,14 @@ var questions = {
 	workExperienceInCanada: {
 		id: null,
 		question: function (payload) { return "{QUOTE}In the last ten years, how many years of skilled work experience in Canada do you have?" },
-		options: function (payload) {
-			return ["None or less then a year",
-				"1 year",
-				"2 years",
-				"3 years",
-				"4 years",
-				"5 years or more"];
-		},
+		options: workExperienceInCanadaOptions,
 		processReply: function (payload, reply) { payload.workExperienceInCanada = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.workExperienceLastTenYears },
 	},
 	workExperienceLastTenYears: {
 		id: null,
 		question: function (payload) { return "{QUOTE}In the last 10 years, how many years of skilled work experience do you have?" },
-		options: function (payload) {
-			return ["None or less then a year",
-				"1 year",
-				"2 years",
-				"3 years or more"];
-		},
+		options: workExperienceLastTenYearsOptions,
 		processReply: function (payload, reply) { payload.workExperienceLastTenYears = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.certificateQualificationProvince },
 	},
@@ -339,14 +354,7 @@ var questions = {
 	nocJobOffer: {
 		id: null,
 		question: function (payload) { return "{QUOTE}Which NOC skill type or level is the job offer?" },
-		options: function (payload) {
-			return ["00",
-				'0',
-				'A',
-				'B',
-				'C',
-				'D'];
-		},
+		options: nocJobOfferOptions,
 		processReply: function (payload, reply) { payload.nocJobOffer = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.nominationCertificate },
 	},
@@ -361,10 +369,9 @@ var questions = {
 	spouseAge: {
 		id: null,
 		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
-		options: function (payload) { return ['17 or less', '18', '19', '20 to 29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45 or more'] },
+		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply)
-			{
+			switch (reply) {
 				case '17 or less':
 					payload.spouseAge = 17;
 					break;
@@ -387,16 +394,7 @@ var questions = {
 	spouseEducationLevel: {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your spouse or common-law partner's education level?" },
-		options: function (payload) {
-			return ['Less than high school',
-				'High school',
-				'One-year program',
-				'Two-year program',
-				'Bachelor\'s degree',
-				'Two or more degrees',
-				'Master\'s degree',
-				'Ph.D.']
-		},
+		options: educationLevelOptions,
 		processReply: function (payload, reply) { payload.spouseEducationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseCanadianDegreeDiplomaCertificate },
 	},
@@ -410,11 +408,7 @@ var questions = {
 	spouseCanadianEducationLevel: {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your spouse or common-law partner's education level in Canada?" },
-		options: function (payload) {
-			return ['High school or less',
-				'One-year or two-year program',
-				'Three or more years program'];
-		},
+		options: canadianEducationLevelOptions,
 		processReply: function (payload, reply) { payload.spouseCanadianEducationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageTest },
 	},
@@ -501,26 +495,14 @@ var questions = {
 	spouseWorkExperienceInCanada: {
 		id: null,
 		question: function (payload) { return "{QUOTE}In the last ten years, how many years of skilled work experience in Canada does your spouse or common-law partner have?" },
-		options: function (payload) {
-			return ["None or less then a year",
-				"1 year",
-				"2 years",
-				"3 years",
-				"4 years",
-				"5 years or more"];
-		},
+		options: workExperienceInCanadaOptions,
 		processReply: function (payload, reply) { payload.spouseWorkExperienceInCanada = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseWorkExperienceLastTenYears },
 	},
 	spouseWorkExperienceLastTenYears: {
 		id: null,
 		question: function (payload) { return "{QUOTE}In the last 10 years, how many years of skilled work experience does your spouse or common-law partner have?" },
-		options: function (payload) {
-			return ["None or less then a year",
-				"1 year",
-				"2 years",
-				"3 years or more"];
-		},
+		options: workExperienceLastTenYearsOptions,
 		processReply: function (payload, reply) { payload.spouseWorkExperienceLastTenYears = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseCertificateQualificationProvince },
 	},
@@ -541,14 +523,7 @@ var questions = {
 	spouseNocJobOffer: {
 		id: null,
 		question: function (payload) { return "{QUOTE}Which NOC skill type or level is the job offer?" },
-		options: function (payload) {
-			return ["00",
-				'0',
-				'A',
-				'B',
-				'C',
-				'D'];
-		},
+		options: nocJobOfferOptions,
 		processReply: function (payload, reply) { payload.spouseNocJobOffer = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseNominationCertificate },
 	},
@@ -567,12 +542,10 @@ var questions = {
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
 
-			if (util.parseBoolean(payload.startOver))
-			{
+			if (util.parseBoolean(payload.startOver)) {
 				var payloadArray = Object.keys(payload);
 
-				for (p = 0; p < payloadArray.length; p++)
-				{
+				for (p = 0; p < payloadArray.length; p++) {
 					delete payload[payloadArray[p]];
 				}
 
@@ -593,8 +566,7 @@ var questions = {
 
 var questionsArray = Object.keys(questions);
 
-for (q = 0; q < questionsArray.length; q++)
-{
+for (q = 0; q < questionsArray.length; q++) {
 	questions[questionsArray[q]].id = q;
 }
 
@@ -623,15 +595,13 @@ function questionFlow(payload, reply, callback) {
 
 	var question;
 
-	if (Object.keys(payload).length > 0)
-	{
+	if (Object.keys(payload).length > 0) {
 		//console.log('payload.question: ', payload.question);
 		question = questions[questionsArray[payload.question]];
 		//console.log('question: ', question);
 
 		//console.log('answerValid: ', validateAnswer(question, payload, reply));
-		if (validateAnswer(question, payload, reply))
-		{
+		if (validateAnswer(question, payload, reply)) {
 			question.processReply(payload, reply);
 
 			//console.log('payload Before: ', payload);
@@ -639,8 +609,7 @@ function questionFlow(payload, reply, callback) {
 			//console.log('payload After: ', payload);
 		}
 	}
-	else
-	{
+	else {
 		question = questions.name;
 	}
 	//console.log('nextQuestion: ', question);
@@ -653,14 +622,12 @@ function questionFlow(payload, reply, callback) {
 	responseJSON.response = responseJSON.response.replace('{QUOTE}', '');
 	responseJSON.customPayload = payload;
 
-	if (payload.score !== undefined)
-	{
+	if (payload.score !== undefined) {
 		responseJSON.score = payload.score;
 		delete payload['score'];
 	}
 
-	if (payload.scoreInverted !== undefined)
-	{
+	if (payload.scoreInverted !== undefined) {
 		responseJSON.scoreInverted = payload.scoreInverted;
 		delete payload['scoreInverted'];
 	}
@@ -722,8 +689,7 @@ function calculate(payload) {
 	score += analysis.analyse(parametersUser, calculationUser);
 
 	//Calculate Inverting the roles
-	if (util.parseBoolean(payload.spouseCommingAlong) && parametersUser.spouseLanguage.test !== calculator.languageTest.none && !parametersUser.provincialNomination)
-	{
+	if (util.parseBoolean(payload.spouseCommingAlong) && parametersUser.spouseLanguage.test !== calculator.languageTest.none && !parametersUser.provincialNomination) {
 		parametersSpouse.married = util.parseBoolean(payload.married);
 		parametersSpouse.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
 		parametersSpouse.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
