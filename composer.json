@@ -1,5 +1,6 @@
 {
-	"name": "multitest",
+    "name": "CanadaBot",
+    "description": "This is an Open Source Immigration Chatbot to help talent relocate. ",
 	"require": {
 		"monolog/monolog": "~1.8"
 	},
