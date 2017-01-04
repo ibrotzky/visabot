@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 
-require './_app/Config.inc.php';
+require '_app/Config.inc.php';
 
 $WC_THEME = filter_input(INPUT_GET, "wctheme", FILTER_DEFAULT);
 if ($WC_THEME && $WC_THEME != 'null'):
