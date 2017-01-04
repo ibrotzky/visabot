@@ -1,5 +1,5 @@
 var expressEntry = function (payload, reply, callback) {
-    var flow = require('../bots/canada/expressEntryFlow');
+    var flow = require('../bots/canada/expressEntry/flow');
 	
     var responseJSON = flow.questionFlow(payload, reply);
 
