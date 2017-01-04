@@ -526,14 +526,14 @@ var questions = {
 	},
 	spouseCertificateQualificationProvince: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Do you have a certificate of qualification from a Canadian province or territory?" },
+		question: function (payload) { return "{QUOTE}Does your spouse or common-law partner have a certificate of qualification from a Canadian province or territory?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.spouseCertificateQualificationProvince = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return questions.spouseValidJobOffer },
 	},
 	spouseValidJobOffer: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Do you have a valid job offer supported by a Labour Market Impact Assessment (if needed)?" },
+		question: function (payload) { return "{QUOTE}Does your spouse or common-law partner have a valid job offer supported by a Labour Market Impact Assessment (if needed)?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.spouseValidJobOffer = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return (util.parseBoolean(payload.spouseValidJobOffer) ? questions.spouseNocJobOffer : questions.spouseNominationCertificate) },
@@ -554,7 +554,7 @@ var questions = {
 	},
 	spouseNominationCertificate: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Do you have a nomination certificate from a province or territory?" },
+		question: function (payload) { return "{QUOTE}Does your spouse or common-law partner have a nomination certificate from a province or territory?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.spouseNominationCertificate = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return questions.calculation },
