@@ -125,7 +125,7 @@ var calculatorParameters = {
 	 */
 	nocJobOffer: null,
 	/** {boolean} Does the principal applicant have a Nomination from a Province? */
-	nomination: null,
+	provincialNomination: null,
 
 	/** {enum} Education Level of the spouse
 	 * 
@@ -1057,7 +1057,7 @@ function calculate(parameters) {
 	if (parameters.workExperience !== undefined) calculatorParameters.workExperience = parameters.workExperience;
 	if (parameters.certificateFromProvince !== undefined) calculatorParameters.certificateFromProvince = parameters.certificateFromProvince;
 	if (parameters.nocJobOffer !== undefined) calculatorParameters.nocJobOffer = parameters.nocJobOffer;
-	if (parameters.nomination !== undefined) calculatorParameters.nomination = parameters.nomination;
+	if (parameters.provincialNomination !== undefined) calculatorParameters.provincialNomination = parameters.provincialNomination;
 	if (parameters.spouseEducationLevel !== undefined) calculatorParameters.spouseEducationLevel = parameters.spouseEducationLevel;
 	if (parameters.spouseWorkInCanada !== undefined) calculatorParameters.spouseWorkInCanada = parameters.spouseWorkInCanada;
 	if (parameters.spouseLanguage !== undefined) calculatorParameters.spouseLanguage = parameters.spouseLanguage;

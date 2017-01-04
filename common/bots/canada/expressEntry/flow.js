@@ -704,7 +704,7 @@ function calculate(payload) {
 	parametersUser.workExperience = parseInt(payload.workExperienceLastTenYears);
 	parametersUser.certificateFromProvince = util.parseBoolean(payload.certificateQualificationProvince);
 	if (payload.nocJobOffer !== undefined) parametersUser.nocJobOffer = parseInt(payload.nocJobOffer);
-	parametersUser.nomination = util.parseBoolean(payload.nominationCertificate);
+	parametersUser.provincialNomination = util.parseBoolean(payload.nominationCertificate);
 	if (payload.spouseEducationLevel !== undefined) parametersUser.spouseEducationLevel = parseInt(payload.spouseEducationLevel);
 	if (payload.spouseWorkExperienceInCanada !== undefined) parametersUser.spouseWorkInCanada = parseInt(payload.spouseWorkExperienceInCanada);
 	parametersUser.spouseLanguage = calculator.languageObject();
@@ -719,10 +719,10 @@ function calculate(payload) {
 
 	score += "Your score is " + calculationUser.total + ".";
 
-	//score += analysis.analyse(parametersUser, calculationUser);
+	score += analysis.analyse(parametersUser, calculationUser);
 
 	//Calculate Inverting the roles
-	if (util.parseBoolean(payload.spouseCommingAlong))
+	if (util.parseBoolean(payload.spouseCommingAlong) && !parametersUser.provincialNomination)
 	{
 		parametersSpouse.married = util.parseBoolean(payload.married);
 		parametersSpouse.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
@@ -746,7 +746,7 @@ function calculate(payload) {
 		parametersSpouse.workExperience = parseInt(payload.spouseWorkExperienceLastTenYears);
 		parametersSpouse.certificateFromProvince = util.parseBoolean(payload.spouseCertificateQualificationProvince);
 		if (payload.nocJobOffer !== undefined) parametersSpouse.nocJobOffer = parseInt(payload.spouseNocJobOffer);
-		parametersSpouse.nomination = util.parseBoolean(payload.spouseNominationCertificate);
+		parametersSpouse.provincialNomination = util.parseBoolean(payload.spouseNominationCertificate);
 		parametersSpouse.spouseEducationLevel = parseInt(payload.educationLevel);
 		parametersSpouse.spouseWorkInCanada = parseInt(payload.workExperienceInCanada);
 		parametersSpouse.spouseLanguage = calculator.languageObject();
