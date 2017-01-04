@@ -1,0 +1,9 @@
+.chatHistory>.question
+{
+    text-align: left;
+}
+
+.chatHistory>.answer
+{
+    text-align: right;
+}
