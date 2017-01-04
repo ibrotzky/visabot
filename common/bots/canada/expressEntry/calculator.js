@@ -55,8 +55,11 @@ var languageTest = {
  */
 var nocList = {
 	_00: 0,
-	AB0: 1,
-	CD: 2
+	_0: 1,
+	A: 2,
+	B: 3,
+	C: 4,
+	D: 5
 }
 
 /**
@@ -148,7 +151,10 @@ var scores = {
 				listening: 0,
 				reading: 0,
 				writing: 0,
-				total: 0
+				total: 0,
+				clb5Count: null,
+				clb7Count: null,
+				clb9Count: null
 			},
 			second: {
 				speaking: 0,
@@ -320,19 +326,18 @@ function calculateAge() {
 /**
  * Calculates the score for the certificate of qualification transferability.
  * 
- * @param {number} clb5Count Quantity of CLB5 or higher on the laguage skills 
- * @param {number} clb7Count Quantity of CLB7 or higher on the laguage skills 
- * 
  * @returns {Number} Returns the ammount of points given.
  *
  * @author Bruno Miranda 
  */
-function calculateCertificateOfQualitication(clb5Count, clb7Count) {
+function calculateCertificateOfQualitication() {
 	if (calculatorParameters.certificateFromProvince === true)
 	{
-		if (clb5Count === 4 && clb7Count < 4)
+		var language = scores.coreHumanCapitalFactors.officialLanguages.first;
+
+		if (language.clb5Count === 4 && language.clb7Count < 4)
 			return 25
-		else if (clb7Count === 4)
+		else if (language.clb7Count === 4)
 			return 50;
 	}
 
@@ -422,6 +427,29 @@ var calculateCLBs = function (clbs, principalApplicant, firstLanguage) {
 	}
 
 	result.total = result.speaking + result.listening + result.reading + result.writing;
+
+	if (principalApplicant && firstLanguage)
+	{
+		result.clb5Count = 0;
+		result.clb7Count = 0;
+		result.clb9Count = 0;
+
+		if (clbs.speaking >= 5) result.clb5Count++;
+		if (clbs.speaking >= 7) result.clb7Count++;
+		if (clbs.speaking >= 9) result.clb9Count++;
+
+		if (clbs.listening >= 5) result.clb5Count++;
+		if (clbs.listening >= 7) result.clb7Count++;
+		if (clbs.listening >= 9) result.clb9Count++;
+
+		if (clbs.reading >= 5) result.clb5Count++;
+		if (clbs.reading >= 7) result.clb7Count++;
+		if (clbs.reading >= 9) result.clb9Count++;
+
+		if (clbs.writing >= 5) result.clb5Count++;
+		if (clbs.writing >= 7) result.clb7Count++;
+		if (clbs.writing >= 9) result.clb9Count++;
+	}
 
 	return result;
 }
@@ -566,27 +594,26 @@ var calculateEducationInCanada = function () {
 /**
  * Calculates the score for the education transferability.
  * 
- * @param {number} clb7Count Quantity of CLB7 or higher on the laguage skills 
- * @param {number} clb9Count Quantity of CLB9 or higher on the laguage skills 
- * 
  * @returns {Number} Returns the ammount of points given.
  *
  * @author Bruno Miranda 
  */
-var calculateEducationTransferability = function (clb7Count, clb9Count) {
+var calculateEducationTransferability = function () {
 	var educationTransferability = {
 		officialLanguageProficiency: 0,
 		canadianWorkExperience: 0,
 		subTotal: 0
 	};
 
+	var language = scores.coreHumanCapitalFactors.officialLanguages.first;
+
 	switch (calculatorParameters.educationLevel)
 	{
 		case educationLevel.OneYearDegree:
 		case educationLevel.BachelorsDegree:
-			if (clb7Count === 4 && clb9Count < 4)
+			if (language.clb7Count === 4 && language.clb9Count < 4)
 				educationTransferability.officialLanguageProficiency += 13;
-			else if (clb9Count === 4)
+			else if (language.clb9Count === 4)
 				educationTransferability.officialLanguageProficiency += 25;
 
 			if (calculatorParameters.workInCanada >= 1 && calculatorParameters.workInCanada < 2)
@@ -599,9 +626,9 @@ var calculateEducationTransferability = function (clb7Count, clb9Count) {
 		case educationLevel.TwoOrMoreDegress:
 		case educationLevel.MastersDegree:
 		case educationLevel.DoctoralDegree:
-			if (clb7Count === 4 && clb9Count < 4)
+			if (language.clb7Count === 4 && language.clb9Count < 4)
 				educationTransferability.officialLanguageProficiency += 25;
-			else if (clb9Count === 4)
+			else if (language.clb9Count === 4)
 				educationTransferability.officialLanguageProficiency += 50;
 
 			if (calculatorParameters.workInCanada >= 1 && calculatorParameters.workInCanada < 2)
@@ -624,26 +651,25 @@ var calculateEducationTransferability = function (clb7Count, clb9Count) {
 /**
  * Calculates the score for the foreign work experience transferability.
  * 
- * @param {number} clb7Count Quantity of CLB7 or higher on the laguage skills 
- * @param {number} clb9Count Quantity of CLB9 or higher on the laguage skills 
- * 
  * @returns {Number} Returns the ammount of points given.
  *
  * @author Bruno Miranda 
  */
-var calculateForeignWorkExperienceTransferability = function (clb7Count, clb9Count) {
+var calculateForeignWorkExperienceTransferability = function () {
 	var foreignWorkExperience = {
 		officialLanguageProficiency: 0,
 		canadianWorkExperience: 0,
 		subTotal: 0
 	};
 
+	var language = scores.coreHumanCapitalFactors.officialLanguages.first;
+
 	switch (true)
 	{
 		case calculatorParameters.workExperience >= 1 && calculatorParameters.workExperience < 3:
-			if (clb7Count === 4 && clb9Count < 4)
+			if (language.clb7Count === 4 && language.clb9Count < 4)
 				foreignWorkExperience.officialLanguageProficiency += 13;
-			else if (clb9Count === 4)
+			else if (language.clb9Count === 4)
 				foreignWorkExperience.officialLanguageProficiency += 25;
 
 			if (calculatorParameters.workInCanada >= 1 && calculatorParameters.workInCanada < 2)
@@ -654,9 +680,9 @@ var calculateForeignWorkExperienceTransferability = function (clb7Count, clb9Cou
 			break;
 
 		case calculatorParameters.workExperience >= 3:
-			if (clb7Count === 4 && clb9Count < 4)
+			if (language.clb7Count === 4 && language.clb9Count < 4)
 				foreignWorkExperience.officialLanguageProficiency += 25;
-			else if (clb9Count === 4)
+			else if (language.clb9Count === 4)
 				foreignWorkExperience.officialLanguageProficiency += 50;
 
 			if (calculatorParameters.workInCanada >= 1 && calculatorParameters.workInCanada < 2)
@@ -689,7 +715,9 @@ var calculateJobOffer = function () {
 		case nocList._00:
 			return 200;
 
-		case nocList.AB0:
+		case nocList._0:
+		case nocList.A:
+		case nocList.B:
 			return 50;
 
 	}
@@ -756,53 +784,9 @@ var calculateSkillTransferabilityFactors = function () {
 		subTotal: 0
 	}
 
-	var clbs = calculatorParameters.firstLanguage;
-
-	var clb5Count = 0;
-
-	if (clbs.speaking >= 5)
-		clb5Count += 1;
-
-	if (clbs.listening >= 5)
-		clb5Count += 1;
-
-	if (clbs.reading >= 5)
-		clb5Count += 1;
-
-	if (clbs.writing >= 5)
-		clb5Count += 1;
-
-	var clb7Count = 0;
-
-	if (clbs.speaking >= 7)
-		clb7Count += 1;
-
-	if (clbs.listening >= 7)
-		clb7Count += 1;
-
-	if (clbs.reading >= 7)
-		clb7Count += 1;
-
-	if (clbs.writing >= 7)
-		clb7Count += 1;
-
-	var clb9Count = 0;
-
-	if (clbs.speaking >= 9)
-		clb9Count += 1;
-
-	if (clbs.listening >= 9)
-		clb9Count += 1;
-
-	if (clbs.reading >= 9)
-		clb9Count += 1;
-
-	if (clbs.writing >= 9)
-		clb9Count += 1;
-
-	skillTransferabilityFactors.education = calculateEducationTransferability(clb7Count, clb9Count);
-	skillTransferabilityFactors.foreignWorkExperience = calculateForeignWorkExperienceTransferability(clb7Count, clb9Count);
-	skillTransferabilityFactors.certificateOfQualification = calculateCertificateOfQualitication(clb5Count, clb7Count);
+	skillTransferabilityFactors.education = calculateEducationTransferability();
+	skillTransferabilityFactors.foreignWorkExperience = calculateForeignWorkExperienceTransferability();
+	skillTransferabilityFactors.certificateOfQualification = calculateCertificateOfQualitication();
 
 	skillTransferabilityFactors.subTotal = skillTransferabilityFactors.education.subTotal +
 		skillTransferabilityFactors.foreignWorkExperience.subTotal +

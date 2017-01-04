@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>VisaBot CRS Calculator</title>
+    <head>
+        <title>VisaBot CRS Calculator</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-    <style>
+        <style>
             .chatHistory>.question
             {
                 text-align: left;
@@ -39,9 +39,12 @@
 
         var payload = {};
 
-        //payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
+        payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
-        function answerQuestion(answer) {
+        //payload = { "question": 44, "name": "Ilya", "married": true, "spouseCanadianCitizen": true, "age": 20, "educationLevel": 3, "canadianDegreeDiplomaCertificate": true, "canadianEducationLevel": 2, "firstLanguageTest": 3, "firstLanguageSpeaking": 10, "firstLanguageListening": 10, "firstLanguageReading": 10, "firstLanguageWriting": 10, "secondLanguageTest": 2, "secondLanguageSpeaking": 10, "secondLanguageListening": 10, "secondLanguageReading": 10, "secondLanguageWriting": 10, "workExperienceInCanada": 5, "workExperienceLastTenYears": 3, "certificateQualificationProvince": true, "validJobOffer": true, "nocJobOffer": "0", "nominationCertificate": true };
+
+        function answerQuestion(answer)
+        {
             chat.find("input").attr('disabled', 'disabled');
             chat.find("button").attr('disabled', 'disabled');
 
@@ -58,7 +61,8 @@
                 cache: false,
                 dataType: 'json',
                 data: request
-            }).success(function (data, textStatus, jqXHR) {
+            }).success(function (data, textStatus, jqXHR)
+            {
                 $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
 
                 if (answer !== null) {
@@ -82,7 +86,8 @@
                     $("<span>&nbsp</span>").appendTo(options);
                     button.appendTo(options);
 
-                    button.click(function () {
+                    button.click(function ()
+                    {
                         if (textbox.val().trim().length > 0)
                             answerQuestion(textbox.val());
                     });
@@ -94,7 +99,8 @@
                         button.appendTo(options);
                         $("<span>&nbsp</span>").appendTo(options);
 
-                        button.click(function () {
+                        button.click(function ()
+                        {
                             answerQuestion($(this).text());
                         });
                     }
@@ -105,7 +111,8 @@
                 console.log('question:', payload.question);
                 console.log('responseJSON:', responseJSON);
                 console.log('payload:', JSON.stringify(payload));
-            }).error(function (jqXHR, textStatus, errorThrown) {
+            }).error(function (jqXHR, textStatus, errorThrown)
+            {
                 chat.find("input").removeAttr('disabled');
                 chat.find("button").removeAttr('disabled');
 
@@ -113,7 +120,8 @@
             });
         }
 
-        $(window).load(function () {
+        $(window).load(function ()
+        {
             answerQuestion(null);
         });
 
