@@ -722,7 +722,7 @@ function calculate(payload) {
 	score += analysis.analyse(parametersUser, calculationUser);
 
 	//Calculate Inverting the roles
-	if (util.parseBoolean(payload.spouseCommingAlong) && !parametersUser.provincialNomination)
+	if (util.parseBoolean(payload.spouseCommingAlong) && parametersUser.spouseLanguage.test !== calculator.languageTest.none && !parametersUser.provincialNomination)
 	{
 		parametersSpouse.married = util.parseBoolean(payload.married);
 		parametersSpouse.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
