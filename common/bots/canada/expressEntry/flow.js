@@ -684,7 +684,7 @@ function calculate(payload) {
 	calculationUser = calculator.calculate(parametersUser);
 	payload.score = calculationUser;
 
-	score += "Your score is " + calculationUser.total + ".";
+	score += "Your score is " + util.formatNumber(calculationUser.total, 0) + ".<br /><br />" + calculator.report();
 
 	score += analysis.analyse(parametersUser, calculationUser);
 
@@ -725,9 +725,9 @@ function calculate(payload) {
 		calculationSpouse = calculator.calculate(parametersSpouse);
 		payload.scoreInverted = calculationSpouse;
 
-		score += '<br /><br /><hr />If you invert roles with your spouse or common-law partner, your score is ' + calculationSpouse.total + '.';
+		score += "<br /><br /><hr />If you invert roles with your spouse or common-law partner, your score is " + calculationSpouse.total + ".<br /><br />" + calculator.report();
 
-		//score += analysis.analyse(parametersSpouse, calculationSpouse, false);
+		score += analysis.analyse(parametersSpouse, calculationSpouse, false);
 	}
 
 	score += "<br /><br /><hr />Would you like to start over?";

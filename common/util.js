@@ -1,30 +1,50 @@
-parseBoolean = function (str) {
-	if (str === undefined || str === null)
+function cloneObject(obj)
+{
+	return JSON.parse(JSON.stringify(obj));
+}
+
+/**
+ * formatNumber(number, dl, wl, sd, dd)
+ * 
+ * @param integer dl: length of decimal
+ * @param integer wl: length of whole part
+ * @param mixed   sd: sections delimiter
+ * @param mixed   dd: decimal delimiter
+ */
+function formatNumber(number, dl, wl, sd, dd) {
+    var re = '\\d(?=(\\d{' + (wl || 3) + '})+' + (dl > 0 ? '\\D' : '$') + ')',
+        num = number.toFixed(Math.max(0, ~~dl));
+
+    return (dd ? num.replace('.', dd) : num).replace(new RegExp(re, 'g'), '$&' + (sd || ','));
+};
+
+function parseBoolean(bool) {
+	if (bool === undefined || bool === null)
 	{
 		return false;
 	}
 	else
 	{
-		if (typeof str !== 'string')
+		if (typeof bool !== 'string')
 		{
-			str = str.toString();
+			bool = bool.toString();
 		}
 
-		if (isNaN(str))
+		if (isNaN(bool))
 		{
-			switch (str.toLowerCase())
+			switch (bool.toLowerCase())
 			{
 				case "true":
 					return true;
 				case "false":
 					return false;
 				default:
-					throw new Error("Boolean.parse: Cannot convert string '" + str + "' to boolean.");
+					throw new Error("parseBoolean: Cannot convert string '" + bool + "' to boolean.");
 			}
 		}
 		else
 		{
-			if (str === '0')
+			if (bool === '0')
 			{
 				return false;
 			}
@@ -37,5 +57,7 @@ parseBoolean = function (str) {
 }
 
 module.exports = {
+	cloneObject: cloneObject,
+	formatNumber: formatNumber,
 	parseBoolean: parseBoolean
 };

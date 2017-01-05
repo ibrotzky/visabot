@@ -1,9 +1,48 @@
-.chatHistory>.question
+.options > button
+{
+    margin-bottom: 4px;
+}
+
+.chatHistory > .question
 {
     text-align: left;
 }
 
-.chatHistory>.answer
+.chatHistory > .answer
 {
     text-align: right;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    border-spacing: 5px;
+}
+
+th, td {
+    padding: 5px;
+}
+
+th {
+    text-align: left;
+}
+
+th.score {
+    text-align: center;
+}
+
+td.ident {
+    padding-left: 20px;
+}
+
+td.score {
+    text-align: center;
+}
+
+th.section
+{
+    background-color: lightgray;
 }
