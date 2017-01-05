@@ -22,6 +22,7 @@
     "strong-error-handler": "^1.0.1"
   },
   "devDependencies": {
+    "bower": "~1.3.3",
     "eslint": "^2.5.3",
     "nsp": "^2.1.0"
   },
