@@ -1,0 +1,20 @@
+{
+  "preset": "google",
+  "requireCurlyBraces": [
+     "for",
+     "while",
+     "do",
+     "try",
+     "catch"
+  ],
+  "disallowSpacesInsideObjectBrackets": null,
+  "disallowMultipleVarDecl": "exceptUndefined",
+  "maximumLineLength": {
+     "value": 92,
+     "allowComments": false,
+     "allowRegex": true
+  },
+  "jsDoc": false,
+  "disallowSpaceAfterObjectKeys": false,
+  "requireSpaceBeforeObjectValues": false,
+}

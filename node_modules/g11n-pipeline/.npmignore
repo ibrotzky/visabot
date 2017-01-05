@@ -1,0 +1,9 @@
+node_modules
+README.html
+npm-debug.log
+/local-*
+/.vscode
+/typings
+/coverage
+/.vscode
+/.nyc_output
