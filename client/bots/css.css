@@ -41,15 +41,21 @@ body {
 }
 
 .chat {
+  /*
   flex: 1;
   padding: 20px;
-  display: flex;
+  display: block;
   flex-direction: column;
+  margin-top: 60px;
+  margin-bottom: 60px;    
+  */
+    list-style: none;
+    background: none;
+    margin: 0;
+    padding: 0 0 50px 0;
+    margin-top: 60px;
+    margin-bottom: 10px;
 }
-
-div {
-    margin: 0 0 20px 0;
-}  
 
 .chatHistory > .question
 {
@@ -67,7 +73,6 @@ div {
     color: white;
     border-radius: 10px;
     padding: 12px 20px;
-    margin-top: 30px;
     max-width: 35%;
 }
 
@@ -87,7 +92,6 @@ div {
     color: black;
     border-radius: 10px;
     padding: 12px 20px;
-    margin-top: 30px;
 }
 
 .user-input {
