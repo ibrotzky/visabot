@@ -1,3 +1,5 @@
+var util = require("../../../util");
+
 /**
  * Enum for Education Level
  * @readonly
@@ -162,7 +164,8 @@ var scores = {
 				reading: 0,
 				writing: 0,
 				total: 0
-			}
+			},
+			total: 0
 		},
 		canadianWorkExperience: null,
 		subTotal: null
@@ -254,8 +257,7 @@ function calculateAdditionalPoins() {
  * @author Bruno Miranda
  */
 function calculateAge() {
-	switch (calculatorParameters.age)
-	{
+	switch (calculatorParameters.age) {
 		case 18:
 			return (isSingle() ? 99 : 90);
 
@@ -331,8 +333,7 @@ function calculateAge() {
  * @author Bruno Miranda 
  */
 function calculateCertificateOfQualitication() {
-	if (calculatorParameters.certificateFromProvince === true)
-	{
+	if (calculatorParameters.certificateFromProvince === true) {
 		var language = scores.coreHumanCapitalFactors.officialLanguages.first;
 
 		if (language.clb5Count === 4 && language.clb7Count < 4)
@@ -356,10 +357,8 @@ function calculateCertificateOfQualitication() {
  * @author Bruno Miranda
  */
 var calculateCLB = function (clbLevel, principalApplicant, firstLanguage) {
-	if (principalApplicant)
-	{
-		switch (clbLevel)
-		{
+	if (principalApplicant) {
+		switch (clbLevel) {
 			case 4:
 				return (firstLanguage ? (isSingle() ? 6 : 6) : (isSingle() ? 0 : 0));
 
@@ -382,10 +381,8 @@ var calculateCLB = function (clbLevel, principalApplicant, firstLanguage) {
 				return (firstLanguage ? (isSingle() ? 34 : 32) : (isSingle() ? 6 : 6));
 		}
 	}
-	else
-	{
-		switch (clbLevel)
-		{
+	else {
+		switch (clbLevel) {
 			case 4:
 				return 0;
 
@@ -428,8 +425,7 @@ var calculateCLBs = function (clbs, principalApplicant, firstLanguage) {
 
 	result.total = result.speaking + result.listening + result.reading + result.writing;
 
-	if (principalApplicant && firstLanguage)
-	{
+	if (principalApplicant && firstLanguage) {
 		result.clb5Count = 0;
 		result.clb7Count = 0;
 		result.clb9Count = 0;
@@ -494,6 +490,9 @@ var calculateCoreHumanCapitalFactors = function () {
 
 	coreHumanCapitalFactors.canadianWorkExperience = calculateWorkInCanada();
 
+	coreHumanCapitalFactors.officialLanguages.total = coreHumanCapitalFactors.officialLanguages.first.total +
+		coreHumanCapitalFactors.officialLanguages.second.total;
+
 	coreHumanCapitalFactors.subTotal = coreHumanCapitalFactors.age +
 		coreHumanCapitalFactors.levelOfEducation +
 		coreHumanCapitalFactors.officialLanguages.first.total +
@@ -513,10 +512,8 @@ var calculateCoreHumanCapitalFactors = function () {
  * @author Bruno Miranda 
  */
 var calculateEducation = function (principalApplicant) {
-	if (principalApplicant)
-	{
-		switch (calculatorParameters.educationLevel)
-		{
+	if (principalApplicant) {
+		switch (calculatorParameters.educationLevel) {
 			case educationLevel.Secondary:
 				return (isSingle() ? 30 : 28);
 
@@ -539,10 +536,8 @@ var calculateEducation = function (principalApplicant) {
 				return (isSingle() ? 150 : 140);
 		}
 	}
-	else
-	{
-		switch (calculatorParameters.spouseEducationLevel)
-		{
+	else {
+		switch (calculatorParameters.spouseEducationLevel) {
 			case educationLevel.Secondary:
 				return 2;
 
@@ -576,10 +571,8 @@ var calculateEducation = function (principalApplicant) {
  * @author Bruno Miranda
  */
 var calculateEducationInCanada = function () {
-	if (calculatorParameters.educationInCanada !== null && calculatorParameters.educationInCanada !== undefined && typeof (calculatorParameters.educationInCanada) === 'number')
-	{
-		switch (calculatorParameters.educationInCanada)
-		{
+	if (calculatorParameters.educationInCanada !== null && calculatorParameters.educationInCanada !== undefined && typeof (calculatorParameters.educationInCanada) === 'number') {
+		switch (calculatorParameters.educationInCanada) {
 			case educationInCanada.OneOrTwoYearDiplomaOrCertificate:
 				return 15;
 
@@ -607,8 +600,7 @@ var calculateEducationTransferability = function () {
 
 	var language = scores.coreHumanCapitalFactors.officialLanguages.first;
 
-	switch (calculatorParameters.educationLevel)
-	{
+	switch (calculatorParameters.educationLevel) {
 		case educationLevel.OneYearDegree:
 		case educationLevel.BachelorsDegree:
 			if (language.clb7Count === 4 && language.clb9Count < 4)
@@ -664,8 +656,7 @@ var calculateForeignWorkExperienceTransferability = function () {
 
 	var language = scores.coreHumanCapitalFactors.officialLanguages.first;
 
-	switch (true)
-	{
+	switch (true) {
 		case calculatorParameters.workExperience >= 1 && calculatorParameters.workExperience < 3:
 			if (language.clb7Count === 4 && language.clb9Count < 4)
 				foreignWorkExperience.officialLanguageProficiency += 13;
@@ -710,8 +701,7 @@ var calculateForeignWorkExperienceTransferability = function () {
  * @author Bruno Miranda
  */
 var calculateJobOffer = function () {
-	switch (calculatorParameters.nocJobOffer)
-	{
+	switch (calculatorParameters.nocJobOffer) {
 		case nocList._00:
 			return 200;
 
@@ -819,8 +809,7 @@ var calculateSpouseFactors = function () {
 		subTotal: 0
 	}
 
-	if (!isSingle())
-	{
+	if (!isSingle()) {
 		spouseFactors.levelOfEducation = calculateEducation(false);
 		spouseFactors.officialLanguage = calculateLanguage(false);
 		spouseFactors.canadianWorkExperience = calculateWorkInCanada(false);
@@ -843,10 +832,8 @@ var calculateSpouseFactors = function () {
  * @author Bruno Miranda
  */
 function calculateWorkInCanada(principalApplicant) {
-	if (principalApplicant)
-	{
-		switch (true)
-		{
+	if (principalApplicant) {
+		switch (true) {
 			case calculatorParameters.workInCanada >= 1 && calculatorParameters.workInCanada < 2:
 				return (isSingle() ? 40 : 35);
 
@@ -863,10 +850,8 @@ function calculateWorkInCanada(principalApplicant) {
 				return (isSingle() ? 80 : 70);
 		}
 	}
-	else
-	{
-		switch (true)
-		{
+	else {
+		switch (true) {
 			case calculatorParameters.spouseWorkInCanada >= 1 && calculatorParameters.spouseWorkInCanada < 2:
 				return 5;
 
@@ -899,21 +884,17 @@ function validate() {
 
 	if (calculatorParameters.married === null)
 		result.push('married');
-	else
-	{
+	else {
 		if (typeof (calculatorParameters.married) !== 'boolean')
 			result.push('married');
-		else
-		{
+		else {
 			if (calculatorParameters.spouseCanadianCitizen === null)
 				result.push('spouseCanadianCitizen');
 			else
 				if (typeof (calculatorParameters.spouseCanadianCitizen) !== 'boolean')
 					result.push('spouseCanadianCitizen');
-				else
-				{
-					if (!calculatorParameters.spouseCanadianCitizen)
-					{
+				else {
+					if (!calculatorParameters.spouseCanadianCitizen) {
 						if (calculatorParameters.spouseCommingAlong === null)
 							result.push('spouseCommingAlong');
 						else
@@ -960,16 +941,14 @@ function validate() {
 		if (isNaN(calculatorParameters.firstLanguage.writing))
 			result.push('firstLanguage.writing');
 
-	if (calculatorParameters.secondLanguage.test !== null || calculatorParameters.secondLanguage.speaking !== null || calculatorParameters.secondLanguage.listening !== null || calculatorParameters.secondLanguage.reading !== null || calculatorParameters.secondLanguage.speaking !== null)
-	{
+	if (calculatorParameters.secondLanguage.test !== null || calculatorParameters.secondLanguage.speaking !== null || calculatorParameters.secondLanguage.listening !== null || calculatorParameters.secondLanguage.reading !== null || calculatorParameters.secondLanguage.speaking !== null) {
 		if (calculatorParameters.secondLanguage.test === null)
 			result.push('secondLanguage.test');
 		else
 			if (isNaN(calculatorParameters.secondLanguage.test))
 				result.push('secondLanguage.test');
 			else
-				if (calculatorParameters.secondLanguage.test !== languageTest.none)
-				{
+				if (calculatorParameters.secondLanguage.test !== languageTest.none) {
 					if (calculatorParameters.secondLanguage.speaking === null)
 						result.push('secondLanguage.speaking');
 					else
@@ -996,16 +975,14 @@ function validate() {
 				}
 	}
 
-	if (calculatorParameters.spouseLanguage.test !== null || calculatorParameters.spouseLanguage.speaking !== null || calculatorParameters.spouseLanguage.listening !== null || calculatorParameters.spouseLanguage.reading !== null || calculatorParameters.spouseLanguage.speaking !== null)
-	{
+	if (calculatorParameters.spouseLanguage.test !== null || calculatorParameters.spouseLanguage.speaking !== null || calculatorParameters.spouseLanguage.listening !== null || calculatorParameters.spouseLanguage.reading !== null || calculatorParameters.spouseLanguage.speaking !== null) {
 		if (calculatorParameters.spouseLanguage.test === null)
 			result.push('spouseLanguage.test');
 		else
 			if (isNaN(calculatorParameters.spouseLanguage.test))
 				result.push('spouseLanguage.test');
 			else
-				if (calculatorParameters.spouseLanguage.test !== languageTest.none)
-				{
+				if (calculatorParameters.spouseLanguage.test !== languageTest.none) {
 					if (calculatorParameters.spouseLanguage.speaking === null)
 						result.push('spouseLanguage.speaking');
 					else
@@ -1064,8 +1041,7 @@ function calculate(parameters) {
 
 	var valid = validate();
 
-	if (valid === true)
-	{
+	if (valid === true) {
 		scores.coreHumanCapitalFactors = calculateCoreHumanCapitalFactors();
 		scores.spouseFactors = calculateSpouseFactors();
 		scores.skillTransferabilityFactors = calculateSkillTransferabilityFactors();
@@ -1078,12 +1054,141 @@ function calculate(parameters) {
 
 		return scores;
 	}
-	else
-	{
+	else {
 		console.log('valid: ', valid);
 
 		return valid;
 	}
+}
+
+function report() {
+	var details = "";
+
+	details += "<table class='scoreDetails'>";
+	details += "	<caption>Here are the details of the score</caption>";
+	details += "	<thead>";
+	details += "		<tr>";
+	details += "			<th>Core/Human capital factors</th>";
+	details += "			<th class='score'>" + scores.coreHumanCapitalFactors.subTotal + "</th>";
+	details += "		</tr>";
+	details += "	</thead>";
+	details += "	<tbody>";
+	details += "		<tr>";
+	details += "			<td>Age</td>";
+	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.age + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Level of education</td>";
+	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.levelOfEducation + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Official Languages</td>";
+	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.officialLanguages.total + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td class='ident'>First Official Language</td>";
+	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.officialLanguages.first.total + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td class='ident'>Second  Official Language</td>";
+	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.officialLanguages.second.total + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Canadian work experience</td>";
+	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.canadianWorkExperience + "</td>";
+	details += "		</tr>";
+	details += "	</tbody>";
+
+	if (calculatorParameters.spouseCommingAlong) {
+		details += "	<thead>";
+		details += "		<tr>";
+		details += "			<th>Spouse factors</th>";
+		details += "			<th class='score'>" + scores.spouseFactors.subTotal + "</th>";
+		details += "		</tr>";
+		details += "	</thead>";
+		details += "	<tbody>";
+		details += "		<tr>";
+		details += "			<td>Level of education</td>";
+		details += "			<td class='score'>" + scores.spouseFactors.levelOfEducation + "</td>";
+		details += "		</tr>";
+		details += "		<tr>";
+		details += "			<td>First Official Language</td>";
+		details += "			<td class='score'>" + scores.spouseFactors.officialLanguage.total + "</td>";
+		details += "		</tr>";
+		details += "		<tr>";
+		details += "			<td>Canadian work experience</td>";
+		details += "			<td class='score'>" + scores.spouseFactors.canadianWorkExperience + "</td>";
+		details += "		</tr>";
+		details += "	</tbody>";
+	}
+
+	details += "	<thead>";
+	details += "		<tr>";
+	details += "			<th>Skill transferability factors</th>";
+	details += "			<th class='score'>" + scores.skillTransferabilityFactors.subTotal + "</th>";
+	details += "		</tr>";
+	details += "	</thead>";
+	details += "	<tbody>";
+	details += "		<tr>";
+	details += "			<td>Education</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.education.subTotal + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td class='ident'>Official Language proficiency and education</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.education.officialLanguageProficiency + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td class='ident'>Canadian work experience and education</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.education.canadianWorkExperience + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Foreign work experience</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.subTotal + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td class='ident'>Official Language proficiency and education</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.officialLanguageProficiency + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td class='ident'>Canadian work experience and education</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.canadianWorkExperience + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Certificate of qualification</td>";
+	details += "			<td class='score'>" + scores.skillTransferabilityFactors.certificateOfQualification + "</td>";
+	details += "		</tr>";
+	details += "	</tbody>";
+
+	details += "	<thead>";
+	details += "		<tr>";
+	details += "			<th>Additional points</th>";
+	details += "			<th class='score'>" + scores.additionalPoints.subTotal + "</th>";
+	details += "		</tr>";
+	details += "	</thead>";
+	details += "	<tbody>";
+	details += "		<tr>";
+	details += "			<td>Study in Canada</td>";
+	details += "			<td class='score'>" + scores.additionalPoints.studyInCadada + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Job Offer</td>";
+	details += "			<td class='score'>" + scores.additionalPoints.jobOffer + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Nomination certificate</td>";
+	details += "			<td class='score'>" + scores.additionalPoints.provincialNomination + "</td>";
+	details += "		</tr>";
+	details += "	</tbody>";
+
+	details += "	<thead class='total'>";
+	details += "		<tr>";
+	details += "			<th>Total</th>";
+	details += "			<th class='score'>" + util.formatNumber(scores.total, 0) + "</th>";
+	details += "		</tr>";
+	details += "	</thead>";
+	details += "</table>";
+
+	return details;
 }
 
 module.exports = {
@@ -1094,5 +1199,6 @@ module.exports = {
 	languageTest: languageTest,
 	languageObject: languageObject,
 	nocList: nocList,
-	scores: scores
+	scores: scores,
+	report: report
 };
