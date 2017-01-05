@@ -15,6 +15,9 @@
 </head>
 
 <body>
+    <div>
+        <h1 class="title">Canadabot Chat</h1>
+    </div>
     <div id="chat" class="chat">
         <div id="chatHistory" class="chatHistory"></div>
         <div id="question" class="question"></div>
@@ -28,6 +31,8 @@
         var options = $("#options");
 
         var payload = {};
+
+        //payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":27,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false, "nocJobOffer": undefined,"nominationCertificate":true,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
         if (window.location.href.indexOf('?') > 0) {
             payload = { "question": 44, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": 2, "firstLanguageSpeaking": 9, "firstLanguageListening": 9, "firstLanguageReading": 9, "firstLanguageWriting": 9, "secondLanguageTest": "0", "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nocJobOffer": undefined, "nominationCertificate": false, 
@@ -53,9 +58,12 @@
                 cache: false,
                 dataType: 'json',
                 data: request
-            }).success(function (data, textStatus, jqXHR) {
-                $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
-
+            }).success(function (data, textStatus, jqXHR)
+            {
+                if (payload.question >= 0) {
+                    $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
+                }                
+                
                 if (answer !== null) {
                     $("<div class='answer'>" + answer + "</div>").appendTo(chatHistory);
 
@@ -70,7 +78,7 @@
                 options.html('<br />');
 
                 if (responseJSON.quickReplies === null) {
-                    var textbox = $("<input id='reply'></input>");
+                    var textbox = $("<input id='reply' class='user-input'></input>");
                     var button = $("<button id='reply'>Reply</button>");
 
                     textbox.appendTo(options);
