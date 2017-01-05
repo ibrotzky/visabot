@@ -15,8 +15,8 @@
 </head>
 
 <body>
-    <div>
-        <h1 class="title">Canadabot Chat</h1>
+    <div class="title">        
+        <img class="svg" id="u309" src="../../images/pasted-svg-400x213.svg?crc=4161460473" width="400" height="213" alt="" data-mu-svgfallback="../../images/pasted%20svg%20400x213_poster_.png?crc=4019588615">        
     </div>
     <div id="chat" class="chat">
         <div id="chatHistory" class="chatHistory"></div>
@@ -63,7 +63,7 @@
                 if (payload.question >= 0) {
                     $("<div class='question'>" + question.html() + "</div>").appendTo(chatHistory);
                 }                
-                
+
                 if (answer !== null) {
                     $("<div class='answer'>" + answer + "</div>").appendTo(chatHistory);
 
