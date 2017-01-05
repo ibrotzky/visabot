@@ -1,6 +1,6 @@
 {
-    "name": "CanadaBot",
-    "description": "This is an Open Source Immigration Chatbot to help talent relocate. ",
+	"name": "CanadaBot",
+	"description": "This is an Open Source Immigration Chatbot to help talent relocate. ",
 	"require": {
 		"monolog/monolog": "~1.8"
 	},
@@ -8,8 +8,6 @@
 		"heroku/heroku-buildpack-php": "*"
 	},
 	"scripts": {
-		"compile": [
-			"bower install"
-		]
+		"postinstall": "bower install"
 	}
 }
