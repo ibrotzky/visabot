@@ -15,9 +15,9 @@ app.start = function () {
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
 
-    var phpServer = require('node-php-server');
+    /*var phpServer = require('node-php-server');
 
-    /*// Create a PHP Server 
+    // Create a PHP Server 
     phpServer.createServer({
       port: 8000,
       hostname: '127.0.0.1',
