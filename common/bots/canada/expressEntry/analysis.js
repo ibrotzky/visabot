@@ -93,6 +93,7 @@ function analyse(parameters, scores) {
 
     analysis += studyInCanadaOneTwoYearDegree(util.cloneObject(parameters));
 
+    analysis += studyInCanadaThreeOrMoreYearsDegree(util.cloneObject(parameters));
 
     analysis += "</table><br /><br />";
 
@@ -416,6 +417,48 @@ function spouseCanadianWorkExperience(parameters) {
     simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Canadian work experience</th>";
+
+    for (i = 0; i <= 5; i++) {
+        parameters.age = currentParameters.age + i;
+        parameters.spouseWorkInCanada += 1;
+
+        calculator.calculate(parameters);
+
+        simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+    }
+
+    simulation += "	</tbody>";
+
+    return simulation;
+}
+
+function studyInCanadaOneTwoYearDegree(parameters) {
+    var simulation = "";
+
+    simulation += "	<tbody>";
+    simulation += "		<tr>";
+    simulation += "			<td>Study in Canada One-year or two-year program</th>";
+
+    for (i = 0; i <= 5; i++) {
+        parameters.age = currentParameters.age + i;
+        parameters.spouseWorkInCanada += 1;
+
+        calculator.calculate(parameters);
+
+        simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+    }
+
+    simulation += "	</tbody>";
+
+    return simulation;
+}
+
+function studyInCanadaThreeOrMoreYearsDegree(parameters) {
+    var simulation = "";
+
+    simulation += "	<tbody>";
+    simulation += "		<tr>";
+    simulation += "			<td>Study in Canada Three or more years program</th>";
 
     for (i = 0; i <= 5; i++) {
         parameters.age = currentParameters.age + i;
