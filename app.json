@@ -1,0 +1,15 @@
+{
+    "name": "canadabot",
+    "description": "This is an Open Source Immigration Chatbot to help talent relocate.",
+    "website": "http://www.canadabot.ca",
+    "repository": "https://github.com/ibrotzky/visabot",
+    "success_url": "/",
+    "buildpacks": [
+        {
+            "url": "heroku/nodejs"
+        },
+        {
+            "url": "heroku/php"
+        }
+    ]
+}
