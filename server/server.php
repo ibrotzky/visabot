@@ -2,7 +2,7 @@
 // Example from Laravel framework 
 return call_user_func(function () {
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $publicDir = __DIR__ . '/../public';
+    $publicDir = __DIR__ . '/../web';
     $uri = urldecode($uri);
  
     $requested = $publicDir . '/' . $uri;
