@@ -96,10 +96,10 @@ function analyse(parameters, scores) {
         analysis += "			<th colspan='7'>Skill transferability factors</th>";
         analysis += "		</tr>";
         analysis += "	</thead>";
-        simulation += "	<tbody>";
-        simulation += "		<tr>";
-        simulation += "			<td>Education</th>";
-        simulation += "	</tbody>";
+        analysis += "	<tbody>";
+        analysis += "		<tr>";
+        analysis += "			<td>Education</th>";
+        analysis += "	</tbody>";
 
         analysis += firstOfficialLanguage(util.cloneObject(parameters));
     }
