@@ -1,0 +1,5 @@
+test/
+node_modules
+npm-debug.log
+advisories.json
+Dockerfile

@@ -1,0 +1,10 @@
+{
+  "a19f59787426e8f41b321911dd39f8ec": "Phase: {0}, URL: {1}",
+  "6447e6b342a2c51ab0bc53b3cbdf3742": "Sortierungskonflikt: \"{0}\" kann nicht nach \"{1}\" hinzugefügt werden, da die entgegengesetzte Reihenfolge bereits angegeben wurde",
+  "2bdb39e93f74c523a8ccee628fb9599a": "Phase \"{0}\" ist bereits vorhanden.",
+  "58545fed6db146f2b8576d723560cb47": "Unbekannte Phase: %",
+  "7c9ffc9635ec7f4de62b0955d2b8a474": "Unbekannte Phase: {0}",
+  "9f7cabafa3a0e4a1e27acc839534e34d": "Unbekannte Phase {0}",
+  "f2151dad01f583c644dd2e7e7fa062be": "Es kann kein Nicht-Phasen-Objekt zu einer {{PhaseList}} hinzugefügt werden"
+}
+
