@@ -132,11 +132,11 @@ function languageOptions(test, testQuestion, payload, ability) {
 
 function nocJobOfferOptions(payload) {
 	return ["00",
-				'0',
-				'A',
-				'B',
-				'C',
-				'D'];
+		'0',
+		'A',
+		'B',
+		'C',
+		'D'];
 }
 
 function workExperienceInCanadaOptions(payload) {
@@ -150,9 +150,9 @@ function workExperienceInCanadaOptions(payload) {
 
 function workExperienceLastTenYearsOptions(payload) {
 	return ["None or less then a year",
-				"1 year",
-				"2 years",
-				"3 years or more"];
+		"1 year",
+		"2 years",
+		"3 years or more"];
 }
 
 function yesNo() {
@@ -539,9 +539,43 @@ var questions = {
 		id: null,
 		question: function (payload) { return calculate(payload); },
 		options: yesNo,
+		processReply: function (payload, reply) { payload.calculateInverted = yesNoAnswer(reply); },
+		nextQuestion: function (payload) {
+			if (util.parseBoolean(payload.calculateInverted)) {
+				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
+					return questions.calculationInverted;
+				else
+					return questions.startOver;
+			}
+			else
+				return questions.startOver;
+		},
+	},
+	calculationInverted: {
+		id: null,
+		question: function (payload) { return calculateInverted(payload); },
+		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
+			if (util.parseBoolean(payload.startOver)) {
+				var payloadArray = Object.keys(payload);
 
+				for (p = 0; p < payloadArray.length; p++) {
+					delete payload[payloadArray[p]];
+				}
+
+				return questions.name;
+			}
+			else
+				return questions.done;
+		},
+	},
+	startOver: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Would you like to start over?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
+		nextQuestion: function (payload) {
 			if (util.parseBoolean(payload.startOver)) {
 				var payloadArray = Object.keys(payload);
 
@@ -642,95 +676,106 @@ function calculate(payload) {
 
 	var score = "{QUOTE}";
 
-	var parametersUser = {};
-	var calculationUser;
+	var parameters = {};
+	var calculation;
 
-	var parametersSpouse = {};
-	var calculationSpouse;
+	parameters.married = util.parseBoolean(payload.married);
+	parameters.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
+	parameters.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
+	parameters.age = parseInt(payload.age);
+	parameters.educationLevel = parseInt(payload.educationLevel);
+	if (payload.canadianEducationLevel !== undefined) parameters.educationInCanada = parseInt(payload.canadianEducationLevel);
+	parameters.firstLanguage = calculator.languageObject();
+	parameters.firstLanguage.test = parseInt(payload.firstLanguageTest);
+	parameters.firstLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
+	parameters.firstLanguage.listening = parseInt(payload.firstLanguageListening);
+	parameters.firstLanguage.reading = parseInt(payload.firstLanguageReading);
+	parameters.firstLanguage.writing = parseInt(payload.firstLanguageWriting);
+	parameters.secondLanguage = calculator.languageObject();
+	parameters.secondLanguage.test = (parameters.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.secondLanguageTest) : calculator.languageTest.tef);
+	parameters.secondLanguage.speaking = (payload.secondLanguageSpeaking === undefined ? 0 : parseInt(payload.secondLanguageSpeaking));
+	parameters.secondLanguage.listening = (payload.secondLanguageListening === undefined ? 0 : parseInt(payload.secondLanguageListening));
+	parameters.secondLanguage.reading = (payload.secondLanguageReading === undefined ? 0 : parseInt(payload.secondLanguageReading));
+	parameters.secondLanguage.writing = (payload.secondLanguageWriting === undefined ? 0 : parseInt(payload.secondLanguageWriting));
+	parameters.workInCanada = parseInt(payload.workExperienceInCanada);
+	parameters.workExperience = parseInt(payload.workExperienceLastTenYears);
+	parameters.certificateFromProvince = util.parseBoolean(payload.certificateQualificationProvince);
+	if (payload.nocJobOffer !== undefined) parameters.nocJobOffer = parseInt(payload.nocJobOffer);
+	parameters.provincialNomination = util.parseBoolean(payload.nominationCertificate);
+	if (payload.spouseEducationLevel !== undefined) parameters.spouseEducationLevel = parseInt(payload.spouseEducationLevel);
+	if (payload.spouseWorkExperienceInCanada !== undefined) parameters.spouseWorkInCanada = parseInt(payload.spouseWorkExperienceInCanada);
+	parameters.spouseLanguage = calculator.languageObject();
+	parameters.spouseLanguage.test = (payload.spouseFirstLanguageTest === undefined ? calculator.languageTest.none : parseInt(payload.spouseFirstLanguageTest));
+	parameters.spouseLanguage.speaking = (payload.spouseFirstLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseFirstLanguageSpeaking));
+	parameters.spouseLanguage.listening = (payload.spouseFirstLanguageListening === undefined ? 0 : parseInt(payload.spouseFirstLanguageListening));
+	parameters.spouseLanguage.reading = (payload.spouseFirstLanguageReading === undefined ? 0 : parseInt(payload.spouseFirstLanguageReading));
+	parameters.spouseLanguage.writing = (payload.spouseFirstLanguageWriting === undefined ? 0 : parseInt(payload.spouseFirstLanguageWriting));
 
-	// Calculate for the Principal Applicant
-	parametersUser.married = util.parseBoolean(payload.married);
-	parametersUser.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
-	parametersUser.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
-	parametersUser.age = parseInt(payload.age);
-	parametersUser.educationLevel = parseInt(payload.educationLevel);
-	if (payload.canadianEducationLevel !== undefined) parametersUser.educationInCanada = parseInt(payload.canadianEducationLevel);
-	parametersUser.firstLanguage = calculator.languageObject();
-	parametersUser.firstLanguage.test = parseInt(payload.firstLanguageTest);
-	parametersUser.firstLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
-	parametersUser.firstLanguage.listening = parseInt(payload.firstLanguageListening);
-	parametersUser.firstLanguage.reading = parseInt(payload.firstLanguageReading);
-	parametersUser.firstLanguage.writing = parseInt(payload.firstLanguageWriting);
-	parametersUser.secondLanguage = calculator.languageObject();
-	parametersUser.secondLanguage.test = (parametersUser.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.secondLanguageTest) : calculator.languageTest.tef);
-	parametersUser.secondLanguage.speaking = (payload.secondLanguageSpeaking === undefined ? 0 : parseInt(payload.secondLanguageSpeaking));
-	parametersUser.secondLanguage.listening = (payload.secondLanguageListening === undefined ? 0 : parseInt(payload.secondLanguageListening));
-	parametersUser.secondLanguage.reading = (payload.secondLanguageReading === undefined ? 0 : parseInt(payload.secondLanguageReading));
-	parametersUser.secondLanguage.writing = (payload.secondLanguageWriting === undefined ? 0 : parseInt(payload.secondLanguageWriting));
-	parametersUser.workInCanada = parseInt(payload.workExperienceInCanada);
-	parametersUser.workExperience = parseInt(payload.workExperienceLastTenYears);
-	parametersUser.certificateFromProvince = util.parseBoolean(payload.certificateQualificationProvince);
-	if (payload.nocJobOffer !== undefined) parametersUser.nocJobOffer = parseInt(payload.nocJobOffer);
-	parametersUser.provincialNomination = util.parseBoolean(payload.nominationCertificate);
-	if (payload.spouseEducationLevel !== undefined) parametersUser.spouseEducationLevel = parseInt(payload.spouseEducationLevel);
-	if (payload.spouseWorkExperienceInCanada !== undefined) parametersUser.spouseWorkInCanada = parseInt(payload.spouseWorkExperienceInCanada);
-	parametersUser.spouseLanguage = calculator.languageObject();
-	parametersUser.spouseLanguage.test = (payload.spouseFirstLanguageTest === undefined ? calculator.languageTest.none : parseInt(payload.spouseFirstLanguageTest));
-	parametersUser.spouseLanguage.speaking = (payload.spouseFirstLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseFirstLanguageSpeaking));
-	parametersUser.spouseLanguage.listening = (payload.spouseFirstLanguageListening === undefined ? 0 : parseInt(payload.spouseFirstLanguageListening));
-	parametersUser.spouseLanguage.reading = (payload.spouseFirstLanguageReading === undefined ? 0 : parseInt(payload.spouseFirstLanguageReading));
-	parametersUser.spouseLanguage.writing = (payload.spouseFirstLanguageWriting === undefined ? 0 : parseInt(payload.spouseFirstLanguageWriting));
+	calculation = calculator.calculate(parameters);
+	payload.score = calculation;
 
-	calculationUser = calculator.calculate(parametersUser);
-	payload.score = calculationUser;
+	score += "Your score is " + util.formatNumber(calculation.total, 0) + ".<br /><br />" + calculator.report();
 
-	score += "Your score is " + util.formatNumber(calculationUser.total, 0) + ".<br /><br />" + calculator.report();
-
-	score += analysis.analyse(parametersUser, calculationUser);
+	score += analysis.analyse(parameters, calculation);
 
 	//Calculate Inverting the roles
-	if (util.parseBoolean(payload.spouseCommingAlong) && parametersUser.spouseLanguage.test !== calculator.languageTest.none && !parametersUser.provincialNomination) {
-		parametersSpouse.married = util.parseBoolean(payload.married);
-		parametersSpouse.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
-		parametersSpouse.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
-		parametersSpouse.age = parseInt(payload.spouseAge);
-		parametersSpouse.educationLevel = parseInt(payload.spouseEducationLevel);
-		if (payload.spouseCanadianEducationLevel !== undefined) parametersSpouse.educationInCanada = parseInt(payload.spouseCanadianEducationLevel);
-		parametersSpouse.firstLanguage = calculator.languageObject();
-		parametersSpouse.firstLanguage.test = parseInt(payload.spouseFirstLanguageTest);
-		parametersSpouse.firstLanguage.speaking = parseInt(payload.spouseFirstLanguageSpeaking);
-		parametersSpouse.firstLanguage.listening = parseInt(payload.spouseFirstLanguageListening);
-		parametersSpouse.firstLanguage.reading = parseInt(payload.spouseFirstLanguageReading);
-		parametersSpouse.firstLanguage.writing = parseInt(payload.spouseFirstLanguageWriting);
-		parametersSpouse.secondLanguage = calculator.languageObject();
-		parametersSpouse.secondLanguage.test = (parametersSpouse.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.spouseSecondLanguageTest) : calculator.languageTest.tef);
-		parametersSpouse.secondLanguage.speaking = (payload.spouseSecondLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseSecondLanguageSpeaking));
-		parametersSpouse.secondLanguage.listening = (payload.spouseSecondLanguageListening === undefined ? 0 : parseInt(payload.spouseSecondLanguageListening));
-		parametersSpouse.secondLanguage.reading = (payload.spouseSecondLanguageReading === undefined ? 0 : parseInt(payload.spouseSecondLanguageReading));
-		parametersSpouse.secondLanguage.writing = (payload.spouseSecondLanguageWriting === undefined ? 0 : parseInt(payload.spouseSecondLanguageWriting));
-		parametersSpouse.workInCanada = parseInt(payload.spouseWorkExperienceInCanada);
-		parametersSpouse.workExperience = parseInt(payload.spouseWorkExperienceLastTenYears);
-		parametersSpouse.certificateFromProvince = util.parseBoolean(payload.spouseCertificateQualificationProvince);
-		if (payload.nocJobOffer !== undefined) parametersSpouse.nocJobOffer = parseInt(payload.spouseNocJobOffer);
-		parametersSpouse.provincialNomination = util.parseBoolean(payload.spouseNominationCertificate);
-		parametersSpouse.spouseEducationLevel = parseInt(payload.educationLevel);
-		parametersSpouse.spouseWorkInCanada = parseInt(payload.workExperienceInCanada);
-		parametersSpouse.spouseLanguage = calculator.languageObject();
-		parametersSpouse.spouseLanguage.test = parseInt(payload.firstLanguageTest);
-		parametersSpouse.spouseLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
-		parametersSpouse.spouseLanguage.listening = parseInt(payload.firstLanguageListening);
-		parametersSpouse.spouseLanguage.reading = parseInt(payload.firstLanguageReading);
-		parametersSpouse.spouseLanguage.writing = parseInt(payload.firstLanguageWriting);
+	if (util.parseBoolean(payload.spouseCommingAlong) && parameters.spouseLanguage.test !== calculator.languageTest.none && !parameters.provincialNomination)
+		score += "<br /><br />I can do this analysis inverting your role with your spouse or common-law partner. Would you like me to do it?";
+	else
+		score += "<br /><br />Would you like to start over?";
 
-		calculationSpouse = calculator.calculate(parametersSpouse);
-		payload.scoreInverted = calculationSpouse;
+	return score;
+}
 
-		score += "<br /><br /><hr />If you invert roles with your spouse or common-law partner, your score is " + calculationSpouse.total + ".<br /><br />" + calculator.report();
+function calculateInverted(payload) {
+	var calculator = require("./calculator");
+	var analysis = require("./analysis");
 
-		score += analysis.analyse(parametersSpouse, calculationSpouse, false);
-	}
+	var score = "{QUOTE}";
 
-	score += "<br /><br /><hr />Would you like to start over?";
+	var parameters = {};
+	var calculation;
+
+	parameters.married = util.parseBoolean(payload.married);
+	parameters.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
+	parameters.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
+	parameters.age = parseInt(payload.spouseAge);
+	parameters.educationLevel = parseInt(payload.spouseEducationLevel);
+	if (payload.spouseCanadianEducationLevel !== undefined) parameters.educationInCanada = parseInt(payload.spouseCanadianEducationLevel);
+	parameters.firstLanguage = calculator.languageObject();
+	parameters.firstLanguage.test = parseInt(payload.spouseFirstLanguageTest);
+	parameters.firstLanguage.speaking = parseInt(payload.spouseFirstLanguageSpeaking);
+	parameters.firstLanguage.listening = parseInt(payload.spouseFirstLanguageListening);
+	parameters.firstLanguage.reading = parseInt(payload.spouseFirstLanguageReading);
+	parameters.firstLanguage.writing = parseInt(payload.spouseFirstLanguageWriting);
+	parameters.secondLanguage = calculator.languageObject();
+	parameters.secondLanguage.test = (parameters.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.spouseSecondLanguageTest) : calculator.languageTest.tef);
+	parameters.secondLanguage.speaking = (payload.spouseSecondLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseSecondLanguageSpeaking));
+	parameters.secondLanguage.listening = (payload.spouseSecondLanguageListening === undefined ? 0 : parseInt(payload.spouseSecondLanguageListening));
+	parameters.secondLanguage.reading = (payload.spouseSecondLanguageReading === undefined ? 0 : parseInt(payload.spouseSecondLanguageReading));
+	parameters.secondLanguage.writing = (payload.spouseSecondLanguageWriting === undefined ? 0 : parseInt(payload.spouseSecondLanguageWriting));
+	parameters.workInCanada = parseInt(payload.spouseWorkExperienceInCanada);
+	parameters.workExperience = parseInt(payload.spouseWorkExperienceLastTenYears);
+	parameters.certificateFromProvince = util.parseBoolean(payload.spouseCertificateQualificationProvince);
+	if (payload.nocJobOffer !== undefined) parameters.nocJobOffer = parseInt(payload.spouseNocJobOffer);
+	parameters.provincialNomination = util.parseBoolean(payload.spouseNominationCertificate);
+	parameters.spouseEducationLevel = parseInt(payload.educationLevel);
+	parameters.spouseWorkInCanada = parseInt(payload.workExperienceInCanada);
+	parameters.spouseLanguage = calculator.languageObject();
+	parameters.spouseLanguage.test = parseInt(payload.firstLanguageTest);
+	parameters.spouseLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
+	parameters.spouseLanguage.listening = parseInt(payload.firstLanguageListening);
+	parameters.spouseLanguage.reading = parseInt(payload.firstLanguageReading);
+	parameters.spouseLanguage.writing = parseInt(payload.firstLanguageWriting);
+
+	calculation = calculator.calculate(parameters);
+	payload.score = calculation;
+
+	score += "Your score with your roles inverted is " + util.formatNumber(calculation.total, 0) + ".<br /><br />" + calculator.report();
+
+	score += analysis.analyse(parameters, calculation, false);
+
+	score += "<br /><br />Would you like to start over?";
 
 	return score;
 }

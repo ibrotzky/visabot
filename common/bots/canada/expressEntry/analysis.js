@@ -8,8 +8,8 @@ function analyse(parameters, scores) {
     if (parameters.provincialNomination)
         return "<br /><br />Since you were nominated by a province or territory, you already have enough points to pass the next draw. Welcome to Canada! :)";
 
-    currentParameters = parameters;
-    currentScore = scores;
+    currentParameters = util.cloneObject(parameters);
+    currentScore = util.cloneObject(scores);
 
     var analysis = "<br /><br />";
 
@@ -58,6 +58,8 @@ function analyse(parameters, scores) {
 
     analysis += canadianWorkExperience(util.cloneObject(parameters));
 
+    analysis += secondOfficialLanguage(util.cloneObject(parameters));
+
     if (parameters.spouseCommingAlong) {
         analysis += "	<thead>";
         analysis += "		<tr>";
@@ -85,6 +87,24 @@ function analyse(parameters, scores) {
         analysis += spouseCanadianWorkExperience(util.cloneObject(parameters));
     }
 
+    if (parameters.firstLanguage.speaking < 9 ||
+        parameters.firstLanguage.listening < 9 ||
+        parameters.firstLanguage.reading < 9 ||
+        parameters.firstLanguage.writing < 9) {
+        analysis += "	<thead>";
+        analysis += "		<tr>";
+        analysis += "			<th colspan='7'>Skill transferability factors</th>";
+        analysis += "		</tr>";
+        analysis += "	</thead>";
+        simulation += "	<tbody>";
+        simulation += "		<tr>";
+        simulation += "			<td>Education</th>";
+        simulation += "	</tbody>";
+
+        analysis += firstOfficialLanguage(util.cloneObject(parameters));
+    }
+
+
     analysis += "	<thead>";
     analysis += "		<tr>";
     analysis += "			<th colspan='7'>Additional points</th>";
@@ -97,7 +117,7 @@ function analyse(parameters, scores) {
 
     analysis += "</table><br /><br />";
 
-    analysis += "There some other things you could do to get more points, for instance:<br/>";
+    analysis += "There some other things you could do to get more points, for instance:<br/><br />";
     analysis += "If you get a Job Offer in the NOC 00, you'll get 200 more points.<br/>";
     analysis += "If you get a Job Offer in the NOCs 0, A or B, you'll get 50 more points.<br/>";
     analysis += "If you get a Certificate of Qualification from a province or territory, you'll get 50 more points.<br/>";
@@ -231,6 +251,89 @@ function educationTwoOrMoreDegress(parameters) {
     return simulation;
 }
 
+function secondOfficialLanguage(parameters) {
+    var simulation = "";
+
+    if (parameters.secondLanguage.test === calculator.languageTest.none) {
+        parameters.secondLanguage.test = calculator.languageTest.tef;
+        parameters.secondLanguage.speaking = 0;
+        parameters.secondLanguage.listening = 0;
+        parameters.secondLanguage.reading = 0;
+        parameters.secondLanguage.writing = 0;
+    }
+
+    if (parameters.secondLanguage.speaking < 5 ||
+        parameters.secondLanguage.listening < 5 ||
+        parameters.secondLanguage.reading < 5 ||
+        parameters.secondLanguage.writing < 5) {
+        simulation += "	<tbody>";
+        simulation += "		<tr>";
+        simulation += "			<td>Second Official Language to CLB 5 or 6</th>";
+
+        for (i = 0; i <= 5; i++) {
+            parameters.age = currentParameters.age + i;
+            parameters.secondLanguage.speaking = 5;
+            parameters.secondLanguage.listening = 5;
+            parameters.secondLanguage.reading = 5;
+            parameters.secondLanguage.writing = 5;
+
+            calculator.calculate(parameters);
+
+            simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+        }
+
+        simulation += "	</tbody>";
+    }
+
+    if (parameters.secondLanguage.speaking >= 5 && parameters.secondLanguage.speaking < 7 ||
+        parameters.secondLanguage.listening >= 5 && parameters.secondLanguage.listening < 7 ||
+        parameters.secondLanguage.reading >= 5 && parameters.secondLanguage.reading < 7 ||
+        parameters.secondLanguage.writing >= 5 && parameters.secondLanguage.writing < 7) {
+        simulation += "	<tbody>";
+        simulation += "		<tr>";
+        simulation += "			<td>Second Official Language to CLB 7 or 8</th>";
+
+        for (i = 0; i <= 5; i++) {
+            parameters.age = currentParameters.age + i;
+            parameters.secondLanguage.speaking = 7;
+            parameters.secondLanguage.listening = 7;
+            parameters.secondLanguage.reading = 7;
+            parameters.secondLanguage.writing = 7;
+
+            calculator.calculate(parameters);
+
+            simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+        }
+
+        simulation += "	</tbody>";
+    }
+
+    if (parameters.secondLanguage.speaking >= 7 && parameters.secondLanguage.speaking < 9 ||
+        parameters.secondLanguage.listening >= 7 && parameters.secondLanguage.listening < 9 ||
+        parameters.secondLanguage.reading >= 7 && parameters.secondLanguage.reading < 9 ||
+        parameters.secondLanguage.writing >= 7 && parameters.secondLanguage.writing < 9) {
+        simulation += "	<tbody>";
+        simulation += "		<tr>";
+        simulation += "			<td>Second Official Language to CLB 9</th>";
+
+        for (i = 0; i <= 5; i++) {
+            parameters.age = currentParameters.age + i;
+            parameters.secondLanguage.speaking = 9;
+            parameters.secondLanguage.listening = 9;
+            parameters.secondLanguage.reading = 9;
+            parameters.secondLanguage.writing = 9;
+
+            calculator.calculate(parameters);
+
+            simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+        }
+
+        simulation += "	</tbody>";
+    }
+
+    return simulation;
+}
+
 function canadianWorkExperience(parameters) {
     var simulation = "";
 
@@ -240,7 +343,7 @@ function canadianWorkExperience(parameters) {
 
     for (i = 0; i <= 5; i++) {
         parameters.age = currentParameters.age + i;
-        parameters.workInCanada += 1;
+        parameters.workInCanada += i;
 
         calculator.calculate(parameters);
 
@@ -420,7 +523,7 @@ function spouseCanadianWorkExperience(parameters) {
 
     for (i = 0; i <= 5; i++) {
         parameters.age = currentParameters.age + i;
-        parameters.spouseWorkInCanada += 1;
+        parameters.spouseWorkInCanada += i;
 
         calculator.calculate(parameters);
 
@@ -441,7 +544,7 @@ function studyInCanadaOneTwoYearDegree(parameters) {
 
     for (i = 0; i <= 5; i++) {
         parameters.age = currentParameters.age + i;
-        parameters.spouseWorkInCanada += 1;
+        parameters.spouseWorkInCanada += i;
 
         calculator.calculate(parameters);
 
@@ -462,7 +565,7 @@ function studyInCanadaThreeOrMoreYearsDegree(parameters) {
 
     for (i = 0; i <= 5; i++) {
         parameters.age = currentParameters.age + i;
-        parameters.spouseWorkInCanada += 1;
+        parameters.spouseWorkInCanada += i;
 
         calculator.calculate(parameters);
 
@@ -470,6 +573,58 @@ function studyInCanadaThreeOrMoreYearsDegree(parameters) {
     }
 
     simulation += "	</tbody>";
+
+    return simulation;
+}
+
+function firstOfficialLanguage(parameters) {
+    var simulation = "";
+
+    if (parameters.firstLanguage.speaking < 7 ||
+        parameters.firstLanguage.listening < 7 ||
+        parameters.firstLanguage.reading < 7 ||
+        parameters.firstLanguage.writing < 7) {
+        simulation += "	<tbody>";
+        simulation += "		<tr>";
+        simulation += "			<td>First Official Language to CLB 7</th>";
+
+        for (i = 0; i <= 5; i++) {
+            parameters.age = currentParameters.age + i;
+            parameters.firstLanguage.speaking = 7;
+            parameters.firstLanguage.listening = 7;
+            parameters.firstLanguage.reading = 7;
+            parameters.firstLanguage.writing = 7;
+
+            calculator.calculate(parameters);
+
+            simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+        }
+
+        simulation += "	</tbody>";
+    }
+
+    if (parameters.firstLanguage.speaking >= 7 && parameters.firstLanguage.speaking < 9 ||
+        parameters.firstLanguage.listening >= 7 && parameters.firstLanguage.listening < 9 ||
+        parameters.firstLanguage.reading >= 7 && parameters.firstLanguage.reading < 9 ||
+        parameters.firstLanguage.writing >= 7 && parameters.firstLanguage.writing < 9) {
+        simulation += "	<tbody>";
+        simulation += "		<tr>";
+        simulation += "			<td>First Official Language to CLB 9</th>";
+
+        for (i = 0; i <= 5; i++) {
+            parameters.age = currentParameters.age + i;
+            parameters.firstLanguage.speaking = 9;
+            parameters.firstLanguage.listening = 9;
+            parameters.firstLanguage.reading = 9;
+            parameters.firstLanguage.writing = 9;
+
+            calculator.calculate(parameters);
+
+            simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
+        }
+
+        simulation += "	</tbody>";
+    }
 
     return simulation;
 }
