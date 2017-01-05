@@ -1,1 +1,0 @@
-<li class="dashboard_nav_menu_li <?= strstr($getViewInput, 'custom/') ? 'dashboard_nav_menu_active' : ''; ?>"><a class="icon-accessibility" title="Personalizados" href="dashboard.php?wc=custom/home">Personalizados</a></li>
