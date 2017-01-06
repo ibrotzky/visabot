@@ -529,7 +529,7 @@ var calculateEducation = function (principalApplicant) {
 			case educationLevel.TwoOrMoreDegress:
 				return (isSingle() ? 128 : 119);
 
-			case educationLevel.DoctoralDegree:
+			case educationLevel.MastersDegree:
 				return (isSingle() ? 135 : 126);
 
 			case educationLevel.DoctoralDegree:
@@ -553,7 +553,7 @@ var calculateEducation = function (principalApplicant) {
 			case educationLevel.TwoOrMoreDegress:
 				return 9;
 
-			case educationLevel.DoctoralDegree:
+			case educationLevel.MastersDegree:
 				return 10;
 
 			case educationLevel.DoctoralDegree:
