@@ -1022,6 +1022,11 @@ function validate() {
  * @author Bruno Miranda
  */
 function calculate(parameters) {
+	var calculatorParametersArray = Object.keys(calculatorParameters);
+
+	for (p = 0; p <calculatorParametersArray.length; p++)
+		calculatorParameters[calculatorParametersArray[p]] = null;
+
 	if (parameters.married !== undefined) calculatorParameters.married = parameters.married;
 	if (parameters.spouseCanadianCitizen !== undefined) calculatorParameters.spouseCanadianCitizen = parameters.spouseCanadianCitizen;
 	if (parameters.spouseCommingAlong !== undefined) calculatorParameters.spouseCommingAlong = parameters.spouseCommingAlong;

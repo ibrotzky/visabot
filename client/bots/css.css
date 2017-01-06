@@ -1,15 +1,13 @@
 * {
   box-sizing: border-box;  
 }
-html {
-  background: #34495e;
-}
 
 body, html {
   height: 100%;
 }
 
 body {
+  background: #34495e;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 115%;
   display: flex;
@@ -25,82 +23,53 @@ body {
     padding: 30px;
 }
 
-.options > button
-{
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-}
-
 .chat {
-  /*
-  flex: 1;
-  padding: 20px;
-  display: block;
-  flex-direction: column;
-  margin-top: 60px;
-  margin-bottom: 60px;    
-  */
-    list-style: none;
-    background: none;
-    margin: 0;
-    padding: 0 0 50px 0;
-    margin-top: 60px;
-    margin-bottom: 10px;
+    margin: 0px 10px;
 }
 
-.chatHistory > .question
+.chatHistory .row
 {
-    text-align: left;
-    background: #0FB0DF;
-    color: white;
-    border-radius: 10px;
-    padding: 12px 20px;
-}
-
-.question
-{
-    text-align: left;
-    background: #0FB0DF;
-    color: white;
-    border-radius: 10px;
-    padding: 12px 20px;
-    max-width: 35%;
-}
-
-.chatHistory > .answer
-{
-    float: right;
-    background: #ccc;
-    color: black;
-    border-radius: 10px;
-    padding: 12px 20px;
+    margin-bottom: 15px;
 }
 
 .answer
 {
-    float: right;
     background: #ccc;
+    border-radius: 4px;
     color: black;
-    border-radius: 10px;
-    padding: 12px 20px;
+    float: right;
+    font-size: 16px;
+    width: auto;
 }
 
-.user-input {
-    width: 90%;
-    font-size: 1.2rem;
-    border: 1px solid #ccc;
+.question
+{
+    background: #0FB0DF;
     border-radius: 4px;
-    padding: 8px;
-  }
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    width: auto;
+}
+
+.options input[type="text"] 
+{
+    width: 100%;
+}
+
+.options button
+{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.options button:disabled
+{
+    background-color: lightgray;
+}
 
 table, th, td {
     border: 1px solid black;

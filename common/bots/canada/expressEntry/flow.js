@@ -548,7 +548,7 @@ var questions = {
 					return questions.startOver;
 			}
 			else
-				return questions.startOver;
+				return questions.done;
 		},
 	},
 	calculationInverted: {
