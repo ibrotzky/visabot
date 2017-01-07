@@ -5,8 +5,9 @@ var currentParameters;
 var currentScore;
 
 function analyse(parameters, scores, title) {
+    var analysis = "";
 
-    if (title === undefined)
+if (title === undefined)
     {
         if (parameters.provincialNomination)
             return "<br /><br />Since you were nominated by a province or territory, you already have enough points to pass the next draw. Welcome to Canada! :)";
@@ -14,7 +15,7 @@ function analyse(parameters, scores, title) {
         currentParameters = util.cloneObject(parameters);
         currentScore = util.cloneObject(scores);
 
-        var analysis = "<br /><br />";
+        analysis += "<br />";
 
         analysis += "<table class='analysis'>";
         analysis += "	<caption>Here is a 5-year plan with some ideas to improve your score</caption>";

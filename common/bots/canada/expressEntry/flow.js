@@ -1,3 +1,5 @@
+var analysis = require("./analysis");
+var calculator = require("./calculator");
 var util = require("../../../util");
 
 /**
@@ -47,14 +49,15 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 	if (principalApplicant === undefined)
 		principalApplicant = true;
 
-	switch (ability) {
+	switch (ability)
+	{
 		case languageAbility.speaking:
 			abilityName = 'speak';
 			testSectionName = 'speaking';
 			break;
 
 		case languageAbility.listening:
-			abilityName = 'listen';
+			abilityName = 'listen to';
 			testSectionName = 'listening';
 			break;
 
@@ -69,37 +72,41 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 			break;
 	}
 
-	if (parseInt(test) === 0)
-		return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English?";
-	else {
-		switch (parseInt(test)) {
-			case answerIndex(testQuestion, payload, 'CELPIP'):
-				testName = "CELPIP";
-				break;
+	switch (parseInt(test))
+	{
+		case answerIndex(testQuestion, payload, 'CELPIP'):
+			testName = "CELPIP";
+			break;
 
-			case answerIndex(testQuestion, payload, 'IELTS'):
-				testName = "IELTS";
-				break;
+		case answerIndex(testQuestion, payload, 'IELTS'):
+			testName = "IELTS";
+			break;
 
-			case answerIndex(testQuestion, payload, 'TEF'):
-				testName = "TEF";
-				break;
-		}
+		case answerIndex(testQuestion, payload, 'TEF'):
+			testName = "TEF";
+			break;
 
-		return "{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?";
+		default:
+			return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English?";
 	}
+
+	return "{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?";
 }
 
 function languageOptions(test, testQuestion, payload, ability) {
-	/*
+/*
 	console.log('answer: ', test);
 	console.log('No: ', answerIndex(testQuestion, payload, 'No'));
+	console.log('No, and won\'t: ', answerIndex(testQuestion, payload, 'No, and won\'t'));
+	console.log('No, but will: ', answerIndex(testQuestion, payload, 'No, but will'));
 	console.log('CELPIP: ', answerIndex(testQuestion, payload, 'CELPIP'));
 	console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
 	console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
-	*/
-	switch (parseInt(test)) {
+*/
+	switch (parseInt(test))
+	{
 		case answerIndex(testQuestion, payload, 'No'):
+		case answerIndex(testQuestion, payload, 'No, but will'):
 			return ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
 			break;
 
@@ -112,7 +119,8 @@ function languageOptions(test, testQuestion, payload, ability) {
 			break;
 
 		case answerIndex(testQuestion, payload, 'TEF'):
-			switch (ability) {
+			switch (ability)
+			{
 				case languageAbility.speaking:
 				case languageAbility.writing:
 					return ["0 - 180", "181 - 225", "226 - 270", "271 - 309", "310 - 348", "349 - 370", "371 - 392", "393 - 450"];
@@ -202,7 +210,8 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old are you?" },
 		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply) {
+			switch (reply)
+			{
 				case '17 or less':
 					payload.age = 17;
 					break;
@@ -371,7 +380,8 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
 		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply) {
+			switch (reply)
+			{
 				case '17 or less':
 					payload.spouseAge = 17;
 					break;
@@ -414,15 +424,25 @@ var questions = {
 	},
 	spouseFirstLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Will your spouse or common-law partner take a language test?" },
+		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a language test?" },
 		options: function (payload) {
-			return ['No',
+			return ['No, and won\'t',
+				'No, but will',
 				'CELPIP',
 				'IELTS',
 				'TEF'];
 		},
-		processReply: function (payload, reply) { payload.spouseFirstLanguageTest = answerIndex(this, payload, reply); },
-		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseFirstLanguageSpeaking) },
+		processReply: function (payload, reply) {
+			payload.spouseFirstLanguageTest = answerIndex(this, payload, reply);
+		},
+		nextQuestion: function (payload) {
+			if (payload.spouseFirstLanguageTest == 0)
+				return questions.spouseWorkExperienceInCanada;
+			else
+			{
+				return questions.spouseFirstLanguageSpeaking;
+			}
+		}
 	},
 	spouseFirstLanguageSpeaking: {
 		id: null,
@@ -456,7 +476,7 @@ var questions = {
 		id: null,
 		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a second language test?" },
 		options: function (payload) {
-			return (payload.spouseFirstLanguageTest == 3 ? ['No',
+			return (payload.spouseFirstLanguageTest == 4 ? ['No',
 				'CELPIP',
 				'IELTS'] : ['No',
 					'TEF']);
@@ -541,14 +561,19 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.calculateInverted = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.calculateInverted)) {
+			if (util.parseBoolean(payload.calculateInverted))
+			{
 				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
 					return questions.calculationInverted;
 				else
-					return questions.startOver;
+				{
+					clearPayload(payload, questions.married.id);
+
+					return questions.married;
+				}
 			}
 			else
-				return questions.done;
+				return questions.startOver;
 		},
 	},
 	calculationInverted: {
@@ -557,14 +582,11 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.startOver)) {
-				var payloadArray = Object.keys(payload);
+			if (util.parseBoolean(payload.startOver))
+			{
+				clearPayload(payload, questions.married.id);
 
-				for (p = 0; p < payloadArray.length; p++) {
-					delete payload[payloadArray[p]];
-				}
-
-				return questions.name;
+				return questions.married;
 			}
 			else
 				return questions.done;
@@ -576,14 +598,11 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.startOver)) {
-				var payloadArray = Object.keys(payload);
+			if (util.parseBoolean(payload.startOver))
+			{
+				clearPayload(payload, questions.married.id);
 
-				for (p = 0; p < payloadArray.length; p++) {
-					delete payload[payloadArray[p]];
-				}
-
-				return questions.name;
+				return questions.married;
 			}
 			else
 				return questions.done;
@@ -600,7 +619,8 @@ var questions = {
 
 var questionsArray = Object.keys(questions);
 
-for (q = 0; q < questionsArray.length; q++) {
+for (q = 0; q < questionsArray.length; q++)
+{
 	questions[questionsArray[q]].id = q;
 }
 
@@ -629,13 +649,15 @@ function questionFlow(payload, reply, callback) {
 
 	var question;
 
-	if (Object.keys(payload).length > 0) {
+	if (Object.keys(payload).length > 0)
+	{
 		//console.log('payload.question: ', payload.question);
 		question = questions[questionsArray[payload.question]];
 		//console.log('question: ', question);
 
 		//console.log('answerValid: ', validateAnswer(question, payload, reply));
-		if (validateAnswer(question, payload, reply)) {
+		if (validateAnswer(question, payload, reply))
+		{
 			question.processReply(payload, reply);
 
 			//console.log('payload Before: ', payload);
@@ -643,7 +665,8 @@ function questionFlow(payload, reply, callback) {
 			//console.log('payload After: ', payload);
 		}
 	}
-	else {
+	else
+	{
 		question = questions.name;
 	}
 	//console.log('nextQuestion: ', question);
@@ -656,12 +679,14 @@ function questionFlow(payload, reply, callback) {
 	responseJSON.response = responseJSON.response.replace('{QUOTE}', '');
 	responseJSON.customPayload = payload;
 
-	if (payload.score !== undefined) {
+	if (payload.score !== undefined)
+	{
 		responseJSON.score = payload.score;
 		delete payload['score'];
 	}
 
-	if (payload.scoreInverted !== undefined) {
+	if (payload.scoreInverted !== undefined)
+	{
 		responseJSON.scoreInverted = payload.scoreInverted;
 		delete payload['scoreInverted'];
 	}
@@ -671,9 +696,6 @@ function questionFlow(payload, reply, callback) {
 }
 
 function calculate(payload) {
-	var calculator = require("./calculator");
-	var analysis = require("./analysis");
-
 	var score = "{QUOTE}";
 
 	var parameters = {};
@@ -705,7 +727,7 @@ function calculate(payload) {
 	if (payload.spouseEducationLevel !== undefined) parameters.spouseEducationLevel = parseInt(payload.spouseEducationLevel);
 	if (payload.spouseWorkExperienceInCanada !== undefined) parameters.spouseWorkInCanada = parseInt(payload.spouseWorkExperienceInCanada);
 	parameters.spouseLanguage = calculator.languageObject();
-	parameters.spouseLanguage.test = (payload.spouseFirstLanguageTest === undefined ? calculator.languageTest.none : parseInt(payload.spouseFirstLanguageTest));
+	parameters.spouseLanguage.test = (payload.spouseFirstLanguageTest === undefined ? calculator.languageTest.none : parseInt(payload.spouseFirstLanguageTest) - 1);
 	parameters.spouseLanguage.speaking = (payload.spouseFirstLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseFirstLanguageSpeaking));
 	parameters.spouseLanguage.listening = (payload.spouseFirstLanguageListening === undefined ? 0 : parseInt(payload.spouseFirstLanguageListening));
 	parameters.spouseLanguage.reading = (payload.spouseFirstLanguageReading === undefined ? 0 : parseInt(payload.spouseFirstLanguageReading));
@@ -728,9 +750,6 @@ function calculate(payload) {
 }
 
 function calculateInverted(payload) {
-	var calculator = require("./calculator");
-	var analysis = require("./analysis");
-
 	var score = "{QUOTE}";
 
 	var parameters = {};
@@ -743,7 +762,7 @@ function calculateInverted(payload) {
 	parameters.educationLevel = parseInt(payload.spouseEducationLevel);
 	if (payload.spouseCanadianEducationLevel !== undefined) parameters.educationInCanada = parseInt(payload.spouseCanadianEducationLevel);
 	parameters.firstLanguage = calculator.languageObject();
-	parameters.firstLanguage.test = parseInt(payload.spouseFirstLanguageTest);
+	parameters.firstLanguage.test = parseInt(payload.spouseFirstLanguageTest) - 1;
 	parameters.firstLanguage.speaking = parseInt(payload.spouseFirstLanguageSpeaking);
 	parameters.firstLanguage.listening = parseInt(payload.spouseFirstLanguageListening);
 	parameters.firstLanguage.reading = parseInt(payload.spouseFirstLanguageReading);
@@ -773,11 +792,31 @@ function calculateInverted(payload) {
 
 	score += "Your score with your roles inverted is " + util.formatNumber(calculation.total, 0) + ".<br /><br />" + calculator.report();
 
-	score += analysis.analyse(parameters, calculation, false);
+	score += analysis.analyse(parameters, calculation);
 
 	score += "<br /><br />Would you like to start over?";
 
 	return score;
+}
+
+function clearPayload(payload, startingQuestion) {
+	var ignore = "";
+
+	for (q = 0; q < startingQuestion; q++)
+	{
+		ignore += "[" + questionsArray[q] + "]";
+	}
+
+	var payloadArray = Object.keys(payload);
+	var propertyName;
+
+	for (p = 0; p < payloadArray.length; p++)
+	{
+		propertyName = payloadArray[p];
+
+		if (ignore.indexOf(propertyName) < 0)
+			delete payload[propertyName];
+	}
 }
 
 module.exports = {
