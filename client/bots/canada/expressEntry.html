@@ -45,7 +45,7 @@
                     "spouseAge": 42, "spouseEducationLevel": 4, "spouseCanadianDegreeDiplomaCertificate": false, "spouseFirstLanguageTest": 2, "spouseFirstLanguageSpeaking": 9, "spouseFirstLanguageListening": 9, "spouseFirstLanguageReading": 9, "spouseFirstLanguageWriting": 9, "spouseSecondLanguageTest": "0", "spouseWorkExperienceInCanada": "0", "spouseWorkExperienceLastTenYears": 3, "spouseCertificateQualificationProvince": false, "spouseValidJobOffer": false, "spouseNominationCertificate": false
                 };
 
-                payload = {"question":26,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":33,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":"0","firstLanguageSpeaking":12,"firstLanguageListening":12,"firstLanguageReading":12,"firstLanguageWriting":12,"workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":42,"spouseEducationLevel":4};
+                payload = { "question": 26, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": "0", "firstLanguageSpeaking": 12, "firstLanguageListening": 12, "firstLanguageReading": 12, "firstLanguageWriting": 12, "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nominationCertificate": false, "spouseAge": 42, "spouseEducationLevel": 4 };
 
                 //payload = {"question":43,"name":"Douglas Miguel","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":30,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":"0","firstLanguageSpeaking":9,"firstLanguageListening":10,"firstLanguageReading":11,"firstLanguageWriting":8,"workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":30,"spouseEducationLevel":1,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":10,"spouseFirstLanguageListening":10,"spouseFirstLanguageReading":10,"spouseFirstLanguageWriting":10,"spouseSecondLanguageTest":1,"spouseSecondLanguageSpeaking":10,"spouseSecondLanguageListening":10,"spouseSecondLanguageReading":10,"spouseSecondLanguageWriting":10,"spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false};
 
@@ -59,8 +59,8 @@
 
             function answerQuestion(answer)
             {
-                chat.find("input").attr('disabled', 'disabled');
-                chat.find("button").attr('disabled', 'disabled');
+                options.find("input").attr('disabled', 'disabled');
+                options.find("button").attr('disabled', 'disabled');
 
                 var request = {
                     "payload": payload,
@@ -78,13 +78,102 @@
                 }).success(function (data, textStatus, jqXHR)
                 {
                     if (payload.question >= 0) {
-                        $("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div></div>").appendTo(chatHistory);
+                        $("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div><button id='back" + payload.question + "'>delorean</button></div>").appendTo(chatHistory);
                     }
 
                     if (answer !== null) {
                         $("<div class='row'><div class='answer col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-11 col-sm-11 col-md-11 col-lg-11'>" + answer + "</div></div>").appendTo(chatHistory);
                     }
 
+                    $("#back" + payload.question).click(function ()
+                    {
+                        backQuestion(this);
+                    });
+
+                    var responseJSON = data.responseJSON;
+
+                    payload = responseJSON.customPayload;
+
+                    if (responseJSON.response === '') {
+                        question.hide();
+                        options.hide();
+                    }
+                    else {
+                        question.html(responseJSON.response);
+                        options.html('<br />');
+
+                        if (responseJSON.quickReplies === null) {
+                            var row = $("<div class='row'></div>");
+                            var textbox = $("<div class='col-xs-10 col-sm-10 col-md-10 col-lg-10'><input id='replyInput' type='text' class='form-control'></input></div>");
+                            var button = $("<div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'><button id='reply' class='btn btn-block'>Reply</button></div>");
+
+                            textbox.appendTo(row);
+                            button.appendTo(row);
+
+                            row.appendTo(options);
+
+                            $("#reply").click(function ()
+                            {
+                                var name = $("#replyInput").val().trim();
+
+                                if (name.length > 0)
+                                    answerQuestion(name);
+                            });
+                        }
+                        else {
+                            for (r = 0; r < responseJSON.quickReplies.length; r++) {
+                                var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.quickReplies[r] + "</button>");
+
+                                button.appendTo(options);
+                                $("<span>&nbsp</span>").appendTo(options);
+
+                                $("#reply" + r).click(function ()
+                                {
+                                    answerQuestion($(this).text());
+                                });
+                            }
+                        }
+
+                        if (responseJSON.score === undefined)
+                            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                    }
+
+                    console.log('question:', payload.question);
+                    console.log('responseJSON:', responseJSON);
+                    console.log('payload:', JSON.stringify(payload));
+                }).error(function (jqXHR, textStatus, errorThrown)
+                {
+                    chat.find("input").removeAttr('disabled');
+                    chat.find("button").removeAttr('disabled');
+
+                    console.log('Error: ', jqXHR.responseText);
+                });
+            }
+
+            function backQuestion(button)
+            {
+                var id = button.id.replace('back', '');
+
+                $(button).attr('disabled', 'disabled');
+                $(button).parent().nextAll().remove();
+                $(button).parent().remove();
+
+                var request = {
+                    "payload": payload,
+                    "reply": "",
+                    "back": id
+                }
+
+                console.log('Request:', request);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/canada/expressEntry',
+                    cache: false,
+                    dataType: 'json',
+                    data: request
+                }).success(function (data, textStatus, jqXHR)
+                {
                     var responseJSON = data.responseJSON;
 
                     payload = responseJSON.customPayload;

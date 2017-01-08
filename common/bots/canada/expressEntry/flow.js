@@ -94,15 +94,15 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 }
 
 function languageOptions(test, testQuestion, payload, ability) {
-/*
-	console.log('answer: ', test);
-	console.log('No: ', answerIndex(testQuestion, payload, 'No'));
-	console.log('No, and won\'t: ', answerIndex(testQuestion, payload, 'No, and won\'t'));
-	console.log('No, but will: ', answerIndex(testQuestion, payload, 'No, but will'));
-	console.log('CELPIP: ', answerIndex(testQuestion, payload, 'CELPIP'));
-	console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
-	console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
-*/
+	/*
+		console.log('answer: ', test);
+		console.log('No: ', answerIndex(testQuestion, payload, 'No'));
+		console.log('No, and won\'t: ', answerIndex(testQuestion, payload, 'No, and won\'t'));
+		console.log('No, but will: ', answerIndex(testQuestion, payload, 'No, but will'));
+		console.log('CELPIP: ', answerIndex(testQuestion, payload, 'CELPIP'));
+		console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
+		console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
+	*/
 	switch (parseInt(test))
 	{
 		case answerIndex(testQuestion, payload, 'No'):
@@ -148,7 +148,7 @@ function nocJobOfferOptions(payload) {
 }
 
 function workExperienceInCanadaOptions(payload) {
-	return ["None or less then a year",
+	return ["None or less than a year",
 		"1 year",
 		"2 years",
 		"3 years",
@@ -157,7 +157,7 @@ function workExperienceInCanadaOptions(payload) {
 }
 
 function workExperienceLastTenYearsOptions(payload) {
-	return ["None or less then a year",
+	return ["None or less than a year",
 		"1 year",
 		"2 years",
 		"3 years or more"];
@@ -186,7 +186,7 @@ var questions = {
 	},
 	married: {
 		id: null,
-		question: function (payload) { return "Hi " + payload.name + ". Are you married or has a common-law partner?" },
+		question: function (payload) { return "Hi " + payload.name + ". Are you married or have a common-law partner?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.married = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return (payload.married ? questions.spouseCanadianCitizen : questions.age) },
@@ -633,9 +633,10 @@ function validateAnswer(question, payload, reply) {
 		return (options.indexOf(reply) >= 0);
 }
 
-function questionFlow(payload, reply, callback) {
+function questionFlow(payload, reply, back, callback) {
 	//console.log('payload: ', payload);
 	//console.log('reply: ', reply);
+	//console.log('back: ', back);
 
 	if (payload === undefined) payload = {};
 
@@ -649,26 +650,40 @@ function questionFlow(payload, reply, callback) {
 
 	var question;
 
-	if (Object.keys(payload).length > 0)
+	if (back === undefined)
 	{
-		//console.log('payload.question: ', payload.question);
-		question = questions[questionsArray[payload.question]];
-		//console.log('question: ', question);
-
-		//console.log('answerValid: ', validateAnswer(question, payload, reply));
-		if (validateAnswer(question, payload, reply))
+		if (Object.keys(payload).length > 0)
 		{
-			question.processReply(payload, reply);
+			//console.log('payload.question: ', payload.question);
+			question = questions[questionsArray[payload.question]];
+			//console.log('question: ', question);
 
-			//console.log('payload Before: ', payload);
-			question = question.nextQuestion(payload);
-			//console.log('payload After: ', payload);
+			//console.log('answerValid: ', validateAnswer(question, payload, reply));
+			if (validateAnswer(question, payload, reply))
+			{
+				question.processReply(payload, reply);
+
+				//console.log('payload Before: ', payload);
+				question = question.nextQuestion(payload);
+				//console.log('payload After: ', payload);
+			}
+		}
+		else
+		{
+			question = questions.name;
 		}
 	}
 	else
 	{
-		question = questions.name;
+		console.log('back: ', back);
+		question = questions[questionsArray[back]];
+		console.log('question: ', question);
+
+		console.log('payload: ', payload);
+		clearPayload(payload, back);
+		console.log('payload: ', payload);
 	}
+
 	//console.log('nextQuestion: ', question);
 
 	responseJSON.response = question.question(payload);
@@ -801,6 +816,9 @@ function calculateInverted(payload) {
 
 function clearPayload(payload, startingQuestion) {
 	var ignore = "";
+
+	if (typeof(startingQuestion) === 'string')
+		startingQuestion = parseInt(startingQuestion);
 
 	for (q = 0; q < startingQuestion; q++)
 	{
