@@ -4,13 +4,7 @@
     "connector": "memory"
   },
   "mongods": {
-    "host": "ds145168.mlab.com",
-    "port": 45168,
-    "url": "mongodb://visabot:vanhack123@ds145168.mlab.com:45168/vanhackbot",
-    "database": "vanhackbot",
-    "password": "vanhack123",
     "name": "mongods",
-    "user": "visabot",
     "connector": "mongodb"
   }
 }

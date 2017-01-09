@@ -78,7 +78,8 @@
                 }).success(function (data, textStatus, jqXHR)
                 {
                     if (payload.question >= 0) {
-                        $("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div><button id='back" + payload.question + "'>delorean</button></div>").appendTo(chatHistory);
+                        //$("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div><button id='back" + payload.question + "'>delorean</button></div>").appendTo(chatHistory);
+                        $("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div></div>").appendTo(chatHistory);
                     }
 
                     if (answer !== null) {
