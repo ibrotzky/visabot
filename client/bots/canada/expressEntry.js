@@ -1,14 +1,14 @@
 var chat;
 var chatHistory;
 var question;
-var options;
+
+var lastQuestion = null;
 
 var payload = {};
 
 //payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":27,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false, "nocJobOffer": undefined,"nominationCertificate":true,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
-if (window.location.href.indexOf('?') > 0)
-{
+if (window.location.href.indexOf('?') > 0) {
     payload = {
         "question": 44, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": 2, "firstLanguageSpeaking": 6, "firstLanguageListening": 9, "firstLanguageReading": 9, "firstLanguageWriting": 9, "secondLanguageTest": "0", "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nocJobOffer": undefined, "nominationCertificate": false,
         "spouseAge": 42, "spouseEducationLevel": 4, "spouseCanadianDegreeDiplomaCertificate": false, "spouseFirstLanguageTest": 2, "spouseFirstLanguageSpeaking": 9, "spouseFirstLanguageListening": 9, "spouseFirstLanguageReading": 9, "spouseFirstLanguageWriting": 9, "spouseSecondLanguageTest": "0", "spouseWorkExperienceInCanada": "0", "spouseWorkExperienceLastTenYears": 3, "spouseCertificateQualificationProvince": false, "spouseValidJobOffer": false, "spouseNominationCertificate": false
@@ -44,45 +44,50 @@ function answerQuestion(answer) {
         dataType: 'json',
         data: request
     }).success(function (data, textStatus, jqXHR) {
-        if (payload.question >= 0)
-        {
-            //$("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div><button id='back" + payload.question + "'>delorean</button></div>").appendTo(chatHistory);
-            $("<div class='row'><div class='question  col-xs-10 col-sm-10 col-md-10 col-lg-10'>" + question.html() + "</div></div>").appendTo(chatHistory);
+        var responseJSON = data.responseJSON;
+
+        if (lastQuestion !== null) {
+            $('<div class="row">' +
+                '   <div class="circle">' +
+                '       <div class="alignLeft">' +
+                '           <div class="bot">CB</div>' +
+                '       </div>' +
+                '   </div>' +
+                '   <div class="question col-xs-10 col-sm-10 col-md-10 col-lg-10">' + lastQuestion + '</div><button id="back"' + payload.question + '">delorean</button>' +
+                '</div>').appendTo(chatHistory);
         }
 
-        if (answer !== null)
-        {
-            $("<div class='row'><div class='answer col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-11 col-sm-11 col-md-11 col-lg-11'>" + answer + "</div></div>").appendTo(chatHistory);
+        lastQuestion = responseJSON.question;
+
+        if (answer !== null) {
+            $('<div class="row">' +
+                '   <div class="circle">' +
+                '       <div class="alignRight">' +
+                '           <div class="user">' + responseJSON.payload.name.substring(0, 1) + '</div>' +
+                '       </div>' +
+                '   </div>' +
+                '   <div class="answer col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-xs-11 col-sm-11 col-md-11 col-lg-11">' + answer + '</div>' +
+                '</div>').appendTo(chatHistory);
         }
 
         $("#back" + payload.question).click(function () {
             backQuestion(this);
         });
 
-        var responseJSON = data.responseJSON;
-
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '')
-        {
+        if (responseJSON.question === '') {
             question.hide();
             options.hide();
         }
-        else
-        {
-            question.html(responseJSON.question);
-            options.html('<br />');
+        else {
+            var questionContent = responseJSON.question + '<br /><br />';
 
-            if (responseJSON.options === null)
-            {
-                var row = $("<div class='row'></div>");
-                var textbox = $("<div class='col-xs-10 col-sm-10 col-md-10 col-lg-10'><input id='replyInput' type='text' class='form-control'></input></div>");
-                var button = $("<div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'><button id='reply' class='btn btn-block'>Reply</button></div>");
+            if (responseJSON.options === null) {
+                questionContent += "<div class='col-xs-7 col-sm-9 col-md-9'><input id='replyInput' type='text' class='form-control'></input></div>";
+                questionContent += "<div class='col-xs-5 col-sm-3 col-md-3'><button id='reply' class='btn btn-block'>Reply</button></div>"
 
-                textbox.appendTo(row);
-                button.appendTo(row);
-
-                row.appendTo(options);
+                question.html(questionContent);
 
                 $("#reply").click(function () {
                     var name = $("#replyInput").val().trim();
@@ -91,19 +96,16 @@ function answerQuestion(answer) {
                         answerQuestion(name);
                 });
             }
-            else
-            {
-                for (r = 0; r < responseJSON.options.length; r++)
-                {
-                    var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button>");
-
-                    button.appendTo(options);
-                    $("<span>&nbsp</span>").appendTo(options);
-
-                    $("#reply" + r).click(function () {
-                        answerQuestion($(this).text());
-                    });
+            else {
+                for (r = 0; r < responseJSON.options.length; r++) {
+                    questionContent += "<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button><span>&nbsp</span>";
                 }
+
+                question.html(questionContent);
+
+                $('[id*="reply"]').click(function () {
+                    answerQuestion($(this).text());
+                });
             }
 
             if (responseJSON.score === undefined)
@@ -147,18 +149,15 @@ function backQuestion(button) {
 
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '')
-        {
+        if (responseJSON.question === '') {
             question.hide();
             options.hide();
         }
-        else
-        {
+        else {
             question.html(responseJSON.question);
             options.html('<br />');
 
-            if (responseJSON.options === null)
-            {
+            if (responseJSON.options === null) {
                 var row = $("<div class='row'></div>");
                 var textbox = $("<div class='col-xs-10 col-sm-10 col-md-10 col-lg-10'><input id='replyInput' type='text' class='form-control'></input></div>");
                 var button = $("<div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'><button id='reply' class='btn btn-block'>Reply</button></div>");
@@ -175,10 +174,8 @@ function backQuestion(button) {
                         answerQuestion(name);
                 });
             }
-            else
-            {
-                for (r = 0; r < responseJSON.options.length; r++)
-                {
+            else {
+                for (r = 0; r < responseJSON.options.length; r++) {
                     var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button>");
 
                     button.appendTo(options);

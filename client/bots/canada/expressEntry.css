@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
 * {
   box-sizing: border-box;  
 }
@@ -8,11 +10,9 @@ body, html {
 }
 
 body {
-  background: #34495e;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-size: 115%;
-  display: flex;
-  flex-direction: column;  
+  background: #ffffff;
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
   margin: 0 auto;
   max-width: 1024px;
 }
@@ -22,7 +22,7 @@ body {
     width: 100%;
     height: auto;
     margin: 0 0 0 0;
-    padding: 30px;
+    padding: 20px 0px;
 }
 
 .chat {
@@ -34,22 +34,68 @@ body {
     margin-bottom: 15px;
 }
 
+.circle
+{
+    height: 40px;
+    margin: 10px 0px;
+    position: relative;
+    width: 100%;
+}
+
+    .circle > .alignLeft
+    {
+        position: absolute; 
+        left: 0px;
+    }
+
+        .circle > .alignLeft > .bot
+        {
+            background: #ff0000;
+            border-radius: 50%;
+            display: table-cell;
+            color: #ffffff;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            width: 40px;
+        }
+
+    .circle > .alignRight
+    {
+        position: absolute; 
+        right: 0px;
+    }
+
+        .circle > .alignRight > .user
+        {
+            background: #a8a8a8;
+            border-radius: 50%;
+            display: table-cell;
+            color: #ffffff;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            width: 40px;
+        }
+
 .answer
 {
     background: #aaaaaa;
-    border-radius: 4px;
-    color: #f4f4f4;
+    border-radius: 10px;
+    color: #ffffff;
     float: right;
-    font-size: 16px;
+    margin-right: 20px;
+    padding: 20px 30px;
     width: auto;
 }
 
 .question
 {
-    background: #fe0000;
-    border-radius: 4px;
+    background: #ff0000;
+    border-radius: 10px;
     color: #ffffff;
-    font-size: 16px;
+    margin-left: 20px;
+    padding: 20px 30px;
     text-align: left;
     width: auto;
 }
@@ -59,13 +105,14 @@ body {
     width: 100%;
 }
 
-.options button
+button
 {
-    background-color: #4CAF50; /* Green */
+    background-color: #ffffff;
     border: none;
-    color: white;
+    color: #000000;
     cursor: pointer;
-    margin-bottom: 5px;
+    font-weight: bold !important;
+    margin-bottom: 5px !important;
 }
 
 .options button:disabled
