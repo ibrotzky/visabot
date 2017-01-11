@@ -38,3 +38,4 @@ jspm_packages
 
 *.DS_Store
 server/.env
+server/.env.bat
