@@ -641,11 +641,10 @@ function questionFlow(payload, reply, back, callback) {
 	if (payload === undefined) payload = {};
 
 	var responseJSON = {
-		"response": null, // what the bot will respond with (more is appended below)
-		"continue": false, // denotes that Motion AI should hit this module again, rather than continue further in the flow
-		"customPayload": null, // working data to examine in future calls to this function to keep track of state
-		"quickReplies": null, // a JSON object containing suggested/quick replies to display to the user
-		"cards": null // a cards JSON object to display a carousel to the user (see docs)
+		"question": null, // what the bot will respond with (more is appended below)
+		"remarks": null, // any other information that is not a question
+		"payload": null, // working data to examine in future calls to this function to keep track of state
+		"options": null // a JSON object containing suggested/quick replies to display to the user
 	};
 
 	var question;
@@ -686,13 +685,13 @@ function questionFlow(payload, reply, back, callback) {
 
 	//console.log('nextQuestion: ', question);
 
-	responseJSON.response = question.question(payload);
-	responseJSON.quickReplies = question.options(payload);
+	responseJSON.question = question.question(payload);
+	responseJSON.options = question.options(payload);
 
 	payload.question = question.id;
 
-	responseJSON.response = responseJSON.response.replace('{QUOTE}', '');
-	responseJSON.customPayload = payload;
+	responseJSON.question = quote(responseJSON.question);
+	responseJSON.payload = payload;
 
 	if (payload.score !== undefined)
 	{
@@ -817,7 +816,7 @@ function calculateInverted(payload) {
 function clearPayload(payload, startingQuestion) {
 	var ignore = "";
 
-	if (typeof(startingQuestion) === 'string')
+	if (typeof (startingQuestion) === 'string')
 		startingQuestion = parseInt(startingQuestion);
 
 	for (q = 0; q < startingQuestion; q++)
@@ -835,6 +834,10 @@ function clearPayload(payload, startingQuestion) {
 		if (ignore.indexOf(propertyName) < 0)
 			delete payload[propertyName];
 	}
+}
+
+function quote(text) {
+	return text.replace('{QUOTE}', '');
 }
 
 module.exports = {
