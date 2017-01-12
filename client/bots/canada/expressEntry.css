@@ -14,15 +14,25 @@ body {
   font-family: 'Raleway', sans-serif;
   font-size: 14px;
   margin: 0 auto;
+  padding-top: 70px;
   max-width: 1024px;
 }
 
-.title {    
-    text-align: center;    
-    width: 100%;
-    height: auto;
-    margin: 0 0 0 0;
-    padding: 20px 0px;
+.navbar
+{
+    background: #3f3f3f;
+}
+
+    .navbar .glyphicon
+    {
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+.navbar-text > .row
+{
+    margin: 0px !important;
+    padding: 0px !important;
 }
 
 .chat {
@@ -33,6 +43,11 @@ body {
 {
     margin-bottom: 15px;
 }
+
+
+
+
+
 
 .circle
 {
@@ -97,8 +112,14 @@ body {
     margin-left: 20px;
     padding: 20px 30px;
     text-align: left;
-    width: auto;
 }
+
+.question > .questionReply
+{
+    display: none;
+}
+
+
 
 .options input[type="text"] 
 {

@@ -8,7 +8,8 @@ var payload = {};
 
 //payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":27,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false, "nocJobOffer": undefined,"nominationCertificate":true,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
-if (window.location.href.indexOf('?') > 0) {
+if (window.location.href.indexOf('?') > 0)
+{
     payload = {
         "question": 44, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": 2, "firstLanguageSpeaking": 6, "firstLanguageListening": 9, "firstLanguageReading": 9, "firstLanguageWriting": 9, "secondLanguageTest": "0", "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nocJobOffer": undefined, "nominationCertificate": false,
         "spouseAge": 42, "spouseEducationLevel": 4, "spouseCanadianDegreeDiplomaCertificate": false, "spouseFirstLanguageTest": 2, "spouseFirstLanguageSpeaking": 9, "spouseFirstLanguageListening": 9, "spouseFirstLanguageReading": 9, "spouseFirstLanguageWriting": 9, "spouseSecondLanguageTest": "0", "spouseWorkExperienceInCanada": "0", "spouseWorkExperienceLastTenYears": 3, "spouseCertificateQualificationProvince": false, "spouseValidJobOffer": false, "spouseNominationCertificate": false
@@ -46,7 +47,8 @@ function answerQuestion(answer) {
     }).success(function (data, textStatus, jqXHR) {
         var responseJSON = data.responseJSON;
 
-        if (lastQuestion !== null) {
+        if (lastQuestion !== null)
+        {
             $('<div class="row">' +
                 '   <div class="circle">' +
                 '       <div class="alignLeft">' +
@@ -59,7 +61,8 @@ function answerQuestion(answer) {
 
         lastQuestion = responseJSON.question;
 
-        if (answer !== null) {
+        if (answer !== null)
+        {
             $('<div class="row">' +
                 '   <div class="circle">' +
                 '       <div class="alignRight">' +
@@ -76,16 +79,27 @@ function answerQuestion(answer) {
 
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '') {
+        if (responseJSON.question === '')
+        {
             question.hide();
             options.hide();
         }
-        else {
-            var questionContent = responseJSON.question + '<br /><br />';
+        else
+        {
+            var questionContent = '<div class="circle">' +
+                '<div class="alignLeft"> ' +
+                '    <div class="bot">CB</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="question">' +
+                '<div id="questionText" style="width: 100%;"></div>' +
+                '<br /><div id="questionReply" class="row questionReply">';
 
-            if (responseJSON.options === null) {
-                questionContent += "<div class='col-xs-7 col-sm-9 col-md-9'><input id='replyInput' type='text' class='form-control'></input></div>";
-                questionContent += "<div class='col-xs-5 col-sm-3 col-md-3'><button id='reply' class='btn btn-block'>Reply</button></div>"
+            if (responseJSON.options === null)
+            {
+                questionContent += "<div class='col-xs-8 col-sm-10 col-md-10'><input id='replyInput' type='text' class='form-control'></input></div>";
+                questionContent += "<div class='col-xs-4 col-sm-2 col-md-2'><button id='reply' class='btn btn-block'>Reply</button></div>";
+                questionContent += "</div></div>";
 
                 question.html(questionContent);
 
@@ -95,17 +109,24 @@ function answerQuestion(answer) {
                     if (name.length > 0)
                         answerQuestion(name);
                 });
+
+                typewriter("questionText", responseJSON.question, function () { $("#questionReply").slideDown(); });
             }
-            else {
-                for (r = 0; r < responseJSON.options.length; r++) {
+            else
+            {
+                for (r = 0; r < responseJSON.options.length; r++)
+                {
                     questionContent += "<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button><span>&nbsp</span>";
                 }
+                questionContent += "</div></div>";
 
-                question.html(questionContent);
+                question.html(questionContent);              
 
                 $('[id*="reply"]').click(function () {
                     answerQuestion($(this).text());
                 });
+
+                typewriter("questionText", responseJSON.question, function () { $("#questionReply").slideDown(); });  
             }
 
             if (responseJSON.score === undefined)
@@ -149,18 +170,21 @@ function backQuestion(button) {
 
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '') {
+        if (responseJSON.question === '')
+        {
             question.hide();
             options.hide();
         }
-        else {
+        else
+        {
             question.html(responseJSON.question);
             options.html('<br />');
 
-            if (responseJSON.options === null) {
+            if (responseJSON.options === null)
+            {
                 var row = $("<div class='row'></div>");
-                var textbox = $("<div class='col-xs-10 col-sm-10 col-md-10 col-lg-10'><input id='replyInput' type='text' class='form-control'></input></div>");
-                var button = $("<div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'><button id='reply' class='btn btn-block'>Reply</button></div>");
+                var textbox = $("<div class='col-xs-6'><input id='replyInput' type='text' class='form-control'></input></div>");
+                var button = $("<div class='col-xs-6'><button id='reply' class='btn btn-block'>Reply</button></div>");
 
                 textbox.appendTo(row);
                 button.appendTo(row);
@@ -174,8 +198,10 @@ function backQuestion(button) {
                         answerQuestion(name);
                 });
             }
-            else {
-                for (r = 0; r < responseJSON.options.length; r++) {
+            else
+            {
+                for (r = 0; r < responseJSON.options.length; r++)
+                {
                     var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button>");
 
                     button.appendTo(options);
@@ -204,4 +230,23 @@ function backQuestion(button) {
 
 $(window).load(function () {
     answerQuestion(null);
+});
+
+$(document).ready(function () {
+    $(window).on('resize', function () {
+        var winWidth = $(window).width();
+        if (winWidth < 768)
+        {
+            console.log('Window Width: ' + winWidth + 'class used: col-xs');
+        } else if (winWidth <= 991)
+        {
+            console.log('Window Width: ' + winWidth + 'class used: col-sm');
+        } else if (winWidth <= 1199)
+        {
+            console.log('Window Width: ' + winWidth + 'class used: col-md');
+        } else
+        {
+            console.log('Window Width: ' + winWidth + 'class used: col-lg');
+        }
+    });
 });

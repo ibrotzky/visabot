@@ -9,28 +9,34 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="../typewritter.js"></script>
         <script src="expressEntry.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
         <link rel="stylesheet" type="text/css" href="expressEntry.css" />
-
     </head>
     <body>
-        <div class="title">
-            <img class="svg" id="u309" src="logo.svg" width="400" alt="Canada Bot">
-        </div>
-        <div id="chat" class="chat container-fluid">
-            <div id="chatHistory" class="chatHistory"></div>
-            <div class="row">
-                <div class="circle">
-                    <div class="alignLeft">
-                        <div class="bot">CB</div>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-text" style="text-align: center">
+                    <div style="width: inherit; background-color: blue;">
+                        <div style="float: left; width: 10%; background-color: purple;">
+                            <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="back" onclick="history.back()"></span>
+                        </div>
+                        <div style="float: left; width: 80%; background-color: #ffcc00; text-align: center">
+                            <img src="logo.svg" height="18" alt="Canada Bot">
+                        </div>
                     </div>
                 </div>
-                <div id="question" class="question col-xs-10 col-sm-10 col-md-10 col-lg-10"></div>
-                <div id="remarks" class="remarks col-xs-10 col-sm-10 col-md-10 col-lg-10"></div>
             </div>
+        </nav>
+
+        <div id="chat" class="chat container-fluid">
+            <div id="chatHistory" class="chatHistory"></div>
+            <div id="question"></div>
+            <div id="remarks"></div>
         </div>
 
         <script>
@@ -39,7 +45,5 @@
             question = $("#question");
             options = $("#options");
         </script>
-
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</body>
+    </body>
 </html>
