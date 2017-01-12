@@ -14,12 +14,11 @@ var sContents = ''; // initialise contents variable
 var iRow; // initialise current row
 
 function typewriter(id, linesArray, callbackFunction) {
-    if (id !== undefined)
-    {
+    if (id !== undefined) {
         typewriterElement = id;
         aText = linesArray;
         callback = callbackFunction;
-        
+
         iIndex = 0;
         iTextPos = 0;
         sContents = '';
@@ -35,24 +34,22 @@ function typewriter(id, linesArray, callbackFunction) {
     iRow = Math.max(0, iIndex - iScrollAt);
     var destination = document.getElementById(typewriterElement);
 
-    while (iRow < iIndex)
-    {
+    while (iRow < iIndex) {
         sContents += aText[iRow++] + '<br />';
     }
+
     destination.innerHTML = sContents + aText[iIndex].substring(0, iTextPos);
-    if (iTextPos++ == iArrLength)
-    {
+    
+    if (iTextPos++ == iArrLength) {
         iTextPos = 0;
         iIndex++;
-        if (iIndex != aText.length)
-        {
+        if (iIndex != aText.length) {
             iArrLength = aText[iIndex].length;
-            setTimeout("typewriter()", 500);
+            setTimeout(function () { typewriter() }, 500);
         }
         else
             callback();
-    } else
-    {
-        setTimeout("typewriter()", iSpeed);
+    } else {
+        setTimeout(function () { typewriter() }, iSpeed);
     }
 }

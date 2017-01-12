@@ -6,16 +6,16 @@
 
 body, html {
   height: 100%;
-  
 }
 
 body {
-  background: #ffffff;
-  font-family: 'Raleway', sans-serif;
-  font-size: 14px;
-  margin: 0 auto;
-  padding-top: 70px;
-  max-width: 1024px;
+    background: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    margin: 0 auto;
+    overflow: scroll-y;
+    padding-top: 70px;
+    max-width: 1024px;
 }
 
 .navbar
@@ -37,60 +37,57 @@ body {
 
 .chat {
     margin: 0px 10px;
+    padding-bottom: 200px;
 }
 
-.chatHistory .row
+.chatHistory > .row
 {
-    margin-bottom: 15px;
+    margin-bottom: 15px !important;
 }
 
-
-
-
-
-
-.circle
+.chatHistory > .back
 {
-    height: 40px;
-    margin: 10px 0px;
-    position: relative;
-    width: 100%;
+    margin: -10px 60px 15px 0px !important;
+    text-align: right;
 }
 
-    .circle > .alignLeft
-    {
-        position: absolute; 
-        left: 0px;
-    }
+.circleBot
+{
+    float: left;
+    height: 60px;
+    margin: 0px 0px;
+    width: 60px;
+}
 
-        .circle > .alignLeft > .bot
+        .circleBot > .bot
         {
             background: #ff0000;
             border-radius: 50%;
             display: table-cell;
             color: #ffffff;
-            height: 40px;
+            height: inherit;
             text-align: center;
             vertical-align: middle;
-            width: 40px;
+            width: inherit;
         }
 
-    .circle > .alignRight
-    {
-        position: absolute; 
-        right: 0px;
-    }
-
-        .circle > .alignRight > .user
+.circleUser
+{
+    float: right;
+    height: 60px;
+    margin: 0px 0px;
+    width: 60px;
+}
+        .circleUser > .user
         {
             background: #a8a8a8;
             border-radius: 50%;
             display: table-cell;
             color: #ffffff;
-            height: 40px;
+            height: inherit;
             text-align: center;
             vertical-align: middle;
-            width: 40px;
+            width: inherit;
         }
 
 .answer
@@ -99,7 +96,7 @@ body {
     border-radius: 10px;
     color: #ffffff;
     float: right;
-    margin-right: 20px;
+    margin-right: 10px;
     padding: 20px 30px;
     width: auto;
 }
@@ -109,14 +106,16 @@ body {
     background: #ff0000;
     border-radius: 10px;
     color: #ffffff;
-    margin-left: 20px;
+    float: left;
+    margin-left: 10px;
     padding: 20px 30px;
     text-align: left;
 }
 
-.question > .questionReply
+#questionReply
 {
     display: none;
+    margin-top: 20px;
 }
 
 
@@ -128,9 +127,9 @@ body {
 
 button
 {
-    background-color: #ffffff;
+    background-color: #ff0000;
     border: none;
-    color: #000000;
+    color: #ffffff;
     cursor: pointer;
     font-weight: bold !important;
     margin-bottom: 5px !important;
