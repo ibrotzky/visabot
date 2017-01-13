@@ -9,8 +9,6 @@ var payload = {};
 var slideDownSpeed = 400;
 var slideUpSpeed = 400;
 
-var userInitials;
-
 var questionTemplate = '' +
     '<div id="question">' +
     '   <table class="question">' +
@@ -21,6 +19,9 @@ var questionTemplate = '' +
     '               </div>' +
     '           </td>' +
     '           <td id="question"></td>' +
+    '           <td>' +
+    '               <span class="glyphicon glyphicon-repeat icon-flipped rounded-border back" onclick="backQuestion(this)"></span>' +
+    '           </td>' +
     '       </tr>' +
     '   </table>' +
     '   <div id="remarks">' +
@@ -56,13 +57,8 @@ var answerTemplate = '' +
     '           </td>' +
     '           <td class="circle">' +
     '               <div class="circleUser">' +
-    '                   <div class="user"></div>' +
+    '                   <div class="user">you</div>' +
     '               </div>' +
-    '           </td>' +
-    '       </tr>' +
-    '       <tr>' +
-    '           <td class="back">' +
-    '               <button class="back" onclick="backQuestion(this)">back to this question</button>' +
     '           </td>' +
     '       </tr>' +
     '   </table>' +
@@ -116,8 +112,10 @@ function answerQuestion(answer, post) {
         if (lastQuestion !== null) {
             var questionCell = $(questionTemplate);
 
-            questionCell.find("#question").html('<div class="question"style="width: ' + ($("#question div.question").last().outerWidth() + 1) + 'px;">' + lastQuestion + '</div>');
-
+            questionCell.find("#question").html('<div class="question">' + lastQuestion + '</div>');
+            questionCell.find("span.back").attr("data-id", payload.question);
+            questionCell.find("span.back").show();
+            
             $(questionCell[0]).appendTo(chatHistory);
 
             question.html('');
@@ -130,8 +128,6 @@ function answerQuestion(answer, post) {
         if (answer !== null) {
             var answerCell = $(answerTemplate);
 
-            answerCell.find("button.back").attr("data-id", payload.question);
-            answerCell.find(".user").html(responseJSON.payload.name.substring(0, 1));
             answerCell.find("div.answer").html(answer);
 
             $(answerCell).appendTo(chatHistory);
@@ -183,7 +179,7 @@ function showQuestion(responseJSON, show) {
             '           </div>');
 
         var typewriterCallback = function () {
-            if (responseJSON.remarks !== '')
+            if (responseJSON.remarks !== null)
                 $("#question div#remarks").slideDown(slideDownSpeed, function () {
                     $("#question div#questionAfterRemarks").show();
 
@@ -266,10 +262,8 @@ function backQuestion(e) {
 
         id = parseInt(button.attr('data-id'));
 
-        var hideAndDelete = button.parents("div#answer").nextAll();
-        hideAndDelete.push(button.parents("div#answer")[0]);
-        hideAndDelete.push(button.parents("div#answer").prev()[0]);
-
+        var hideAndDelete = button.parents("div#question").nextAll();
+        hideAndDelete.push(button.parents("div#question")[0]);
 
         hideAndDelete.slideUp(slideUpSpeed, function () { hideAndDelete.remove(); });
 
@@ -308,10 +302,21 @@ function backQuestion(e) {
     }
 }
 
+function startOver() {
+    chatHistory.html('');
+    question.html('');
+
+    lastQuestion = null;
+    payload = {};
+
+    answerQuestion(null);
+}
+
 $(window).load(function () {
     answerQuestion(null);
 });
 
+/*
 $(document).ready(function () {
     $(window).on('resize', function () {
         var winWidth = $(window).width();
@@ -326,3 +331,4 @@ $(document).ready(function () {
         }
     });
 });
+*/

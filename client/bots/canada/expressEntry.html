@@ -19,14 +19,19 @@
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
-                <div style="width: 100%;">
-                    <div class="navbar-text" style="float: left; text-align: center; width: 10%;">
-                        <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="back" onclick="history.back()"></span>
-                    </div>
-                    <div class="navbar-text" style="float: left; width: 80%; text-align: center">
-                        <img src="logo.svg" height="18" alt="Canada Bot">
-                    </div>
+            <div style="width: 100%;">
+                <div class="navbar-text" style="cursor: pointer;float: left; text-align: left; width: 30%;" onclick="history.back()">
+                    <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="back"></span>
+                    Back to the features
                 </div>
+                <div class="navbar-text" style="float: left; width: 40%; text-align: center">
+                    <img src="logo.svg" height="18" alt="Canada Bot">
+                </div>
+                <div class="navbar-text" style="cursor: pointer; float: left; text-align: right; width: 30%;" onclick="startOver()">
+                    Start over&nbsp;
+                    <span class="glyphicon glyphicon-repeat icon-flipped" aria-hidden="true" aria-label="back"></span>
+                </div>
+            </div>
         </nav>
 
         <div id="chat" class="chat container-fluid">

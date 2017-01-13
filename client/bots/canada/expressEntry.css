@@ -9,7 +9,7 @@ body, html {
 }
 
 body {
-    background: #ffffff;
+    background: #e2e3e5;
     font-family: 'Raleway', sans-serif;
     font-size: 14px;
     margin: 0 auto;
@@ -20,19 +20,36 @@ body {
 
 .navbar
 {
-    background: #3f3f3f;
+    background-color: #ffffff !important;
+    color: #636363;
 }
 
     .navbar .glyphicon
     {
-        color: #ffffff;
         cursor: pointer;
     }
 
-.navbar-text > .row
+.navbar-text
 {
-    margin: 0px !important;
-    padding: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding: 0px 15px !important;
+}
+
+.icon-flipped 
+{
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+}
+
+.rounded-border
+{
+    border-radius: 50%;
+    border-style: solid; 
+    border-width: 1px;   
+    padding: 3px;
 }
 
 .chat {
@@ -45,10 +62,12 @@ td.circle
     width: 70px;
 }
 
-td.back
+.back
 {
-    margin: 5px 0px 10px 0px !important;
-    text-align: right !important;
+    cursor: pointer;
+    display: none;
+    font-weight: bold;
+    margin-left: 5px;
 }
 
 .circleBot
@@ -79,7 +98,7 @@ td.back
 }
         .circleUser > .user
         {
-            background: #a8a8a8;
+            background: #000000;
             border-radius: 50%;
             display: table-cell;
             color: #ffffff;
@@ -143,8 +162,8 @@ td.back
 
 div.question
 {
-    background: #3f3f3f;
-    border-radius: 10px;
+    background: #636363;
+    border-radius: 40px;
     color: #ffffff;
     padding: 20px 30px;
     text-align: left;
@@ -152,9 +171,9 @@ div.question
 
 div.answer
 {
-    background: #aaaaaa;
-    border-radius: 10px;
-    color: #ffffff;
+    background: #ffffff;
+    border-radius: 50px;
+    color: #636363;
     float: right;
     padding: 20px 30px;
     width: auto;
@@ -169,6 +188,8 @@ div.answer
 
 .options input[type="text"] 
 {
+    border: 1px solid #3f3f3f !important;
+    border-radius: 40px;
     width: 100%;
 }
 
@@ -176,6 +197,7 @@ button
 {
     background-color: #ffffff;
     border: 1px solid #3f3f3f !important;
+    border-radius: 50px !important;
     color: #3f3f3f;
     cursor: pointer;
     font-weight: bold !important;
