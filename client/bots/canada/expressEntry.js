@@ -6,6 +6,11 @@ var lastQuestion = null;
 
 var payload = {};
 
+var slideDownSpeed = 400;
+var slideUpSpeed = 400;
+
+var userInitials;
+
 var questionTemplate = '' +
     '<table class="question">' +
     '   <tr>' +
@@ -14,29 +19,38 @@ var questionTemplate = '' +
     '               <div class="bot">CB</div>' +
     '           </div>' +
     '       </td>' +
-    '       <td>' +
-    '           <div class="question">' +
-    '               <div id="questionText"></div>' +
-    '           </div>' +
-    '       </td>' +
+    '       <td id="question"></td>' +
+    '   </tr>' +
+    '   <tr>' +
+    '       <td></td>' +
+    '       <td id="options"></td>' +
     '   </tr>' +
     '</table>';
 
-var optionsTemplate = '' +
-    '<table class="answer">' +
-    '   <tr>' +
-    '       <td class="circle">' +
-    '       </td>' +
-    '       <td>' +
-    '           [OPTIONS]' +
-    '       </td>' +
-    '   </tr>' +
-    '</table>';
+var answerTemplate = '' +
+    '<div id="answer">'+
+    '   <table class="answer">' +
+    '       <tr>' +
+    '           <td>' +
+    '               <div class="answer"></div>' +
+    '           </td>' +
+    '           <td class="circle">' +
+    '               <div class="circleUser">' +
+    '                   <div class="user"></div>' +
+    '               </div>' +
+    '           </td>' +
+    '       </tr>' +
+    '       <tr>' +
+    '           <td class="back">' +
+    '               <button class="back" onclick="backQuestion">back to this question</button>' +
+    '           </td>' +
+    '       </tr>' +
+    '   </table>' +
+    '</div>';
 
 //payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":27,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false, "nocJobOffer": undefined,"nominationCertificate":true,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
-if (window.location.href.indexOf('?') > 0)
-{
+if (window.location.href.indexOf('?') > 0) {
     payload = {
         "question": 44, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": 2, "firstLanguageSpeaking": 6, "firstLanguageListening": 9, "firstLanguageReading": 9, "firstLanguageWriting": 9, "secondLanguageTest": "0", "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nocJobOffer": undefined, "nominationCertificate": false,
         "spouseAge": 42, "spouseEducationLevel": 4, "spouseCanadianDegreeDiplomaCertificate": false, "spouseFirstLanguageTest": 2, "spouseFirstLanguageSpeaking": 9, "spouseFirstLanguageListening": 9, "spouseFirstLanguageReading": 9, "spouseFirstLanguageWriting": 9, "spouseSecondLanguageTest": "0", "spouseWorkExperienceInCanada": "0", "spouseWorkExperienceLastTenYears": 3, "spouseCertificateQualificationProvince": false, "spouseValidJobOffer": false, "spouseNominationCertificate": false
@@ -56,7 +70,7 @@ if (window.location.href.indexOf('?') > 0)
 
 function answerQuestion(answer, post) {
     if (post === undefined && $("#questionReply").length > 0)
-        $("#questionReply").slideUp(400, function () { answerQuestion(answer, true) });
+        $("#questionReply").slideUp(slideUpSpeed, function () { answerQuestion(answer, true) });
     else
         post = true;
 
@@ -79,144 +93,126 @@ function answerQuestion(answer, post) {
     }).success(function (data, textStatus, jqXHR) {
         var responseJSON = data.responseJSON;
 
-        if (lastQuestion !== null)
-        {
-            var questionContent = questionTemplate +
-                '<div id="questionReply" class="questionReply">';
+        if (lastQuestion !== null) {
+            var questionCell = $(questionTemplate);
 
+            questionCell.find("#question").html('<div class="question"style="width: ' + ($("#question div.question").last().outerWidth() + 1) + 'px;">' + lastQuestion + '</div>');
 
-            var questionContent = '' +
-                '<div class="row">' +
-                '   <div class="circleBot">' +
-                '       <div class="bot">CB</div>' +
-                '   </div>' +
-                '   <div class="question" style="width: ' + ($("#question .question").outerWidth() + 1) + 'px;">' + lastQuestion + '</div>' +
-                '</div>';
+            $(questionCell).appendTo(chatHistory);
 
-            $(questionContent).appendTo(chatHistory);
+            question.html('');
 
             $("html, body").animate({ scrollTop: $(document).height() }, "fast");
-
-            /*
-                        $('<div class="row">' +
-                            '   <div class="circle">' +
-                            '       <div class="alignLeft">' +
-                            '           <div class="bot">CB</div>' +
-                            '       </div>' +
-                            '   </div>' +
-                            '   <div class="question col-xs-10 col-sm-10 col-md-10 col-lg-10">' + lastQuestion + '</div>' +
-                            '</div>' +
-                            '   <br /><button id="back"' + payload.question + '">delorean</button>').appendTo(chatHistory);
-                            */
         }
 
         lastQuestion = responseJSON.question;
 
-        if (answer !== null)
-        {
-            var answerContent = '' +
-                '<div id="answer' + payload.question + '" class="row" style="display: none;">' +
-                '   <div class="circleUser">' +
-                '       <div class="user">' + responseJSON.payload.name.substring(0, 1) + '</div>' +
-                '   </div>' +
-                '   <div class="answer">' + answer + '</div>' +
-                '</div>' +
-                '<div class="back row">' +
-                '   <button id="back"' + payload.question + '">back to this question</button>' +
-                '</div>';
+        if (answer !== null) {
+            var answerCell = $(answerTemplate);
 
-            $(answerContent).appendTo(chatHistory);
+            answerCell.attr('data-id', payload.question);
+            answerCell.find(".user").html(responseJSON.payload.name.substring(0, 1));
+            answerCell.find("div.answer").html(answer);
 
-            $("#answer" + payload.question).slideDown(200, function () { $("html, body").animate({ scrollTop: $(document).height() }, "fast"); });
+            $(answerCell).appendTo(chatHistory);
 
-            $("#back" + payload.question).click(function () {
-                backQuestion(this);
+            $("div#answer").last().slideDown(slideDownSpeed, function () {
+                showQuestion(responseJSON);
+
+                $("html, body").animate({ scrollTop: $(document).height() }, "fast");
             });
         }
+        else {
+            showQuestion(responseJSON);
+        }
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        $("#questionReply").slideDown(slideDownSpeed);
 
-        question.html('');
+        console.log('Error: ', jqXHR.responseText);
+    });
+}
 
+function showQuestion(responseJSON, show) {
+    if (show === undefined) {
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '')
-        {
+        if (responseJSON.question === '') {
             question.hide();
             options.hide();
         }
-        else
-        {
-            var showQuestion = function () {
-                var questionContent = questionTemplate +
-                    '<div id="questionReply" class="questionReply">';
+        else {
+            if ($("#questionReply").length === 0)
+                showQuestion(responseJSON, true);
+            else
+                $("#questionReply").slideUp(slideUpSpeed, showQuestion);
+        }
+    }
+    else {
+        var questionCell = $(questionTemplate);
 
-                var typewriterCallback = function () {
-                    $("#questionReply").slideDown();
+        questionCell.find("#question").html('' +
+            '           <div class="question">' +
+            '               <div id="questionText"></div>' +
+            '           </div>');
 
-                    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
-                }
+        var typewriterCallback = function () {
+            $("#questionReply").slideDown(slideDownSpeed);
 
-                if (responseJSON.options === null)
-                {
-                    questionContent += optionsTemplate.replace('[OPTIONS]', '' +
-                        '   <table class="answer">' +
-                        '       <tr>' +
-                        '           <td>' +
-                        '               <input id="replyInput" type="text" class="form-control"></input>' +
-                        '           </td>' +
-                        '           <td class="button">' +
-                        '               <button id="reply" class="btn btn-block">Reply</button>' +
-                        '           </td>' +
-                        '       </tr>' +
-                        '   </table>') +
-                        '</div>';
+            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        }
 
-                    question.html(questionContent);
+        if (responseJSON.options === null) {
+            var optionsContent = '' +
+                '<div id="questionReply">' +
+                '   <table class="answer">' +
+                '       <tr>' +
+                '           <td>' +
+                '               <input id="replyInput" type="text" class="form-control"></input>' +
+                '           </td>' +
+                '           <td class="button">' +
+                '               <button id="reply" class="btn btn-block">Reply</button>' +
+                '           </td>' +
+                '       </tr>' +
+                '   </table>' +
+                '</div>';
 
-                    $("#reply").click(function () {
-                        var name = $("#replyInput").val().trim();
+            questionCell.find("#options").html(optionsContent);
 
-                        if (name.length > 0)
-                            answerQuestion(name);
-                    });
+            question.html(questionCell);
 
-                    typewriter("questionText", responseJSON.question, typewriterCallback);
-                }
-                else
-                {
-                    var options = '';
+            $("#reply").click(function () {
+                var name = $("#replyInput").val().trim();
 
-                    for (r = 0; r < responseJSON.options.length; r++)
-                    {
-                        options += "<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button><span>&nbsp</span>";
-                    }
+                if (name.length > 0)
+                    answerQuestion(name);
+            });
 
-                    questionContent += optionsTemplate.replace('[OPTIONS]', options) +
-                        '</div>';
+            typewriter("questionText", responseJSON.question, typewriterCallback);
+        }
+        else {
+            var optionsContent = '<div id="questionReply">';
 
-                    question.html(questionContent);
-
-                    $('[id*="reply"]').click(function () {
-                        answerQuestion($(this).text());
-                    });
-
-                    typewriter("questionText", responseJSON.question, typewriterCallback);
-                }
+            for (r = 0; r < responseJSON.options.length; r++) {
+                optionsContent += "<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button><span>&nbsp</span>";
             }
 
-            if ($("#questionReply").length === 0)
-                showQuestion();
-            else
-                $("#questionReply").slideUp(400, showQuestion);
+            optionsContent += '</div>';
+
+            questionCell.find("#options").html(optionsContent);
+
+            question.html(questionCell);
+
+            $('[id*="reply"]').click(function () {
+                answerQuestion($(this).text());
+            });
+
+            typewriter("questionText", responseJSON.question, typewriterCallback);
         }
 
         console.log('question:', payload.question);
         console.log('responseJSON:', responseJSON);
         console.log('payload:', JSON.stringify(payload));
-    }).error(function (jqXHR, textStatus, errorThrown) {
-        $("#questionReply").slideDown(400);
-
-        console.log('Error: ', jqXHR.responseText);
-    });
+    }
 }
 
 function backQuestion(button) {
@@ -245,18 +241,15 @@ function backQuestion(button) {
 
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '')
-        {
+        if (responseJSON.question === '') {
             question.hide();
             options.hide();
         }
-        else
-        {
+        else {
             question.html(responseJSON.question);
             options.html('<br />');
 
-            if (responseJSON.options === null)
-            {
+            if (responseJSON.options === null) {
                 var row = $("<div class='row'></div>");
                 var textbox = $("<div class='col-xs-6'><input id='replyInput' type='text' class='form-control'></input></div>");
                 var button = $("<div class='col-xs-6'><button id='reply' class='btn btn-block'>Reply</button></div>");
@@ -273,10 +266,8 @@ function backQuestion(button) {
                         answerQuestion(name);
                 });
             }
-            else
-            {
-                for (r = 0; r < responseJSON.options.length; r++)
-                {
+            else {
+                for (r = 0; r < responseJSON.options.length; r++) {
                     var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button>");
 
                     button.appendTo(options);
@@ -310,17 +301,13 @@ $(window).load(function () {
 $(document).ready(function () {
     $(window).on('resize', function () {
         var winWidth = $(window).width();
-        if (winWidth < 768)
-        {
+        if (winWidth < 768) {
             console.log('Window Width: ' + winWidth + 'class used: col-xs');
-        } else if (winWidth <= 991)
-        {
+        } else if (winWidth <= 991) {
             console.log('Window Width: ' + winWidth + 'class used: col-sm');
-        } else if (winWidth <= 1199)
-        {
+        } else if (winWidth <= 1199) {
             console.log('Window Width: ' + winWidth + 'class used: col-md');
-        } else
-        {
+        } else {
             console.log('Window Width: ' + winWidth + 'class used: col-lg');
         }
     });

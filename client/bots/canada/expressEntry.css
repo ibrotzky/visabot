@@ -40,20 +40,15 @@ body {
     padding-bottom: 200px;
 }
 
-.chatHistory > .row
-{
-    margin-bottom: 15px !important;
-}
-
-.chatHistory > .back
-{
-    margin: -10px 60px 15px 0px !important;
-    text-align: right;
-}
-
 td.circle
 {
     width: 70px;
+}
+
+td.back
+{
+    margin: 5px 0px 10px 0px !important;
+    text-align: right !important;
 }
 
 .circleBot
@@ -94,14 +89,14 @@ td.circle
             width: inherit;
         }
 
-#question table.question
+#chatHistory table.question, #question table.question
 {
     border: none !important;
-    margin: 0px !important;
+    margin: 0px 0px 10px 0px !important;
     padding: 0px !important;
 }
 
-#question table.answer
+#chatHistory table.answer, #question table.answer
 {
     border: none !important;
     margin: 0px !important;
@@ -109,7 +104,12 @@ td.circle
     width: 100%;
 }
 
-#question tr, #question td
+#chatHistory div#answer
+{
+    display: none;
+}
+
+#chatHistory tr, #chatHistory td, #question tr, #question td
 {
     border: none !important;
     margin: 0px !important;
@@ -118,7 +118,12 @@ td.circle
     vertical-align: top;
 }
 
-#questionReply td.button
+#chatHistory tr.answer, #question tr.answer
+{
+    margin-top: 10px !important;
+}
+
+#chatHistory td.button, #questionReply td.button
 {
     padding-left: 10px !important;
     width: 60px !important;
@@ -140,7 +145,6 @@ div.answer
     border-radius: 10px;
     color: #ffffff;
     float: right;
-    margin-right: 10px;
     padding: 20px 30px;
     width: auto;
 }
@@ -174,11 +178,18 @@ button
         color: #ffffff !important;
     }
 
+button.back
+{
+    margin: 5px 0px 15px 0px !important;
+}
+
 .options button:disabled
 {
     background-color: lightgray;
 }
 
+
+/*
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
@@ -212,3 +223,4 @@ th.section
 {
     background-color: lightgray;
 }
+*/
