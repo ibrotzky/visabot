@@ -51,9 +51,13 @@ body {
     text-align: right;
 }
 
+td.circle
+{
+    width: 70px;
+}
+
 .circleBot
 {
-    float: left;
     height: 60px;
     margin: 0px 0px;
     width: 60px;
@@ -90,7 +94,47 @@ body {
             width: inherit;
         }
 
-.answer
+#question table.question
+{
+    border: none !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+#question table.answer
+{
+    border: none !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    width: 100%;
+}
+
+#question tr, #question td
+{
+    border: none !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    text-align: left;
+    vertical-align: top;
+}
+
+#questionReply td.button
+{
+    padding-left: 10px !important;
+    width: 60px !important;
+}
+
+
+div.question
+{
+    background: #3f3f3f;
+    border-radius: 10px;
+    color: #ffffff;
+    padding: 20px 30px;
+    text-align: left;
+}
+
+div.answer
 {
     background: #aaaaaa;
     border-radius: 10px;
@@ -99,17 +143,6 @@ body {
     margin-right: 10px;
     padding: 20px 30px;
     width: auto;
-}
-
-.question
-{
-    background: #ff0000;
-    border-radius: 10px;
-    color: #ffffff;
-    float: left;
-    margin-left: 10px;
-    padding: 20px 30px;
-    text-align: left;
 }
 
 #questionReply
@@ -127,13 +160,19 @@ body {
 
 button
 {
-    background-color: #ff0000;
-    border: none;
-    color: #ffffff;
+    background-color: #ffffff;
+    border: 1px solid #3f3f3f !important;
+    color: #3f3f3f;
     cursor: pointer;
     font-weight: bold !important;
     margin-bottom: 5px !important;
 }
+
+    button:hover
+    {
+        background-color: #3f3f3f;
+        color: #ffffff !important;
+    }
 
 .options button:disabled
 {

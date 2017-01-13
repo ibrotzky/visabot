@@ -6,9 +6,37 @@ var lastQuestion = null;
 
 var payload = {};
 
+var questionTemplate = '' +
+    '<table class="question">' +
+    '   <tr>' +
+    '       <td class="circle">' +
+    '           <div class="circleBot">' +
+    '               <div class="bot">CB</div>' +
+    '           </div>' +
+    '       </td>' +
+    '       <td>' +
+    '           <div class="question">' +
+    '               <div id="questionText"></div>' +
+    '           </div>' +
+    '       </td>' +
+    '   </tr>' +
+    '</table>';
+
+var optionsTemplate = '' +
+    '<table class="answer">' +
+    '   <tr>' +
+    '       <td class="circle">' +
+    '       </td>' +
+    '       <td>' +
+    '           [OPTIONS]' +
+    '       </td>' +
+    '   </tr>' +
+    '</table>';
+
 //payload = {"question":44,"name":"Bruno","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":27,"educationLevel":4,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":9,"firstLanguageReading":9,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false, "nocJobOffer": undefined,"nominationCertificate":true,"spouseAge":42,"spouseEducationLevel":4,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":2,"spouseFirstLanguageSpeaking":9,"spouseFirstLanguageListening":9,"spouseFirstLanguageReading":9,"spouseFirstLanguageWriting":9,"spouseSecondLanguageTest":"0","spouseWorkExperienceInCanada":"0","spouseWorkExperienceLastTenYears":3,"spouseCertificateQualificationProvince":false,"spouseValidJobOffer":false,"spouseNominationCertificate":false};
 
-if (window.location.href.indexOf('?') > 0) {
+if (window.location.href.indexOf('?') > 0)
+{
     payload = {
         "question": 44, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": 2, "firstLanguageSpeaking": 6, "firstLanguageListening": 9, "firstLanguageReading": 9, "firstLanguageWriting": 9, "secondLanguageTest": "0", "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nocJobOffer": undefined, "nominationCertificate": false,
         "spouseAge": 42, "spouseEducationLevel": 4, "spouseCanadianDegreeDiplomaCertificate": false, "spouseFirstLanguageTest": 2, "spouseFirstLanguageSpeaking": 9, "spouseFirstLanguageListening": 9, "spouseFirstLanguageReading": 9, "spouseFirstLanguageWriting": 9, "spouseSecondLanguageTest": "0", "spouseWorkExperienceInCanada": "0", "spouseWorkExperienceLastTenYears": 3, "spouseCertificateQualificationProvince": false, "spouseValidJobOffer": false, "spouseNominationCertificate": false
@@ -51,7 +79,12 @@ function answerQuestion(answer, post) {
     }).success(function (data, textStatus, jqXHR) {
         var responseJSON = data.responseJSON;
 
-        if (lastQuestion !== null) {
+        if (lastQuestion !== null)
+        {
+            var questionContent = questionTemplate +
+                '<div id="questionReply" class="questionReply">';
+
+
             var questionContent = '' +
                 '<div class="row">' +
                 '   <div class="circleBot">' +
@@ -79,7 +112,8 @@ function answerQuestion(answer, post) {
 
         lastQuestion = responseJSON.question;
 
-        if (answer !== null) {
+        if (answer !== null)
+        {
             var answerContent = '' +
                 '<div id="answer' + payload.question + '" class="row" style="display: none;">' +
                 '   <div class="circleUser">' +
@@ -104,22 +138,16 @@ function answerQuestion(answer, post) {
 
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '') {
+        if (responseJSON.question === '')
+        {
             question.hide();
             options.hide();
         }
-        else {
+        else
+        {
             var showQuestion = function () {
-                var questionContent = '' +
-                    '<div class="row">' +
-                    '   <div class="circleBot">' +
-                    '       <div class="bot">CB</div>' +
-                    '   </div>' +
-                    '   <div class="question">' +
-                    '       <div id="questionText" style="width: 100%;"></div>' +
-                    '   </div>' +
-                    '</div>' +
-                    '<div id="questionReply" class="row questionReply">';
+                var questionContent = questionTemplate +
+                    '<div id="questionReply" class="questionReply">';
 
                 var typewriterCallback = function () {
                     $("#questionReply").slideDown();
@@ -127,10 +155,20 @@ function answerQuestion(answer, post) {
                     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                 }
 
-                if (responseJSON.options === null) {
-                    questionContent += "<div class='col-xs-7 col-sm-10 col-md-10'><input id='replyInput' type='text' class='form-control'></input></div>";
-                    questionContent += "<div class='col-xs-3 col-sm-2 col-md-2'><button id='reply' class='btn btn-block'>Reply</button></div>";
-                    questionContent += "</div></div>";
+                if (responseJSON.options === null)
+                {
+                    questionContent += optionsTemplate.replace('[OPTIONS]', '' +
+                        '   <table class="answer">' +
+                        '       <tr>' +
+                        '           <td>' +
+                        '               <input id="replyInput" type="text" class="form-control"></input>' +
+                        '           </td>' +
+                        '           <td class="button">' +
+                        '               <button id="reply" class="btn btn-block">Reply</button>' +
+                        '           </td>' +
+                        '       </tr>' +
+                        '   </table>') +
+                        '</div>';
 
                     question.html(questionContent);
 
@@ -143,11 +181,17 @@ function answerQuestion(answer, post) {
 
                     typewriter("questionText", responseJSON.question, typewriterCallback);
                 }
-                else {
-                    for (r = 0; r < responseJSON.options.length; r++) {
-                        questionContent += "<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button><span>&nbsp</span>";
+                else
+                {
+                    var options = '';
+
+                    for (r = 0; r < responseJSON.options.length; r++)
+                    {
+                        options += "<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button><span>&nbsp</span>";
                     }
-                    questionContent += "</div></div>";
+
+                    questionContent += optionsTemplate.replace('[OPTIONS]', options) +
+                        '</div>';
 
                     question.html(questionContent);
 
@@ -201,15 +245,18 @@ function backQuestion(button) {
 
         payload = responseJSON.payload;
 
-        if (responseJSON.question === '') {
+        if (responseJSON.question === '')
+        {
             question.hide();
             options.hide();
         }
-        else {
+        else
+        {
             question.html(responseJSON.question);
             options.html('<br />');
 
-            if (responseJSON.options === null) {
+            if (responseJSON.options === null)
+            {
                 var row = $("<div class='row'></div>");
                 var textbox = $("<div class='col-xs-6'><input id='replyInput' type='text' class='form-control'></input></div>");
                 var button = $("<div class='col-xs-6'><button id='reply' class='btn btn-block'>Reply</button></div>");
@@ -226,8 +273,10 @@ function backQuestion(button) {
                         answerQuestion(name);
                 });
             }
-            else {
-                for (r = 0; r < responseJSON.options.length; r++) {
+            else
+            {
+                for (r = 0; r < responseJSON.options.length; r++)
+                {
                     var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button>");
 
                     button.appendTo(options);
@@ -261,13 +310,17 @@ $(window).load(function () {
 $(document).ready(function () {
     $(window).on('resize', function () {
         var winWidth = $(window).width();
-        if (winWidth < 768) {
+        if (winWidth < 768)
+        {
             console.log('Window Width: ' + winWidth + 'class used: col-xs');
-        } else if (winWidth <= 991) {
+        } else if (winWidth <= 991)
+        {
             console.log('Window Width: ' + winWidth + 'class used: col-sm');
-        } else if (winWidth <= 1199) {
+        } else if (winWidth <= 1199)
+        {
             console.log('Window Width: ' + winWidth + 'class used: col-md');
-        } else {
+        } else
+        {
             console.log('Window Width: ' + winWidth + 'class used: col-lg');
         }
     });
