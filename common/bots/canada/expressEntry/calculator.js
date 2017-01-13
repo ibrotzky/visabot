@@ -1070,7 +1070,6 @@ function report() {
 	var details = "";
 
 	details += "<table class='scoreDetails'>";
-	details += "	<caption>Here are the details of the score</caption>";
 	details += "	<thead>";
 	details += "		<tr>";
 	details += "			<th>Core/Human capital factors</th>";

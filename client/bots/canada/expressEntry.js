@@ -12,23 +12,43 @@ var slideUpSpeed = 400;
 var userInitials;
 
 var questionTemplate = '' +
-    '<table class="question">' +
-    '   <tr>' +
-    '       <td class="circle">' +
-    '           <div class="circleBot">' +
-    '               <div class="bot">CB</div>' +
-    '           </div>' +
-    '       </td>' +
-    '       <td id="question"></td>' +
-    '   </tr>' +
-    '   <tr>' +
-    '       <td></td>' +
-    '       <td id="options"></td>' +
-    '   </tr>' +
-    '</table>';
+    '<div id="question">' +
+    '   <table class="question">' +
+    '       <tr>' +
+    '           <td class="circle">' +
+    '               <div class="circleBot">' +
+    '                   <div class="bot">CB</div>' +
+    '               </div>' +
+    '           </td>' +
+    '           <td id="question"></td>' +
+    '       </tr>' +
+    '   </table>' +
+    '   <div id="remarks">' +
+    '       <table class="remarks">' +
+    '           <tr>' +
+    '               <td class="circle"></td>' +
+    '               <td id="remarks"></td>' +
+    '           </tr>' +
+    '       </table>' +
+    '   </div>' +
+    '   <div id="questionAfterRemarks">' +
+    '       <table class="questionAfterRemarks">' +
+    '           <tr>' +
+    '               <td class="circle"></td>' +
+    '               <td id="question"></td>' +
+    '           </tr>' +
+    '       </table>' +
+    '   </div>' +
+    '   <table class="options">' +
+    '       <tr>' +
+    '           <td class="circle"></td>' +
+    '           <td id="options"></td>' +
+    '       </tr>' +
+    '   </table>' +
+    '</div>';
 
 var answerTemplate = '' +
-    '<div id="answer">'+
+    '<div id="answer">' +
     '   <table class="answer">' +
     '       <tr>' +
     '           <td>' +
@@ -42,7 +62,7 @@ var answerTemplate = '' +
     '       </tr>' +
     '       <tr>' +
     '           <td class="back">' +
-    '               <button class="back" onclick="backQuestion">back to this question</button>' +
+    '               <button class="back" onclick="backQuestion(this)">back to this question</button>' +
     '           </td>' +
     '       </tr>' +
     '   </table>' +
@@ -98,7 +118,7 @@ function answerQuestion(answer, post) {
 
             questionCell.find("#question").html('<div class="question"style="width: ' + ($("#question div.question").last().outerWidth() + 1) + 'px;">' + lastQuestion + '</div>');
 
-            $(questionCell).appendTo(chatHistory);
+            $(questionCell[0]).appendTo(chatHistory);
 
             question.html('');
 
@@ -110,7 +130,7 @@ function answerQuestion(answer, post) {
         if (answer !== null) {
             var answerCell = $(answerTemplate);
 
-            answerCell.attr('data-id', payload.question);
+            answerCell.find("button.back").attr("data-id", payload.question);
             answerCell.find(".user").html(responseJSON.payload.name.substring(0, 1));
             answerCell.find("div.answer").html(answer);
 
@@ -155,10 +175,22 @@ function showQuestion(responseJSON, show) {
             '               <div id="questionText"></div>' +
             '           </div>');
 
-        var typewriterCallback = function () {
-            $("#questionReply").slideDown(slideDownSpeed);
+        questionCell.find("td#remarks").html(responseJSON.remarks);
 
-            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        questionCell.find("td#questionAfterRemarks").html('' +
+            '           <div class="question">' +
+            '               <div id="questionText"></div>' +
+            '           </div>');
+
+        var typewriterCallback = function () {
+            if (responseJSON.remarks !== '')
+                $("#question div#remarks").slideDown(slideDownSpeed, function () {
+                    $("#question div#questionAfterRemarks").show();
+
+                    typewriter("#question div#questionAfterRemarks #questionText", responseJSON.questionAfterRemarks, function () { showOptions(); });
+                });
+            else
+                showOptions();
         }
 
         if (responseJSON.options === null) {
@@ -187,7 +219,7 @@ function showQuestion(responseJSON, show) {
                     answerQuestion(name);
             });
 
-            typewriter("questionText", responseJSON.question, typewriterCallback);
+            typewriter("#questionText", responseJSON.question, typewriterCallback);
         }
         else {
             var optionsContent = '<div id="questionReply">';
@@ -206,7 +238,7 @@ function showQuestion(responseJSON, show) {
                 answerQuestion($(this).text());
             });
 
-            typewriter("questionText", responseJSON.question, typewriterCallback);
+            typewriter("#questionText", responseJSON.question, typewriterCallback);
         }
 
         console.log('question:', payload.question);
@@ -215,83 +247,65 @@ function showQuestion(responseJSON, show) {
     }
 }
 
-function backQuestion(button) {
-    var id = button.id.replace('back', '');
+function showOptions() {
+    if ($("#question table.options input[type='text']").length > 0)
+        $("#question table.options").width($("#question table.question").outerWidth());
+    else
+        $("#question table.options").width("100%");
 
-    $(button).attr('disabled', 'disabled');
-    $(button).parent().nextAll().remove();
-    $(button).parent().remove();
+    $("#questionReply").slideDown(slideDownSpeed);
 
-    var request = {
-        "payload": payload,
-        "reply": "",
-        "back": id
+    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+}
+
+function backQuestion(e) {
+    var id;
+
+    if (typeof (e) === 'object') {
+        button = $(e);
+
+        id = parseInt(button.attr('data-id'));
+
+        var hideAndDelete = button.parents("div#answer").nextAll();
+        hideAndDelete.push(button.parents("div#answer")[0]);
+        hideAndDelete.push(button.parents("div#answer").prev()[0]);
+
+
+        hideAndDelete.slideUp(slideUpSpeed, function () { hideAndDelete.remove(); });
+
+        $("#questionReply").slideUp(slideUpSpeed, function () { backQuestion(id); });
     }
+    else {
+        id = e;
 
-    console.log('Request:', request);
-
-    $.ajax({
-        type: 'GET',
-        url: '/api/canada/expressEntry',
-        cache: false,
-        dataType: 'json',
-        data: request
-    }).success(function (data, textStatus, jqXHR) {
-        var responseJSON = data.responseJSON;
-
-        payload = responseJSON.payload;
-
-        if (responseJSON.question === '') {
-            question.hide();
-            options.hide();
-        }
-        else {
-            question.html(responseJSON.question);
-            options.html('<br />');
-
-            if (responseJSON.options === null) {
-                var row = $("<div class='row'></div>");
-                var textbox = $("<div class='col-xs-6'><input id='replyInput' type='text' class='form-control'></input></div>");
-                var button = $("<div class='col-xs-6'><button id='reply' class='btn btn-block'>Reply</button></div>");
-
-                textbox.appendTo(row);
-                button.appendTo(row);
-
-                row.appendTo(options);
-
-                $("#reply").click(function () {
-                    var name = $("#replyInput").val().trim();
-
-                    if (name.length > 0)
-                        answerQuestion(name);
-                });
-            }
-            else {
-                for (r = 0; r < responseJSON.options.length; r++) {
-                    var button = $("<button id='reply" + r + "'class='btn btn-default'>" + responseJSON.options[r] + "</button>");
-
-                    button.appendTo(options);
-                    $("<span>&nbsp</span>").appendTo(options);
-
-                    $("#reply" + r).click(function () {
-                        answerQuestion($(this).text());
-                    });
-                }
-            }
-
-            if (responseJSON.score === undefined)
-                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        var request = {
+            "payload": payload,
+            "reply": "",
+            "back": id
         }
 
-        console.log('question:', payload.question);
-        console.log('responseJSON:', responseJSON);
-        console.log('payload:', JSON.stringify(payload));
-    }).error(function (jqXHR, textStatus, errorThrown) {
-        chat.find("input").removeAttr('disabled');
-        chat.find("button").removeAttr('disabled');
+        console.log('Request:', request);
 
-        console.log('Error: ', jqXHR.responseText);
-    });
+        $.ajax({
+            type: 'GET',
+            url: '/api/canada/expressEntry',
+            cache: false,
+            dataType: 'json',
+            data: request
+        }).success(function (data, textStatus, jqXHR) {
+            var responseJSON = data.responseJSON;
+
+            lastQuestion = responseJSON.question;
+            payload = responseJSON.payload;
+
+            showQuestion(responseJSON, true);
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            chat.find("input").removeAttr('disabled');
+            chat.find("button").removeAttr('disabled');
+
+            console.log('Error: ', jqXHR.responseText);
+        });
+    }
 }
 
 $(window).load(function () {

@@ -49,8 +49,7 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 	if (principalApplicant === undefined)
 		principalApplicant = true;
 
-	switch (ability)
-	{
+	switch (ability) {
 		case languageAbility.speaking:
 			abilityName = 'speak';
 			testSectionName = 'speaking';
@@ -72,8 +71,7 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 			break;
 	}
 
-	switch (parseInt(test))
-	{
+	switch (parseInt(test)) {
 		case answerIndex(testQuestion, payload, 'CELPIP'):
 			testName = "CELPIP";
 			break;
@@ -103,8 +101,7 @@ function languageOptions(test, testQuestion, payload, ability) {
 		console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
 		console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
 	*/
-	switch (parseInt(test))
-	{
+	switch (parseInt(test)) {
 		case answerIndex(testQuestion, payload, 'No'):
 		case answerIndex(testQuestion, payload, 'No, but will'):
 			return ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
@@ -119,8 +116,7 @@ function languageOptions(test, testQuestion, payload, ability) {
 			break;
 
 		case answerIndex(testQuestion, payload, 'TEF'):
-			switch (ability)
-			{
+			switch (ability) {
 				case languageAbility.speaking:
 				case languageAbility.writing:
 					return ["0 - 180", "181 - 225", "226 - 270", "271 - 309", "310 - 348", "349 - 370", "371 - 392", "393 - 450"];
@@ -210,8 +206,7 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old are you?" },
 		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply)
-			{
+			switch (reply) {
 				case '17 or less':
 					payload.age = 17;
 					break;
@@ -380,8 +375,7 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
 		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply)
-			{
+			switch (reply) {
 				case '17 or less':
 					payload.spouseAge = 17;
 					break;
@@ -438,8 +432,7 @@ var questions = {
 		nextQuestion: function (payload) {
 			if (payload.spouseFirstLanguageTest == 0)
 				return questions.spouseWorkExperienceInCanada;
-			else
-			{
+			else {
 				return questions.spouseFirstLanguageSpeaking;
 			}
 		}
@@ -561,12 +554,10 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.calculateInverted = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.calculateInverted))
-			{
+			if (util.parseBoolean(payload.calculateInverted)) {
 				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
 					return questions.calculationInverted;
-				else
-				{
+				else {
 					clearPayload(payload, questions.married.id);
 
 					return questions.married;
@@ -582,8 +573,7 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.startOver))
-			{
+			if (util.parseBoolean(payload.startOver)) {
 				clearPayload(payload, questions.married.id);
 
 				return questions.married;
@@ -598,8 +588,7 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.startOver))
-			{
+			if (util.parseBoolean(payload.startOver)) {
 				clearPayload(payload, questions.married.id);
 
 				return questions.married;
@@ -619,8 +608,7 @@ var questions = {
 
 var questionsArray = Object.keys(questions);
 
-for (q = 0; q < questionsArray.length; q++)
-{
+for (q = 0; q < questionsArray.length; q++) {
 	questions[questionsArray[q]].id = q;
 }
 
@@ -643,23 +631,21 @@ function questionFlow(payload, reply, back, callback) {
 	var responseJSON = {
 		"question": null, // what the bot will respond with (more is appended below)
 		"remarks": null, // any other information that is not a question
+		"questionAfterRemarks": null, // what the bot will respond with (more is appended below)
 		"payload": null, // working data to examine in future calls to this function to keep track of state
 		"options": null // a JSON object containing suggested/quick replies to display to the user
 	};
 
 	var question;
 
-	if (back === undefined)
-	{
-		if (Object.keys(payload).length > 0)
-		{
+	if (back === undefined) {
+		if (Object.keys(payload).length > 0) {
 			//console.log('payload.question: ', payload.question);
 			question = questions[questionsArray[payload.question]];
 			//console.log('question: ', question);
 
 			//console.log('answerValid: ', validateAnswer(question, payload, reply));
-			if (validateAnswer(question, payload, reply))
-			{
+			if (validateAnswer(question, payload, reply)) {
 				question.processReply(payload, reply);
 
 				//console.log('payload Before: ', payload);
@@ -667,20 +653,18 @@ function questionFlow(payload, reply, back, callback) {
 				//console.log('payload After: ', payload);
 			}
 		}
-		else
-		{
+		else {
 			question = questions.name;
 		}
 	}
-	else
-	{
-		console.log('back: ', back);
+	else {
+		//console.log('back: ', back);
 		question = questions[questionsArray[back]];
-		console.log('question: ', question);
+		//console.log('question: ', question);
 
-		console.log('payload: ', payload);
+		//console.log('payload: ', payload);
 		clearPayload(payload, back);
-		console.log('payload: ', payload);
+		//console.log('payload: ', payload);
 	}
 
 	//console.log('nextQuestion: ', question);
@@ -693,14 +677,22 @@ function questionFlow(payload, reply, back, callback) {
 	responseJSON.question = quote(responseJSON.question);
 	responseJSON.payload = payload;
 
-	if (payload.score !== undefined)
-	{
+	if (payload.questionAfterRemarks !== undefined) {
+		responseJSON.questionAfterRemarks = payload.questionAfterRemarks;
+		delete payload['questionAfterRemarks'];
+	}
+
+	if (payload.remarks !== undefined) {
+		responseJSON.remarks = payload.remarks;
+		delete payload['remarks'];
+	}
+
+	if (payload.score !== undefined) {
 		responseJSON.score = payload.score;
 		delete payload['score'];
 	}
 
-	if (payload.scoreInverted !== undefined)
-	{
+	if (payload.scoreInverted !== undefined) {
 		responseJSON.scoreInverted = payload.scoreInverted;
 		delete payload['scoreInverted'];
 	}
@@ -710,8 +702,6 @@ function questionFlow(payload, reply, back, callback) {
 }
 
 function calculate(payload) {
-	var score = "{QUOTE}";
-
 	var parameters = {};
 	var calculation;
 
@@ -749,18 +739,17 @@ function calculate(payload) {
 
 	calculation = calculator.calculate(parameters);
 	payload.score = calculation;
+	payload.remarks = calculator.report(); //analysis.analyse(parameters, calculation);
+	payload.questionAfterRemarks = ["I can show you some ideas on how to improve your score over the next 3 years.", "Would you like to see them?"];
 
-	score += "Your score is " + util.formatNumber(calculation.total, 0) + ".<br /><br />" + calculator.report();
-
-	score += analysis.analyse(parameters, calculation);
-
-	//Calculate Inverting the roles
-	if (util.parseBoolean(payload.spouseCommingAlong) && parameters.spouseLanguage.test !== calculator.languageTest.none && !parameters.provincialNomination)
-		score += "<br /><br />I can do this analysis inverting your role with your spouse or common-law partner. Would you like me to do it?";
-	else
-		score += "<br /><br />Would you like to start over?";
-
-	return score;
+	/*
+		//Calculate Inverting the roles
+		if (util.parseBoolean(payload.spouseCommingAlong) && parameters.spouseLanguage.test !== calculator.languageTest.none && !parameters.provincialNomination)
+			score += "<br /><br />I can do this analysis inverting your role with your spouse or common-law partner. Would you like me to do it?";
+		else
+			score += "<br /><br />Would you like to start over?";
+	*/
+	return "{QUOTE}Your score is " + util.formatNumber(calculation.total, 0) + "! Here are the details of your score:";
 }
 
 function calculateInverted(payload) {
@@ -819,16 +808,14 @@ function clearPayload(payload, startingQuestion) {
 	if (typeof (startingQuestion) === 'string')
 		startingQuestion = parseInt(startingQuestion);
 
-	for (q = 0; q < startingQuestion; q++)
-	{
+	for (q = 0; q < startingQuestion; q++) {
 		ignore += "[" + questionsArray[q] + "]";
 	}
 
 	var payloadArray = Object.keys(payload);
 	var propertyName;
 
-	for (p = 0; p < payloadArray.length; p++)
-	{
+	for (p = 0; p < payloadArray.length; p++) {
 		propertyName = payloadArray[p];
 
 		if (ignore.indexOf(propertyName) < 0)

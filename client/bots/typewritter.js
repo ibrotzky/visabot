@@ -32,7 +32,7 @@ function typewriter(id, linesArray, callbackFunction) {
 
     sContents = ' ';
     iRow = Math.max(0, iIndex - iScrollAt);
-    var destination = document.getElementById(typewriterElement);
+    var destination = $(typewriterElement)[0];
 
     while (iRow < iIndex) {
         sContents += aText[iRow++] + '<br />';
@@ -45,7 +45,7 @@ function typewriter(id, linesArray, callbackFunction) {
         iIndex++;
         if (iIndex != aText.length) {
             iArrLength = aText[iIndex].length;
-            setTimeout(function () { typewriter() }, 500);
+            setTimeout(function () { typewriter() }, iSpeed);
         }
         else
             callback();

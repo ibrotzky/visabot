@@ -129,6 +129,17 @@ td.back
     width: 60px !important;
 }
 
+#question div#remarks
+{
+    display: none;
+}
+
+#question div#questionAfterRemarks
+{
+    display: none;
+    margin: 10px 0px !important;
+}
+
 
 div.question
 {
@@ -152,7 +163,6 @@ div.answer
 #questionReply
 {
     display: none;
-    margin-top: 20px;
 }
 
 
