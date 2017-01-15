@@ -247,9 +247,9 @@ function getTemplate(id){
 $(window).load(function () {
     answerQuestion(null);
 
-    showBootstrapClass();
+    //showBootstrapClass();
 });
-
+/*
 $(document).ready(function () {
     $(window).on('resize', function () {
         showBootstrapClass();
@@ -273,3 +273,4 @@ function showBootstrapClass() {
         document.title = 'Window Width: ' + winWidth + 'class used: col-lg';
     }
 }
+*/
