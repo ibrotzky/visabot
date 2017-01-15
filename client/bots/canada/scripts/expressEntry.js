@@ -134,6 +134,11 @@ function showQuestion(responseJSON, show) {
         {
             var replyNode = getTemplate("replyInputTemplate");
 
+            replyNode.find("input").keyup(function (e) {
+                if (e.keyCode === 13)
+                    replyNode.find("#reply").click();
+            });
+
             replyNode.find("#reply").click(function () {
                 var name = $("#replyInput").val().trim();
 
