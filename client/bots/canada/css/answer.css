@@ -1,0 +1,50 @@
+@font-face {
+    font-family: Titillium;
+    src: url('../fonts/Titillium.ttf');
+}
+
+div.answer
+{
+    display: flex; 
+    display: -webkit-flex; 
+    flex-direction: row;
+    font-family: Titillium, sans-serif;
+    height: auto;
+    margin-bottom: 10px;
+    width: auto;
+}
+
+    div.answer > div.circleBot
+    {
+        align-items: center;       
+        background: #000000;        
+        border-radius: 50%;        
+        color: #ffffff;        
+        display: flex;  
+        display: -webkit-flex; 
+        flex-shrink: 0; 
+        height: 60px;        
+        margin-left: 10px;        
+        text-align: center;        
+        -webkit-align-items: center;
+        width: 60px;
+    }
+
+        div.answer > div.circleBot > div.name
+        {
+            flex-grow: 1;
+        }
+
+            div.answer > div.circleBot > div.name::after
+            {
+                content: "you"
+            }
+
+    div.answer > div.balloon
+    {
+        background: #ffffff;        
+        border-radius: 40px;        
+        color: #636363;        
+        padding: 20px 20px;        
+        text-align: left;        
+    }

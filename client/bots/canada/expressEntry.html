@@ -10,41 +10,86 @@
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="../typewritter.js"></script>
-        <script src="expressEntry.js"></script>
+        <script src="../scripts/typewritter.js"></script>
+        <script src="scripts/expressEntry.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-        <link rel="stylesheet" type="text/css" href="expressEntry.css" />
+        <link rel="stylesheet" type="text/css" href="css/expressEntry.css" />
+        <link rel="stylesheet" type="text/css" href="css/question.css" />
+        <link rel="stylesheet" type="text/css" href="css/answer.css" />
+        <link rel="stylesheet" type="text/css" href="css/reply.css" />
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
-            <div style="width: 100%;">
-                <div class="navbar-text" style="cursor: pointer;float: left; text-align: left; width: 30%;" onclick="history.back()">
-                    <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="back"></span>
-                    Back to the features
-                </div>
-                <div class="navbar-text" style="float: left; width: 40%; text-align: center">
-                    <img src="logo.svg" height="18" alt="Canada Bot">
-                </div>
-                <div class="navbar-text" style="cursor: pointer; float: left; text-align: right; width: 30%;" onclick="startOver()">
-                    Start over&nbsp;
-                    <span class="glyphicon glyphicon-repeat icon-flipped" aria-hidden="true" aria-label="back"></span>
-                </div>
+            <div class="navbar-text back" onclick="history.back()">
+                <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="back"></span>
+                <span class="hidden-sm hidden-md hidden-lg">Back</span>
+                <span class="hidden-xs">Back to the features</span>
+            </div>
+            <div class="navbar-text logo" style="float: left; width: 40%; text-align: center">
+                <img src="images/logo.svg" height="18" alt="Canada Bot">
+            </div>
+            <div class="navbar-text startOver" onclick="startOver()">
+                Start over&nbsp;
+                <span class="glyphicon glyphicon-repeat icon-flipped" aria-hidden="true" aria-label="start over"></span>
             </div>
         </nav>
 
-        <div id="chat" class="chat container-fluid">
+        <div id="chat" class="chat">
             <div id="chatHistory" class="chatHistory"></div>
             <div id="question"></div>
             <div id="remarks"></div>
+            <div id="questionAfterRemarks"></div>
+            <div id="reply"></div>
         </div>
 
+        <div class="verticalSmallPadding hidden-sm hidden-md hidden-lg"></div>
+        <div class="verticalLargePadding hidden-xs"></div>
+
+        <template id="questionTemplate">
+            <div class="question">
+                <div class="circleBot">
+                    <div class="humour">CB</div>
+                </div>
+                <div class="balloon"></div>
+                <div class="back">
+                    <span class="glyphicon glyphicon-repeat icon-flipped rounded-border" onclick="backQuestion(this)"></span>
+                </div>
+                <div class="spacer"></div>
+            </div>
+        </template>
+
+        <template id="answerTemplate">
+            <div class="answer">
+                <div class="spacer"></div>
+                <div class="balloon">
+                    Bruno
+                </div>
+                <div class="circleBot">
+                    <div class="name"></div>
+                </div>
+            </div>
+        </template>
+
+        <template id="replyInputTemplate">
+            <div class="reply input">
+                <input id="replyInput" type="text"></input>
+                <button id="reply" class="btn btn-default btn-input">Reply</button>
+            </div>
+        </template>
+
+        <template id="replyButtonsTemplate">
+            <div class="reply options"></div>
+        </template>
+        
         <script>
             chat = $("#chat");
             chatHistory = $("#chatHistory");
             question = $("#question");
-            options = $("#options");
+            remarks = $("#remarks");
+            questionAfterRemarks = $("#questionAfterRemarks");
+            reply = $("#reply");
         </script>
     </body>
 </html>

@@ -1,0 +1,87 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: #e2e3e5;
+    height: 100%;
+    margin: 0 auto;
+    overflow: scroll-y;
+    padding-top: 65px;
+    max-width: 1024px;
+}
+
+.navbar
+{
+    background-color: #ffffff !important;
+    color: #636363;
+}
+
+    .navbar > .back
+    {
+        cursor: pointer;
+        left: 0px;
+        position: absolute;
+    }
+
+    .navbar > .logo
+    {
+        left: 0px;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        position: absolute;
+        right: 0px;
+    }
+
+    .navbar > .startOver
+    {
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+        width: auto;
+    }
+
+.navbar-text
+{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding: 0px 15px !important;
+}
+
+.icon-flipped 
+{
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+}
+
+.chat
+{
+    margin: 0px 15px;
+}
+
+.rounded-border
+{
+    border-radius: 50%;
+    border-style: solid; 
+    border-width: 1px;   
+    padding: 3px;
+}
+
+.spacer
+{
+    flex-grow: 1;
+}
+
+.verticalSmallPadding
+{
+    height: 75px;
+    width: 100%;
+}
+
+.verticalLargePadding
+{
+    height: 125px;
+    width: 100%;
+}
