@@ -65,8 +65,7 @@ function answerQuestion(answer, post) {
             var questionNode = $($("<div id='question" + payload.question + "'>").html(getTemplate("questionTemplate")));
 
             questionNode.find(".balloon").html(lastQuestion);
-            questionNode.find("span.back").attr("data-id", payload.question);
-            questionNode.find("span.back").show();
+            questionNode.find("div.back > span").attr("data-id", payload.question);
 
             $(questionNode).appendTo(chatHistory);
 
@@ -86,6 +85,8 @@ function answerQuestion(answer, post) {
             answerNode = $(answerNode).appendTo(chatHistory);
 
             answerNode.slideDown(slideDownSpeed, function () {
+                questionNode.find("div.back").css('visibility', 'visible');
+
                 showQuestion(responseJSON);
 
                 $("html, body").animate({ scrollTop: $(document).height() }, "fast");
@@ -114,10 +115,7 @@ function showQuestion(responseJSON, show) {
         }
         else
         {
-            if ($("#questionReply").length === 0)
-                showQuestion(responseJSON, true);
-            else
-                $("#questionReply").slideUp(slideUpSpeed, showQuestion);
+            showQuestion(responseJSON, true);
         }
     }
     else
@@ -126,7 +124,9 @@ function showQuestion(responseJSON, show) {
 
         question.html(questionNode);
 
-        var typewriterCallback = function () {
+        var typedCallback = function () {
+            $("#question .balloon span.typed-cursor").hide();
+
             if (responseJSON.remarks !== null)
                 $("#question div#remarks").slideDown(slideDownSpeed, function () {
                     $("#question div#questionAfterRemarks").show();
@@ -166,8 +166,11 @@ function showQuestion(responseJSON, show) {
             reply.html(replyNode);
         }
 
-        typewriter("#question .balloon", responseJSON.question, typewriterCallback);
+        if (typeof(responseJSON.question) === 'string')
+            responseJSON.question = [responseJSON.question];
 
+        $("#question .balloon span").typed({strings: responseJSON.question, callback: typedCallback});
+        
         console.log('question:', payload.question);
         console.log('responseJSON:', responseJSON);
         console.log('payload:', JSON.stringify(payload));
@@ -189,12 +192,12 @@ function backQuestion(e) {
 
         id = parseInt(button.attr('data-id'));
 
-        var hideAndDelete = button.parents("div#question").nextAll();
-        hideAndDelete.push(button.parents("div#question")[0]);
+        var hideAndDelete = chatHistory.find("#question" + id).nextAll();
+        hideAndDelete.push(chatHistory.find("#question" + id)[0]);
 
         hideAndDelete.slideUp(slideUpSpeed, function () { hideAndDelete.remove(); });
 
-        $("#questionReply").slideUp(slideUpSpeed, function () { backQuestion(id); });
+        reply.slideUp(slideUpSpeed, function () { backQuestion(id); });
     }
     else
     {
