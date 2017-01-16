@@ -49,7 +49,8 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 	if (principalApplicant === undefined)
 		principalApplicant = true;
 
-	switch (ability) {
+	switch (ability)
+	{
 		case languageAbility.speaking:
 			abilityName = 'speak';
 			testSectionName = 'speaking';
@@ -71,7 +72,8 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 			break;
 	}
 
-	switch (parseInt(test)) {
+	switch (parseInt(test))
+	{
 		case answerIndex(testQuestion, payload, 'CELPIP'):
 			testName = "CELPIP";
 			break;
@@ -101,7 +103,8 @@ function languageOptions(test, testQuestion, payload, ability) {
 		console.log('IELTS: ', answerIndex(testQuestion, payload, 'IELTS'));
 		console.log('TEF: ', answerIndex(testQuestion, payload, 'TEF'));
 	*/
-	switch (parseInt(test)) {
+	switch (parseInt(test))
+	{
 		case answerIndex(testQuestion, payload, 'No'):
 		case answerIndex(testQuestion, payload, 'No, but will'):
 			return ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"];
@@ -116,7 +119,8 @@ function languageOptions(test, testQuestion, payload, ability) {
 			break;
 
 		case answerIndex(testQuestion, payload, 'TEF'):
-			switch (ability) {
+			switch (ability)
+			{
 				case languageAbility.speaking:
 				case languageAbility.writing:
 					return ["0 - 180", "181 - 225", "226 - 270", "271 - 309", "310 - 348", "349 - 370", "371 - 392", "393 - 450"];
@@ -209,7 +213,8 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old are you?" },
 		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply) {
+			switch (reply)
+			{
 				case '17 or less':
 					payload.age = 17;
 					break;
@@ -231,7 +236,7 @@ var questions = {
 	},
 	educationLevel: {
 		id: null,
-		question: function (payload) { return "{QUOTE}What is your education level?" },
+		question: function (payload) { return ["Great! Hope you don't mind, I'm telling everyone!", "Just Kidding...", "What is your education level?"] },
 		options: educationLevelOptions,
 		processReply: function (payload, reply) { payload.educationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.canadianDegreeDiplomaCertificate },
@@ -378,7 +383,8 @@ var questions = {
 		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
 		options: ageOptions,
 		processReply: function (payload, reply) {
-			switch (reply) {
+			switch (reply)
+			{
 				case '17 or less':
 					payload.spouseAge = 17;
 					break;
@@ -435,7 +441,8 @@ var questions = {
 		nextQuestion: function (payload) {
 			if (payload.spouseFirstLanguageTest == 0)
 				return questions.spouseWorkExperienceInCanada;
-			else {
+			else
+			{
 				return questions.spouseFirstLanguageSpeaking;
 			}
 		}
@@ -557,10 +564,12 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.calculateInverted = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.calculateInverted)) {
+			if (util.parseBoolean(payload.calculateInverted))
+			{
 				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
 					return questions.calculationInverted;
-				else {
+				else
+				{
 					clearPayload(payload, questions.married.id);
 
 					return questions.married;
@@ -576,7 +585,8 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.startOver)) {
+			if (util.parseBoolean(payload.startOver))
+			{
 				clearPayload(payload, questions.married.id);
 
 				return questions.married;
@@ -591,7 +601,8 @@ var questions = {
 		options: yesNo,
 		processReply: function (payload, reply) { payload.startOver = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.startOver)) {
+			if (util.parseBoolean(payload.startOver))
+			{
 				clearPayload(payload, questions.married.id);
 
 				return questions.married;
@@ -611,7 +622,8 @@ var questions = {
 
 var questionsArray = Object.keys(questions);
 
-for (q = 0; q < questionsArray.length; q++) {
+for (q = 0; q < questionsArray.length; q++)
+{
 	questions[questionsArray[q]].id = q;
 }
 
@@ -641,14 +653,17 @@ function questionFlow(payload, reply, back, callback) {
 
 	var question;
 
-	if (back === undefined) {
-		if (Object.keys(payload).length > 0) {
+	if (back === undefined)
+	{
+		if (Object.keys(payload).length > 0)
+		{
 			//console.log('payload.question: ', payload.question);
 			question = questions[questionsArray[payload.question]];
 			//console.log('question: ', question);
 
 			//console.log('answerValid: ', validateAnswer(question, payload, reply));
-			if (validateAnswer(question, payload, reply)) {
+			if (validateAnswer(question, payload, reply))
+			{
 				question.processReply(payload, reply);
 
 				//console.log('payload Before: ', payload);
@@ -656,11 +671,13 @@ function questionFlow(payload, reply, back, callback) {
 				//console.log('payload After: ', payload);
 			}
 		}
-		else {
+		else
+		{
 			question = questions.name;
 		}
 	}
-	else {
+	else
+	{
 		//console.log('back: ', back);
 		question = questions[questionsArray[back]];
 		//console.log('question: ', question);
@@ -680,22 +697,26 @@ function questionFlow(payload, reply, back, callback) {
 	responseJSON.question = quote(responseJSON.question);
 	responseJSON.payload = payload;
 
-	if (payload.questionAfterRemarks !== undefined) {
+	if (payload.questionAfterRemarks !== undefined)
+	{
 		responseJSON.questionAfterRemarks = payload.questionAfterRemarks;
 		delete payload['questionAfterRemarks'];
 	}
 
-	if (payload.remarks !== undefined) {
+	if (payload.remarks !== undefined)
+	{
 		responseJSON.remarks = payload.remarks;
 		delete payload['remarks'];
 	}
 
-	if (payload.score !== undefined) {
+	if (payload.score !== undefined)
+	{
 		responseJSON.score = payload.score;
 		delete payload['score'];
 	}
 
-	if (payload.scoreInverted !== undefined) {
+	if (payload.scoreInverted !== undefined)
+	{
 		responseJSON.scoreInverted = payload.scoreInverted;
 		delete payload['scoreInverted'];
 	}
@@ -811,14 +832,16 @@ function clearPayload(payload, startingQuestion) {
 	if (typeof (startingQuestion) === 'string')
 		startingQuestion = parseInt(startingQuestion);
 
-	for (q = 0; q < startingQuestion; q++) {
+	for (q = 0; q < startingQuestion; q++)
+	{
 		ignore += "[" + questionsArray[q] + "]";
 	}
 
 	var payloadArray = Object.keys(payload);
 	var propertyName;
 
-	for (p = 0; p < payloadArray.length; p++) {
+	for (p = 0; p < payloadArray.length; p++)
+	{
 		propertyName = payloadArray[p];
 
 		if (ignore.indexOf(propertyName) < 0)
@@ -827,7 +850,10 @@ function clearPayload(payload, startingQuestion) {
 }
 
 function quote(text) {
-	return text.replace('{QUOTE}', '');
+	if (typeof (text) === 'string')
+		return text.replace('{QUOTE}', '');
+	else
+		return text;
 }
 
 module.exports = {
