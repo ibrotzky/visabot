@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>VisaBot CRS Calculator</title>
+        <title>CanadaBot - Express Entry</title>
 
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,22 +16,16 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
         <link rel="stylesheet" type="text/css" href="css/expressEntry.css" />
-        <link rel="stylesheet" type="text/css" href="css/question.css" />
-        <link rel="stylesheet" type="text/css" href="css/answer.css" />
-        <link rel="stylesheet" type="text/css" href="css/reply.css" />
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="navbar-text logo">
+                <img src="images/logo.svg" alt="Canada Bot">
+            </div>
             <div class="navbar-text back" onclick="history.back()">
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true" aria-label="back"></span>
-                <span class="hidden-sm hidden-md hidden-lg">Back</span>
-                <span class="hidden-xs">Back to the features</span>
             </div>
-            <div class="navbar-text logo" style="float: left; width: 40%; text-align: center">
-                <img src="images/logo.svg" height="18" alt="Canada Bot">
-            </div>
-            <div class="navbar-text startOver" onclick="startOver()">
-                Start over&nbsp;
+            <div class="navbar-text reset" onclick="startOver()">
                 <span class="glyphicon glyphicon-repeat icon-flipped" aria-hidden="true" aria-label="start over"></span>
             </div>
         </nav>
@@ -56,7 +50,7 @@
                     <span></span>
                 </div>
                 <div class="back">
-                    <span class="glyphicon glyphicon-repeat icon-flipped rounded-border" onclick="backQuestion(this)"></span>
+                    <span class="glyphicon glyphicon-time" onclick="backQuestion(this)"></span>
                 </div>
                 <div class="spacer"></div>
             </div>
@@ -65,11 +59,17 @@
         <template id="answerTemplate">
             <div class="answer">
                 <div class="spacer"></div>
-                <div class="balloon">
-                    Bruno
-                </div>
+                <div class="balloon"></div>
                 <div class="circleBot">
                     <div class="name"></div>
+                </div>
+            </div>
+        </template>
+
+        <template id="remarksTemplate">
+            <div class="remarks">
+                <div class="balloon">
+                    <div></div>
                 </div>
             </div>
         </template>
@@ -100,7 +100,9 @@
                     "spouseAge": 42, "spouseEducationLevel": 4, "spouseCanadianDegreeDiplomaCertificate": false, "spouseFirstLanguageTest": 2, "spouseFirstLanguageSpeaking": 9, "spouseFirstLanguageListening": 9, "spouseFirstLanguageReading": 9, "spouseFirstLanguageWriting": 9, "spouseSecondLanguageTest": "0", "spouseWorkExperienceInCanada": "0", "spouseWorkExperienceLastTenYears": 3, "spouseCertificateQualificationProvince": false, "spouseValidJobOffer": false, "spouseNominationCertificate": false
                 };
 
-                payload = {"question":4,"name":"Bruno","married":false};
+                payload = {"question":29,"name":"John","married":true,"spouseCanadianCitizen":false,"spouseCommingAlong":true,"age":27,"educationLevel":5,"canadianDegreeDiplomaCertificate":false,"firstLanguageTest":2,"firstLanguageSpeaking":9,"firstLanguageListening":10,"firstLanguageReading":10,"firstLanguageWriting":9,"secondLanguageTest":"0","workExperienceInCanada":"0","workExperienceLastTenYears":3,"certificateQualificationProvince":false,"validJobOffer":false,"nominationCertificate":false,"spouseAge":27,"spouseEducationLevel":5,"spouseCanadianDegreeDiplomaCertificate":false,"spouseFirstLanguageTest":3};
+
+                //payload = {"question":4,"name":"Bruno","married":false};
 
                 //payload = { "question": 26, "name": "Bruno", "married": true, "spouseCanadianCitizen": false, "spouseCommingAlong": true, "age": 33, "educationLevel": 4, "canadianDegreeDiplomaCertificate": false, "firstLanguageTest": "0", "firstLanguageSpeaking": 12, "firstLanguageListening": 12, "firstLanguageReading": 12, "firstLanguageWriting": 12, "workExperienceInCanada": "0", "workExperienceLastTenYears": 3, "certificateQualificationProvince": false, "validJobOffer": false, "nominationCertificate": false, "spouseAge": 42, "spouseEducationLevel": 4 };
 

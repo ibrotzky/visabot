@@ -53,6 +53,10 @@ function answerQuestion(answer, post) {
 
         lastQuestion = responseJSON.question;
 
+        if (typeof (lastQuestion) === 'object')
+            lastQuestion = lastQuestion[lastQuestion.length - 1];
+
+
         if (answer !== null)
         {
             var answerNode = $($("<div id='answer" + payload.question + "' style='display: none;'>").html(getTemplate("answerTemplate")));
@@ -102,60 +106,92 @@ function showQuestion(responseJSON, show) {
         question.html(questionNode);
 
         var typedCallback = function () {
-            $("#question .balloon span.typed-cursor").hide();
+            question.find(".balloon span.typed-cursor").hide();
 
             if (responseJSON.remarks !== null)
-                $("#question div#remarks").slideDown(slideDownSpeed, function () {
-                    $("#question div#questionAfterRemarks").show();
-
-                    typewriter("#question div#questionAfterRemarks #questionText", responseJSON.questionAfterRemarks, function () { showOptions(); });
-                });
+                showRemarks(responseJSON);
             else
                 showOptions();
         }
 
-        if (responseJSON.options === null)
-        {
-            var replyNode = getTemplate("replyInputTemplate");
+        configureOptions(responseJSON);
 
-            replyNode.find("input").keyup(function (e) {
-                if (e.keyCode === 13)
-                    replyNode.find("#reply").click();
-            });
-
-            replyNode.find("#reply").click(function () {
-                var name = $("#replyInput").val().trim();
-
-                if (name.length > 0)
-                    answerQuestion(name);
-            });
-                        
-            reply.html(replyNode);
-        }
-        else
-        {
-            var replyNode = getTemplate("replyButtonsTemplate");
-
-            for (r = 0; r < responseJSON.options.length; r++)
-            {
-                $("<button id='reply" + r + "'class='btn btn-default btn-options'>" + responseJSON.options[r] + "</button><span>&nbsp</span>").appendTo(replyNode);
-            }
-
-            replyNode.find('[id*="reply"]').click(function () {
-                answerQuestion($(this).text());
-            });
-
-            reply.html(replyNode);
-        }
-
-        if (typeof(responseJSON.question) === 'string')
+        if (typeof (responseJSON.question) === 'string')
             responseJSON.question = [responseJSON.question];
 
-        $("#question .balloon span").typed({strings: responseJSON.question, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 800, callback: typedCallback});
-        
+        question.find(".balloon span").typed({ strings: responseJSON.question, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
+
         console.log('question:', payload.question);
         console.log('responseJSON:', responseJSON);
         console.log('payload:', JSON.stringify(payload));
+    }
+}
+
+function showRemarks(responseJSON) {
+    var remarksNode = getTemplate("remarksTemplate");
+
+    remarks.html(remarksNode);
+
+    remarks.find(".remarks .balloon div").html(responseJSON.remarks);
+
+    remarks.find(".remarks").slideDown(slideDownSpeed * 3, function () {
+        showQuestionAfterRemarks(responseJSON);
+    });
+
+}
+
+function showQuestionAfterRemarks(responseJSON) {
+    var questionNode = getTemplate("questionTemplate");
+
+    questionAfterRemarks.html(questionNode);
+
+    var typedCallback = function () {
+        questionAfterRemarks.find(".balloon span.typed-cursor").hide();
+
+        showOptions();
+    }
+
+    configureOptions(responseJSON);
+
+    if (typeof (responseJSON.question) === 'string')
+        responseJSON.question = [responseJSON.question];
+
+    questionAfterRemarks.find(".balloon span").typed({ strings: responseJSON.showQuestionAfterRemarks, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
+}
+
+function configureOptions(responseJSON) {
+    if (responseJSON.options === null)
+    {
+        var replyNode = getTemplate("replyInputTemplate");
+
+        replyNode.find("input").keyup(function (e) {
+            if (e.keyCode === 13)
+                replyNode.find("#reply").click();
+        });
+
+        replyNode.find("#reply").click(function () {
+            var name = $("#replyInput").val().trim();
+
+            if (name.length > 0)
+                answerQuestion(name);
+        });
+
+        reply.html(replyNode);
+    }
+    else
+    {
+        var replyNode = getTemplate("replyButtonsTemplate");
+
+        for (r = 0; r < responseJSON.options.length; r++)
+        {
+            $("<button id='reply" + r + "'class='btn btn-default btn-options'>" + responseJSON.options[r] + "</button><span>&nbsp</span>").appendTo(replyNode);
+        }
+
+        replyNode.find('[id*="reply"]').click(function () {
+            answerQuestion($(this).text());
+        });
+
+        reply.html(replyNode);
     }
 }
 
@@ -225,7 +261,7 @@ function startOver() {
     answerQuestion(null);
 }
 
-function getTemplate(id){
+function getTemplate(id) {
     return $($('<div>').append($("#" + id)[0].content.cloneNode(true)).html());
 }
 
