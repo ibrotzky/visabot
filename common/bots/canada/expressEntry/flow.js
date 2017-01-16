@@ -49,48 +49,66 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 	if (principalApplicant === undefined)
 		principalApplicant = true;
 
-	switch (ability)
+	if (parseInt(test) === answerIndex(testQuestion, payload, 'TEF'))
+		switch (ability)
+		{
+			case languageAbility.speaking:
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test d'expression orale?";
+				break;
+
+			case languageAbility.listening:
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test de compréhension orale?";
+				break;
+
+			case languageAbility.reading:
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test de compréhension écrite?";
+				break;
+
+			case languageAbility.writing:
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test d'expression écrite?";
+				break;
+		}
+	else
 	{
-		case languageAbility.speaking:
-			abilityName = 'speak';
-			testSectionName = 'speaking';
-			break;
+		switch (ability)
+		{
+			case languageAbility.speaking:
+				abilityName = 'speak';
+				testSectionName = 'speaking';
+				break;
 
-		case languageAbility.listening:
-			abilityName = 'listen to';
-			testSectionName = 'listening';
-			break;
+			case languageAbility.listening:
+				abilityName = 'listen to';
+				testSectionName = 'listening';
+				break;
 
-		case languageAbility.reading:
-			abilityName = 'read';
-			testSectionName = 'reading';
-			break;
+			case languageAbility.reading:
+				abilityName = 'read';
+				testSectionName = 'reading';
+				break;
 
-		case languageAbility.writing:
-			abilityName = 'write';
-			testSectionName = 'writing';
-			break;
+			case languageAbility.writing:
+				abilityName = 'write';
+				testSectionName = 'writing';
+				break;
+		}
+
+		switch (parseInt(test))
+		{
+			case answerIndex(testQuestion, payload, 'CELPIP'):
+				testName = "CELPIP";
+				break;
+
+			case answerIndex(testQuestion, payload, 'IELTS'):
+				testName = "IELTS";
+				break;
+
+			default:
+				return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English or French?";
+		}
+
+		return "{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?";
 	}
-
-	switch (parseInt(test))
-	{
-		case answerIndex(testQuestion, payload, 'CELPIP'):
-			testName = "CELPIP";
-			break;
-
-		case answerIndex(testQuestion, payload, 'IELTS'):
-			testName = "IELTS";
-			break;
-
-		case answerIndex(testQuestion, payload, 'TEF'):
-			testName = "TEF";
-			break;
-
-		default:
-			return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English?";
-	}
-
-	return "{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?";
 }
 
 function languageOptions(test, testQuestion, payload, ability, principalApplicant) {
