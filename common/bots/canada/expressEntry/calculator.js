@@ -1154,11 +1154,11 @@ function report() {
 	details += "			<td class='score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.subTotal + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
-	details += "			<td class='ident'>Official Language proficiency and education</td>";
+	details += "			<td class='ident'>Official Language proficiency and foreign work experience</td>";
 	details += "			<td class='ident score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.officialLanguageProficiency + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
-	details += "			<td class='ident'>Canadian work experience and education</td>";
+	details += "			<td class='ident'>Canadian and foreign work experience</td>";
 	details += "			<td class='ident score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.canadianWorkExperience + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
