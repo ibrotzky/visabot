@@ -139,6 +139,57 @@
 
 /* GENERAL */
 
+/* ANSWER */
+
+    div.answer
+    {
+        display: flex; 
+        display: -webkit-flex; 
+        flex-direction: row;
+        font-family: Titillium, sans-serif;
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 20px;
+        width: auto;
+    }
+
+        div.answer > div.circleBot
+        {
+            align-items: center;       
+            background: #000000;        
+            border-radius: 50%;        
+            color: #ffffff;        
+            display: flex;  
+            display: -webkit-flex; 
+            flex-shrink: 0; 
+            height: 60px;        
+            margin-left: 10px;        
+            text-align: center;        
+            -webkit-align-items: center;
+            width: 60px;
+        }
+
+            div.answer > div.circleBot > div.name
+            {
+                flex-grow: 1;
+            }
+
+                div.answer > div.circleBot > div.name::after
+                {
+                    content: "you"
+                }
+
+        div.answer > div.balloon
+        {
+            background: #ffffff;        
+            border-radius: 40px;        
+            color: #636363;        
+            padding: 20px 20px;        
+            text-align: left;        
+        }
+
+/* ANSWER */
+
 /* QUESTION */
 
     div.question
@@ -228,58 +279,139 @@
             -webkit-align-items: center;     
         }
 
-/* REMARKS */
-
-/* ANSWER */
-
-    div.answer
+    div.scoreDetails
     {
+        background-color: #ffcc00;
         display: flex; 
         display: -webkit-flex; 
         flex-direction: row;
-        font-family: Titillium, sans-serif;
-        font-size: 16px;
-        height: auto;
-        margin-bottom: 20px;
-        width: auto;
+        flex-wrap: wrap;
+        width: inherit;
     }
 
-        div.answer > div.circleBot
+        div.scoreDetailsItem
         {
-            align-items: center;       
-            background: #000000;        
-            border-radius: 50%;        
-            color: #ffffff;        
-            display: flex;  
-            display: -webkit-flex; 
-            flex-shrink: 0; 
-            height: 60px;        
-            margin-left: 10px;        
-            text-align: center;        
-            -webkit-align-items: center;
-            width: 60px;
+            flex-grow: 0;
         }
 
-            div.answer > div.circleBot > div.name
-            {
-                flex-grow: 1;
-            }
+    table.scoreDetails
+    {
+        border: 2px solid #ffffff;
+    }
 
-                div.answer > div.circleBot > div.name::after
-                {
-                    content: "you"
-                }
-
-        div.answer > div.balloon
+        table.scoreDetails, table.scoreDetails th, table.scoreDetails td
         {
-            background: #ffffff;        
-            border-radius: 40px;        
-            color: #636363;        
-            padding: 20px 20px;        
-            text-align: left;        
+            border: 2px solid #ffffff;
         }
 
-/* ANSWER */
+        table.scoreDetails th, table.scoreDetails td
+        {
+            border: 2px solid #ffffff;
+            padding: 5px 10px;
+        }
+
+        table.scoreDetails thead
+        {
+            background-color: #3f3f3f;
+            color: #ffffff;
+            padding: 5px 10px;
+        }
+
+        table.scoreDetails tbody
+        {
+            background-color: #636363;
+            color: #ffffff;
+            padding: 5px 10px;
+        }
+
+        table.scoreDetails .ident
+        {
+            background-color: #a8a8a8;
+            color: #ffffff;
+            padding: 5px 10px 5px 20px;
+        }
+
+        table.scoreDetails .score
+        {
+            padding: 5px 20px;
+            text-align: center;
+        }
+
+    @media (max-width: 767px)
+    {
+        table.scoreDetails
+        {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        table.scoreDetails.coreHumanCapitalFactors
+        {
+            order: 1;
+        }
+        
+        table.scoreDetails.spouseFactors
+        {
+            order: 2;
+        }
+        
+        table.scoreDetails.skillTransferabilityFactors
+        {
+            order: 3;
+        }
+        
+        table.scoreDetails.additionalPoints
+        {
+            order: 4;
+        }
+        
+        table.scoreDetails.total
+        {
+            order: 5;
+        }
+    }
+
+    @media (min-width: 768px)
+    {
+        table.scoreDetails
+        {
+            margin: 0px 5% 20px 0px;
+            width: 45%;
+        }
+
+        table.scoreDetails.coreHumanCapitalFactors
+        {
+            order: 1;
+        }
+        
+        table.scoreDetails.spouseFactors
+        {
+            order: 3;
+        }
+        
+        table.scoreDetails.skillTransferabilityFactors
+        {            
+            margin-right: 0px;
+            order: 2;
+        }
+        
+        table.scoreDetails.additionalPoints
+        {
+            margin-right: 0px;
+            order: 4;
+        }
+        
+        table.scoreDetails.total
+        {
+            margin-right: 0px;
+            order: 5;
+            width: 100%;
+        }
+    }
+
+    
+
+/* REMARKS */
 
 /* REPLY */
 

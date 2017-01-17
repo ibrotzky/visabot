@@ -148,7 +148,7 @@ function showQuestionAfterRemarks(responseJSON) {
     var typedCallback = function () {
         questionAfterRemarks.find(".balloon span.typed-cursor").hide();
 
-        showOptions();
+        showOptions(false);
     }
 
     configureOptions(responseJSON);
@@ -159,7 +159,7 @@ function showQuestionAfterRemarks(responseJSON) {
     questionAfterRemarks.find(".balloon span").typed({ strings: responseJSON.showQuestionAfterRemarks, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
 }
 
-function configureOptions(responseJSON) {
+function configureOptions(responseJSON, scrollDown) {
     if (responseJSON.options === null)
     {
         var replyNode = getTemplate("replyInputTemplate");
@@ -195,10 +195,14 @@ function configureOptions(responseJSON) {
     }
 }
 
-function showOptions() {
+function showOptions(scrollDown) {
+    if (scrollDown === undefined)
+        scrollDown = true;
+    
     reply.slideDown(slideDownSpeed);
 
-    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+    if (scrollDown)
+        $("html, body").animate({ scrollTop: $(document).height() }, "slow");
 }
 
 function backQuestion(e) {

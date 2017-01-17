@@ -1069,7 +1069,9 @@ function calculate(parameters) {
 function report() {
 	var details = "";
 
-	details += "<table class='scoreDetails'>";
+	details += "<div class='scoreDetails'>";
+
+	details += "<table class='scoreDetails coreHumanCapitalFactors'>";
 	details += "	<thead>";
 	details += "		<tr>";
 	details += "			<th>Core/Human capital factors</th>";
@@ -1091,41 +1093,43 @@ function report() {
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td class='ident'>First Official Language</td>";
-	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.officialLanguages.first.total + "</td>";
+	details += "			<td class='ident score'>" + scores.coreHumanCapitalFactors.officialLanguages.first.total + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td class='ident'>Second  Official Language</td>";
-	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.officialLanguages.second.total + "</td>";
+	details += "			<td class='ident score'>" + scores.coreHumanCapitalFactors.officialLanguages.second.total + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td>Canadian work experience</td>";
 	details += "			<td class='score'>" + scores.coreHumanCapitalFactors.canadianWorkExperience + "</td>";
 	details += "		</tr>";
 	details += "	</tbody>";
+	details += "</table>";
 
-	if (calculatorParameters.spouseCommingAlong) {
-		details += "	<thead>";
-		details += "		<tr>";
-		details += "			<th>Spouse factors</th>";
-		details += "			<th class='score'>" + scores.spouseFactors.subTotal + "</th>";
-		details += "		</tr>";
-		details += "	</thead>";
-		details += "	<tbody>";
-		details += "		<tr>";
-		details += "			<td>Level of education</td>";
-		details += "			<td class='score'>" + scores.spouseFactors.levelOfEducation + "</td>";
-		details += "		</tr>";
-		details += "		<tr>";
-		details += "			<td>First Official Language</td>";
-		details += "			<td class='score'>" + scores.spouseFactors.officialLanguage.total + "</td>";
-		details += "		</tr>";
-		details += "		<tr>";
-		details += "			<td>Canadian work experience</td>";
-		details += "			<td class='score'>" + scores.spouseFactors.canadianWorkExperience + "</td>";
-		details += "		</tr>";
-		details += "	</tbody>";
-	}
+	details += "<table class='scoreDetails spouseFactors'>";
+	details += "	<thead>";
+	details += "		<tr>";
+	details += "			<th>Spouse factors</th>";
+	details += "			<th class='score'>" + scores.spouseFactors.subTotal + "</th>";
+	details += "		</tr>";
+	details += "	</thead>";
+	details += "	<tbody>";
+	details += "		<tr>";
+	details += "			<td>Level of education</td>";
+	details += "			<td class='score'>" + scores.spouseFactors.levelOfEducation + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>First Official Language</td>";
+	details += "			<td class='score'>" + scores.spouseFactors.officialLanguage.total + "</td>";
+	details += "		</tr>";
+	details += "		<tr>";
+	details += "			<td>Canadian work experience</td>";
+	details += "			<td class='score'>" + scores.spouseFactors.canadianWorkExperience + "</td>";
+	details += "		</tr>";
+	details += "	</tbody>";
+	details += "</table>";
 
+	details += "<table class='scoreDetails skillTransferabilityFactors'>";
 	details += "	<thead>";
 	details += "		<tr>";
 	details += "			<th>Skill transferability factors</th>";
@@ -1139,11 +1143,11 @@ function report() {
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td class='ident'>Official Language proficiency and education</td>";
-	details += "			<td class='score'>" + scores.skillTransferabilityFactors.education.officialLanguageProficiency + "</td>";
+	details += "			<td class='ident score'>" + scores.skillTransferabilityFactors.education.officialLanguageProficiency + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td class='ident'>Canadian work experience and education</td>";
-	details += "			<td class='score'>" + scores.skillTransferabilityFactors.education.canadianWorkExperience + "</td>";
+	details += "			<td class='ident score'>" + scores.skillTransferabilityFactors.education.canadianWorkExperience + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td>Foreign work experience</td>";
@@ -1151,18 +1155,20 @@ function report() {
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td class='ident'>Official Language proficiency and education</td>";
-	details += "			<td class='score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.officialLanguageProficiency + "</td>";
+	details += "			<td class='ident score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.officialLanguageProficiency + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td class='ident'>Canadian work experience and education</td>";
-	details += "			<td class='score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.canadianWorkExperience + "</td>";
+	details += "			<td class='ident score'>" + scores.skillTransferabilityFactors.foreignWorkExperience.canadianWorkExperience + "</td>";
 	details += "		</tr>";
 	details += "		<tr>";
 	details += "			<td>Certificate of qualification</td>";
 	details += "			<td class='score'>" + scores.skillTransferabilityFactors.certificateOfQualification + "</td>";
 	details += "		</tr>";
 	details += "	</tbody>";
+	details += "</table>";
 
+	details += "<table class='scoreDetails additionalPoints'>";
 	details += "	<thead>";
 	details += "		<tr>";
 	details += "			<th>Additional points</th>";
@@ -1183,7 +1189,9 @@ function report() {
 	details += "			<td class='score'>" + scores.additionalPoints.provincialNomination + "</td>";
 	details += "		</tr>";
 	details += "	</tbody>";
+	details += "</table>";
 
+	details += "<table class='scoreDetails total'>";
 	details += "	<thead class='total'>";
 	details += "		<tr>";
 	details += "			<th>Total</th>";
@@ -1191,6 +1199,8 @@ function report() {
 	details += "		</tr>";
 	details += "	</thead>";
 	details += "</table>";
+
+	details += "</div>";
 
 	return details;
 }
