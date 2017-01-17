@@ -53,19 +53,19 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 		switch (ability)
 		{
 			case languageAbility.speaking:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test d'expression orale?";
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve d'expression orale?";
 				break;
 
 			case languageAbility.listening:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test de compréhension orale?";
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve de compréhension orale?";
 				break;
 
 			case languageAbility.reading:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test de compréhension écrite?";
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve de compréhension écrite?";
 				break;
 
 			case languageAbility.writing:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur le test d'expression écrite?";
+				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve d'expression écrite?";
 				break;
 		}
 	else
