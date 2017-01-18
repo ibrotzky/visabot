@@ -7,7 +7,7 @@ var currentScore;
 function analyse(parameters, scores, title) {
     var analysis = "";
 
-if (title === undefined)
+    if (title === undefined)
     {
         if (parameters.provincialNomination)
             return "<br /><br />Since you were nominated by a province or territory, you already have enough points to pass the next draw. Welcome to Canada! :)";

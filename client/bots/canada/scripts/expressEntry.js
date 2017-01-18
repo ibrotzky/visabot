@@ -153,10 +153,10 @@ function showQuestionAfterRemarks(responseJSON) {
 
     configureOptions(responseJSON);
 
-    if (typeof (responseJSON.question) === 'string')
-        responseJSON.question = [responseJSON.question];
+    if (typeof (responseJSON.questionAfterRemarks) === 'string')
+        responseJSON.questionAfterRemarks = [responseJSON.questionAfterRemarks];
 
-    questionAfterRemarks.find(".balloon span").typed({ strings: responseJSON.showQuestionAfterRemarks, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
+    questionAfterRemarks.find(".balloon span").typed({ strings: responseJSON.questionAfterRemarks, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
 }
 
 function configureOptions(responseJSON, scrollDown) {

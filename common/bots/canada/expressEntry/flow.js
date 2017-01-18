@@ -1,5 +1,5 @@
-var analysis = require("./analysis");
 var calculator = require("./calculator");
+var analysis = require("./analysis");
 var util = require("../../../util");
 
 /**
@@ -598,23 +598,75 @@ var questions = {
 
 	calculation: {
 		id: null,
-		question: function (payload) { return calculate(payload); },
+		question: function (payload) { 
+			var scores = calculate(payload); 
+			
+			payload.remarks = calculator.report(scores);
+			payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
+
+			return "{QUOTE}Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details of your score:";
+		},
+		options: yesNo,
+		processReply: function (payload, reply) { payload.plan = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { 
+			if (util.parseBoolean(payload.plan))
+				return questions.plan;
+			else
+			{
+				return questions.sendEmail;
+			}
+		},
+	},
+	plan: {
+		id: null,
+		question: function (payload) { 
+			var scores = calculate(payload); 
+			
+			payload.remarks = calculator.report(scores); //analysis.analyse(parameters, calculation);
+			payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
+
+			return "{QUOTE}Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details of your score:";
+		},
 		options: yesNo,
 		processReply: function (payload, reply) { payload.calculateInverted = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
 			if (util.parseBoolean(payload.calculateInverted))
 			{
-				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
-					return questions.calculationInverted;
-				else
-				{
-					clearPayload(payload, questions.married.id);
-
-					return questions.married;
-				}
+				
 			}
 			else
 				return questions.startOver;
+		},
+	},
+	sendEmail: {
+		id: null,
+		question: function (payload) { return "{QUOTE}I can send this analysis to your e-mail. Would you like me to?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.sendEmail = yesNoAnswer(reply); },
+		nextQuestion: function (payload) {
+			if (util.parseBoolean(payload.email))
+			{
+
+				//SEND EMAIL
+			}
+
+			if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
+				return questions.calculationInverted;
+			else
+			{
+				clearPayload(payload, questions.married.id);
+
+				return questions.married;
+			}
+
+			if (util.parseBoolean(payload.startOver))
+			{
+				clearPayload(payload, questions.married.id);
+
+				return questions.married;
+			}
+			else
+				return questions.done;
 		},
 	},
 	calculationInverted: {
@@ -763,9 +815,9 @@ function questionFlow(payload, reply, back, callback) {
 	return responseJSON;
 }
 
-function calculate(payload) {
+function parameters(payload)
+{
 	var parameters = {};
-	var calculation;
 
 	parameters.married = util.parseBoolean(payload.married);
 	parameters.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
@@ -799,19 +851,57 @@ function calculate(payload) {
 	parameters.spouseLanguage.reading = (payload.spouseFirstLanguageReading === undefined ? 0 : parseInt(payload.spouseFirstLanguageReading));
 	parameters.spouseLanguage.writing = (payload.spouseFirstLanguageWriting === undefined ? 0 : parseInt(payload.spouseFirstLanguageWriting));
 
-	calculation = calculator.calculate(parameters);
-	payload.score = calculation;
-	payload.remarks = calculator.report(); //analysis.analyse(parameters, calculation);
-	payload.questionAfterRemarks = ["I can show you some ideas on how to improve your score over the next 3 years.", "Would you like to see them?"];
+	return parameters;
+}
 
-	/*
-		//Calculate Inverting the roles
-		if (util.parseBoolean(payload.spouseCommingAlong) && parameters.spouseLanguage.test !== calculator.languageTest.none && !parameters.provincialNomination)
-			score += "<br /><br />I can do this analysis inverting your role with your spouse or common-law partner. Would you like me to do it?";
-		else
-			score += "<br /><br />Would you like to start over?";
-	*/
-	return "{QUOTE}Your score is " + util.formatNumber(calculation.total, 0) + "! Here are the details of your score:";
+function parametersInverted(payload)
+{
+	var parameters = {};
+
+	parameters.married = util.parseBoolean(payload.married);
+	parameters.spouseCanadianCitizen = util.parseBoolean(payload.spouseCanadianCitizen);
+	parameters.spouseCommingAlong = util.parseBoolean(payload.spouseCommingAlong);
+	parameters.age = parseInt(payload.spouseAge);
+	parameters.educationLevel = parseInt(payload.spouseEducationLevel);
+	if (payload.spouseCanadianEducationLevel !== undefined) parameters.educationInCanada = parseInt(payload.spouseCanadianEducationLevel);
+	parameters.firstLanguage = calculator.languageObject();
+	parameters.firstLanguage.test = parseInt(payload.spouseFirstLanguageTest) - 1;
+	parameters.firstLanguage.speaking = parseInt(payload.spouseFirstLanguageSpeaking);
+	parameters.firstLanguage.listening = parseInt(payload.spouseFirstLanguageListening);
+	parameters.firstLanguage.reading = parseInt(payload.spouseFirstLanguageReading);
+	parameters.firstLanguage.writing = parseInt(payload.spouseFirstLanguageWriting);
+	parameters.secondLanguage = calculator.languageObject();
+	parameters.secondLanguage.test = (parameters.firstLanguage.test === calculator.languageTest.tef ? parseInt(payload.spouseSecondLanguageTest) : calculator.languageTest.tef);
+	parameters.secondLanguage.speaking = (payload.spouseSecondLanguageSpeaking === undefined ? 0 : parseInt(payload.spouseSecondLanguageSpeaking));
+	parameters.secondLanguage.listening = (payload.spouseSecondLanguageListening === undefined ? 0 : parseInt(payload.spouseSecondLanguageListening));
+	parameters.secondLanguage.reading = (payload.spouseSecondLanguageReading === undefined ? 0 : parseInt(payload.spouseSecondLanguageReading));
+	parameters.secondLanguage.writing = (payload.spouseSecondLanguageWriting === undefined ? 0 : parseInt(payload.spouseSecondLanguageWriting));
+	parameters.workInCanada = parseInt(payload.spouseWorkExperienceInCanada);
+	parameters.workExperience = parseInt(payload.spouseWorkExperienceLastTenYears);
+	parameters.certificateFromProvince = util.parseBoolean(payload.spouseCertificateQualificationProvince);
+	if (payload.nocJobOffer !== undefined) parameters.nocJobOffer = parseInt(payload.spouseNocJobOffer);
+	parameters.provincialNomination = util.parseBoolean(payload.spouseNominationCertificate);
+	parameters.spouseEducationLevel = parseInt(payload.educationLevel);
+	parameters.spouseWorkInCanada = parseInt(payload.workExperienceInCanada);
+	parameters.spouseLanguage = calculator.languageObject();
+	parameters.spouseLanguage.test = parseInt(payload.firstLanguageTest);
+	parameters.spouseLanguage.speaking = parseInt(payload.firstLanguageSpeaking);
+	parameters.spouseLanguage.listening = parseInt(payload.firstLanguageListening);
+	parameters.spouseLanguage.reading = parseInt(payload.firstLanguageReading);
+	parameters.spouseLanguage.writing = parseInt(payload.firstLanguageWriting);
+
+	return parameters;
+}
+
+function calculate(payload) {
+	return calculator.calculate(parameters(payload));
+}
+
+function plan(payload) {
+	var calculationParameters = parameters(payload);
+	var scores = calculator.calculate(calculationParameters);
+
+	return analysis.analyse(calculationParameters, scores);
 }
 
 function calculateInverted(payload) {

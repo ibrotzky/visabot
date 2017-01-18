@@ -1066,7 +1066,7 @@ function calculate(parameters) {
 	}
 }
 
-function report() {
+function report(scores) {
 	var details = "";
 
 	details += "<div class='scoreDetails'>";
