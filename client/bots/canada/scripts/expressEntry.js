@@ -6,6 +6,8 @@ var questionAfterRemarks;
 var reply;
 
 var lastQuestion = null;
+var lastRemarks = null;
+var lastQuestionAfterRemarks = null;
 
 var payload = {};
 
@@ -51,11 +53,26 @@ function answerQuestion(answer, post) {
             $("html, body").animate({ scrollTop: $(document).height() }, "fast");
         }
 
+        if (lastRemarks !== null)
+        {
+            var remarksNode = $($("<div id='remarks" + payload.question + "'>").html(getTemplate("remarksTemplate")));
+
+            remarksNode.find(".remarks .balloon div").html(lastRemarks);
+
+            $(remarksNode).appendTo(chatHistory);
+
+            $("html, body").animate({ scrollTop: $(document).height() }, "fast");
+        }
+
         lastQuestion = responseJSON.question;
+        lastRemarks = responseJSON.remarks;
+        lastQuestionAfterRemarks = responseJSON.questionAfterRemarks;
 
         if (typeof (lastQuestion) === 'object')
             lastQuestion = lastQuestion[lastQuestion.length - 1];
 
+        if (typeof (lastQuestionAfterRemarks) === 'object')
+            lastQuestionAfterRemarks = lastQuestionAfterRemarks[lastQuestionAfterRemarks.length - 1];
 
         if (answer !== null)
         {
