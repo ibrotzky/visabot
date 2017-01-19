@@ -57,9 +57,25 @@ function answerQuestion(answer, post) {
         {
             var remarksNode = $($("<div id='remarks" + payload.question + "'>").html(getTemplate("remarksTemplate")));
 
+            remarksNode.find(".remarks").show();
             remarksNode.find(".remarks .balloon div").html(lastRemarks);
 
             $(remarksNode).appendTo(chatHistory);
+
+            remarks.html('');
+
+            $("html, body").animate({ scrollTop: $(document).height() }, "fast");
+        }
+
+        if (lastQuestionAfterRemarks !== null)
+        {
+            var questionAfterRemarksNode = $($("<div id='questionAfterRemarks" + payload.question + "'>").html(getTemplate("questionTemplate")));
+
+            questionAfterRemarksNode.find(".balloon").html(lastQuestionAfterRemarks);
+
+            $(questionAfterRemarksNode).appendTo(chatHistory);
+
+            questionAfterRemarks.html('');
 
             $("html, body").animate({ scrollTop: $(document).height() }, "fast");
         }
@@ -68,10 +84,10 @@ function answerQuestion(answer, post) {
         lastRemarks = responseJSON.remarks;
         lastQuestionAfterRemarks = responseJSON.questionAfterRemarks;
 
-        if (typeof (lastQuestion) === 'object')
+        if (lastQuestion !== null && typeof (lastQuestion) === 'object')
             lastQuestion = lastQuestion[lastQuestion.length - 1];
 
-        if (typeof (lastQuestionAfterRemarks) === 'object')
+        if (lastQuestionAfterRemarks !== null && typeof (lastQuestionAfterRemarks) === 'object')
             lastQuestionAfterRemarks = lastQuestionAfterRemarks[lastQuestionAfterRemarks.length - 1];
 
         if (answer !== null)
@@ -260,6 +276,9 @@ function backQuestion(e) {
             var responseJSON = data.responseJSON;
 
             lastQuestion = responseJSON.question;
+            lastRemarks = responseJSON.remarks;
+            lastQuestionAfterRemarks = responseJSON.questionAfterRemarks;
+            
             payload = responseJSON.payload;
 
             showQuestion(responseJSON, true);
