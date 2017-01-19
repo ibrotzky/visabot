@@ -254,16 +254,12 @@ var questions = {
 		processReply: function (payload, reply) {
 			switch (reply)
 			{
-				case '17 or less':
+				case 'Ask mom':
 					payload.age = 17;
 					break;
 
-				case '20 to 29':
-					payload.age = 20;
-					break;
-
-				case '45 or more':
-					payload.age = 45;
+				case 'Be polite and don\'t ask':
+					payload.age = 47;
 					break;
 
 				default:
@@ -601,7 +597,7 @@ var questions = {
 		id: null,
 		question: function (payload) { 
 			var scores = calculate(payload); 
-			
+
 			payload.remarks = calculator.report(scores);
 			payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
 
