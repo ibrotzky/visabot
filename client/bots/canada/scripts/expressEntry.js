@@ -152,7 +152,7 @@ function showQuestion(responseJSON, show) {
         if (typeof (responseJSON.question) === 'string')
             responseJSON.question = [responseJSON.question];
 
-        question.find(".balloon span").typed({ strings: responseJSON.question, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
+        typed(question.find(".balloon span"), responseJSON.question, typedCallback);
 
         console.log('question:', payload.question);
         console.log('responseJSON:', responseJSON);
@@ -189,7 +189,7 @@ function showQuestionAfterRemarks(responseJSON) {
     if (typeof (responseJSON.questionAfterRemarks) === 'string')
         responseJSON.questionAfterRemarks = [responseJSON.questionAfterRemarks];
 
-    questionAfterRemarks.find(".balloon span").typed({ strings: responseJSON.questionAfterRemarks, startDelay: 300, typeSpeed: -50, backSpeed: -50, backDelay: 1500, callback: typedCallback });
+    typed(questionAfterRemarks.find(".balloon span"), responseJSON.questionAfterRemarks, typedCallback);
 }
 
 function configureOptions(responseJSON, scrollDown) {
@@ -303,6 +303,18 @@ function startOver() {
 
 function getTemplate(id) {
     return $($('<div>').append($("#" + id)[0].content.cloneNode(true)).html());
+}
+
+function typed(object, text, callback)
+{
+    object.typed({ 
+        strings: text, 
+        startDelay: 300, 
+        typeSpeed: -50, 
+        backSpeed: -50, 
+        backDelay: 2000, 
+        callback: callback 
+    });
 }
 
 $(window).load(function () {
