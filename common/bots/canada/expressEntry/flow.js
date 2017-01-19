@@ -420,16 +420,12 @@ var questions = {
 		processReply: function (payload, reply) {
 			switch (reply)
 			{
-				case '17 or less':
-					payload.spouseAge = 17;
+				case 'Ask mom':
+					payload.age = 17;
 					break;
 
-				case '20 to 29':
-					payload.spouseAge = 20;
-					break;
-
-				case '45 or more':
-					payload.spouseAge = 45;
+				case 'Be polite and don\'t ask':
+					payload.age = 47;
 					break;
 
 				default:
