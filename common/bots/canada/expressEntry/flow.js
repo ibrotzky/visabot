@@ -14,6 +14,16 @@ var languageAbility = {
 	writing: 3
 }
 
+/**
+ * Enum for Reply Type
+ * @readonly
+ * @enum {number}
+ */
+var replyType = {
+	name: 0,
+	email: 1
+}
+
 function ageOptions(payload) {
 	return ['Ask mom', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', 'Be polite and don\'t ask'];
 }
@@ -222,7 +232,7 @@ var questions = {
 		id: null,
 		question: function (payload) { return "Hello, nice to meet you.\nI'm CanadaBot. What is your name?" },
 		options: function (payload) { return null },
-		replyType: { type: 'name' },
+		replyType: { type: replyType.name },
 		processReply: function (payload, reply) { payload.name = reply; },
 		nextQuestion: function (payload) { return questions.married }
 	},
@@ -649,7 +659,7 @@ var questions = {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your e-mail?" },
 		options: function (payload) { return null },
-		replyType: { type: 'email' },
+		replyType: { type: replyType.email },
 		processReply: function (payload, reply) { 
 			payload.email = reply; 
 			
@@ -736,7 +746,7 @@ var questions = {
 		id: null,
 		question: function (payload) { return "{QUOTE}What is your e-mail?" },
 		options: function (payload) { return null },
-		replyType: { type: 'email' },
+		replyType: { type: replyType.email },
 		processReply: function (payload, reply) { 
 			payload.emailInverted = reply; 
 			
@@ -798,7 +808,26 @@ function validateAnswer(question, payload, reply) {
 	var options = question.options(payload);
 
 	if (options === null)
+	{
+		if (question.replyType !== undefined)
+		{
+			switch (question.replyType.type)
+			{
+				case replyType.name:
+					if (reply.indexOf('@') >= 0)
+						return false;
+					else
+						if (!isNaN(reply))
+							return false;
+					break;
+
+				case replyType.email:
+				return util.validateEmail(reply);
+					break;
+			}
+		}
 		return true;
+	}
 	else
 		return (options.indexOf(reply) >= 0);
 }
