@@ -261,22 +261,7 @@ var questions = {
 		id: null,
 		question: function (payload) { return "{QUOTE}How old are you?" },
 		options: ageOptions,
-		processReply: function (payload, reply) {
-			switch (reply)
-			{
-				case 'Ask mom':
-					payload.age = 17;
-					break;
-
-				case 'Be polite and don\'t ask':
-					payload.age = 47;
-					break;
-
-				default:
-					payload.age = parseInt(reply);
-					break;
-			}
-		},
+		processReply: function (payload, reply) { payload.age = answerIndex(this, payload, reply) + 17; },
 		nextQuestion: function (payload) { return questions.educationLevel },
 	},
 	educationLevel: {
@@ -427,22 +412,7 @@ var questions = {
 		id: null,
 		question: function (payload) { return "{QUOTE}How old is your spouse or common-law partner?" },
 		options: ageOptions,
-		processReply: function (payload, reply) {
-			switch (reply)
-			{
-				case 'Ask mom':
-					payload.age = 17;
-					break;
-
-				case 'Be polite and don\'t ask':
-					payload.age = 47;
-					break;
-
-				default:
-					payload.spouseAge = parseInt(reply);
-					break;
-			}
-		},
+		processReply: function (payload, reply) { payload.spouseAge = answerIndex(this, payload, reply) + 17; },
 		nextQuestion: function (payload) { return questions.spouseEducationLevel },
 	},
 	spouseEducationLevel: {
@@ -634,7 +604,7 @@ var questions = {
 			if (util.parseBoolean(payload.sendEmail))
 				return questions.askEmail;
 			else
-				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
+				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest != 0 && !util.parseBoolean(payload.nominationCertificate))
 					return questions.invertRoles;
 				else
 					return questions.startOver;
@@ -649,7 +619,7 @@ var questions = {
 			if (util.parseBoolean(payload.sendEmail))
 				return questions.askEmail;
 			else
-				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
+				if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest != 0 && !util.parseBoolean(payload.nominationCertificate))
 					return questions.invertRoles;
 				else
 					return questions.startOver;
@@ -674,20 +644,35 @@ var questions = {
 		question: function (payload) { 
 			var questionText =  ["{QUOTE}I'm sending it right now and you should receive it soon.", "If you don't receive it, make sure it's not on your spam folder, sometimes it happens."]
 	
-			if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest !== 0 && !util.parseBoolean(payload.nominationCertificate))
+			if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest != 0 && !util.parseBoolean(payload.nominationCertificate))
 				questionText.push ("Oh, I can do this analysis invertion your role with you spouse or common-law partner. Would you like me to do it?");
+			else
+				questionText.push ("Would you like to start over?");
 
 			return questionText;
 		},
 		options: yesNo,
 		processReply: function (payload, reply) { payload.invertRoles = yesNoAnswer(reply); },
 		nextQuestion: function (payload) {
-			if (util.parseBoolean(payload.invertRoles))
+			if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest != 0 && !util.parseBoolean(payload.nominationCertificate))
 			{
-				return questions.calculationInverted;
+				if (util.parseBoolean(payload.invertRoles))
+				{
+					clearPayload(payload, questions.married.id);
+
+					return questions.married;
+				}
+				else
+					return questions.done;
+
 			}
 			else
-				return questions.startOver;
+			{
+				if (util.parseBoolean(payload.invertRoles))
+					return questions.calculationInverted;
+				else
+					return questions.startOver;
+			}
 		},
 	},
 	invertRoles: {
@@ -1060,5 +1045,6 @@ function quote(text) {
 }
 
 module.exports = {
-	questionFlow: questionFlow
+	questionFlow: questionFlow,
+	questions: questions
 };

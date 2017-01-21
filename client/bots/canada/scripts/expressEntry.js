@@ -125,7 +125,7 @@ function showQuestion(responseJSON, show) {
         if (responseJSON.question === '')
         {
             question.hide();
-            options.hide();
+            reply.hide();
         }
         else
         {
@@ -315,6 +315,22 @@ function typed(object, text, callback)
         backDelay: 2000, 
         callback: callback 
     });
+}
+
+function questionIndex(name)
+{
+    $.ajax({
+        type: 'GET',
+        url: '/api/canada/expressEntryQuestionIndex',
+        cache: false,
+        dataType: 'json',
+        data: {name: name}
+    }).success(function (data, textStatus, jqXHR) {
+        console.log('Data: ', data);
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log('Error: ', jqXHR.responseText);
+    });
+
 }
 
 $(window).load(function () {
