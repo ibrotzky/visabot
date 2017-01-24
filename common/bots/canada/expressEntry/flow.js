@@ -230,32 +230,11 @@ function yesNoAnswer(reply) {
 var questions = {
 	name: {
 		id: null,
-		question: function (payload) { return "Hello, nice to meet you.\nI'm CanadaBot. What is your name?" },
+		question: function (payload) { return "Hello, nice to meet you.\nI'm Yukan, the Canada Bot. What is your name?" },
 		options: function (payload) { return null },
 		replyType: { type: replyType.name },
 		processReply: function (payload, reply) { payload.name = reply; },
-		nextQuestion: function (payload) { return questions.married }
-	},
-	married: {
-		id: null,
-		question: function (payload) { return "Hi " + payload.name + ". Are you married or have a common-law partner?" },
-		options: yesNo,
-		processReply: function (payload, reply) { payload.married = yesNoAnswer(reply); },
-		nextQuestion: function (payload) { return (payload.married ? questions.spouseCanadianCitizen : questions.age) },
-	},
-	spouseCanadianCitizen: {
-		id: null,
-		question: function (payload) { return "{QUOTE}Is your spouse or common-law partner a citizen or permanent resident of Canada?" },
-		options: yesNo,
-		processReply: function (payload, reply) { payload.spouseCanadianCitizen = yesNoAnswer(reply); },
-		nextQuestion: function (payload) { return (payload.spouseCanadianCitizen ? questions.age : questions.spouseCommingAlong) },
-	},
-	spouseCommingAlong: {
-		id: null,
-		question: function (payload) { return "{QUOTE}Will your spouse or common-law partner come with you to Canada?" },
-		options: yesNo,
-		processReply: function (payload, reply) { payload.spouseCommingAlong = yesNoAnswer(reply); },
-		nextQuestion: function (payload) { return questions.age },
+		nextQuestion: function (payload) { return questions.age }
 	},
 	age: {
 		id: null,
@@ -266,7 +245,35 @@ var questions = {
 	},
 	educationLevel: {
 		id: null,
-		question: function (payload) { return ["Great! Hope you don't mind, I'm telling everyone!", "Just Kidding...", "What is your education level?"] },
+		question: function (payload) { 
+			var questionText = [];
+
+			if (parseInt(payload.age) <= 17)
+			{
+				questionText.push("Hummmm! I'm telling your parents!");
+				questionText.push("Just Kidding...");
+			}
+			else if (parseInt(payload.age) >= 18 && parseInt(payload.age) <= 25)
+			{
+				questionText.push("Those college years! So many memories...");
+			}
+			else if (parseInt(payload.age) >= 26 && parseInt(payload.age) <= 29)
+			{
+				questionText.push("The prime of your life, good for you...");
+			}
+			else if (parseInt(payload.age) >= 30 && parseInt(payload.age) <= 46)
+			{
+				questionText.push("Great! Hope you don't mind, I'm telling everyone!");
+				questionText.push("Just kidding...");
+			}
+
+			questionText.push("What is your education level?");
+
+			return questionText;
+			
+			
+			//return ["Great! Hope you don't mind, I'm telling everyone!", "Just Kidding...", "What is your education level?"] 
+		},
 		options: educationLevelOptions,
 		processReply: function (payload, reply) { payload.educationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.canadianDegreeDiplomaCertificate },
@@ -405,7 +412,30 @@ var questions = {
 		question: function (payload) { return "{QUOTE}Do you have a nomination certificate from a province or territory?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.nominationCertificate = yesNoAnswer(reply); },
-		nextQuestion: function (payload) { return (util.parseBoolean(payload.married) && !util.parseBoolean(payload.spouseCanadianCitizen) && util.parseBoolean(payload.spouseCommingAlong) ? questions.spouseAge : questions.calculation) },
+		nextQuestion: function (payload) { return questions.married
+			//return (util.parseBoolean(payload.married) && !util.parseBoolean(payload.spouseCanadianCitizen) && util.parseBoolean(payload.spouseCommingAlong) ? questions.spouseAge : questions.calculation) 
+		},
+	},
+	married: {
+		id: null,
+		question: function (payload) { return "Are you married or have a common-law partner?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.married = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (payload.married ? questions.spouseCanadianCitizen : questions.calculation) },
+	},
+	spouseCanadianCitizen: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Is your spouse or common-law partner a citizen or permanent resident of Canada?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.spouseCanadianCitizen = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (payload.spouseCanadianCitizen ? questions.calculation : questions.spouseCommingAlong) },
+	},
+	spouseCommingAlong: {
+		id: null,
+		question: function (payload) { return "{QUOTE}Will your spouse or common-law partner come with you to Canada?" },
+		options: yesNo,
+		processReply: function (payload, reply) { payload.spouseCommingAlong = yesNoAnswer(reply); },
+		nextQuestion: function (payload) { return (payload.spouseCommingAlong ? questions.spouseAge : questions.calculation) }
 	},
 
 	spouseAge: {

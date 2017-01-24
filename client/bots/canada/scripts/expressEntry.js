@@ -252,6 +252,8 @@ function backQuestion(e) {
 
         hideAndDelete.slideUp(slideUpSpeed, function () { hideAndDelete.remove(); });
 
+        remarks.slideUp(slideUpSpeed, function () { remarks.html(''); remarks.show(); });
+        questionAfterRemarks.slideUp(slideUpSpeed, function () { questionAfterRemarks.html(''); questionAfterRemarks.show(); });
         reply.slideUp(slideUpSpeed, function () { backQuestion(id); });
     }
     else
