@@ -1032,6 +1032,7 @@ function parametersInverted(payload)
 }
 
 function calculate(payload) {
+	console.log('parameters: ', parameters(payload));
 	return calculator.calculate(parameters(payload));
 }
 

@@ -488,7 +488,7 @@ var calculateCoreHumanCapitalFactors = function () {
 	if (calculatorParameters.secondLanguage.test !== null)
 		coreHumanCapitalFactors.officialLanguages.second = calculateLanguage(true, false);
 
-	coreHumanCapitalFactors.canadianWorkExperience = calculateWorkInCanada();
+	coreHumanCapitalFactors.canadianWorkExperience = calculateWorkInCanada(true);
 
 	coreHumanCapitalFactors.officialLanguages.total = coreHumanCapitalFactors.officialLanguages.first.total +
 		coreHumanCapitalFactors.officialLanguages.second.total;
