@@ -605,19 +605,35 @@ var questions = {
 			var scores = calculate(payload); 
 
 			payload.remarks = calculator.report(scores);
-			payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
+
+			if (util.parseBoolean(payload.nominationCertificate))
+				payload.questionAfterRemarks = "Since you were nominated by a province or territory, you already have enough points to pass the next draw. Welcome to Canada! I can send this analysis to your e-mail. Would you like me to?";
+			else
+				payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
 
 			return "{QUOTE}Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details:";
 		},
 		options: yesNo,
-		processReply: function (payload, reply) { payload.plan = yesNoAnswer(reply); },
-		nextQuestion: function (payload) { 
-			if (util.parseBoolean(payload.plan))
-				return questions.plan;
+		processReply: function (payload, reply) { 
+			if (util.parseBoolean(payload.nominationCertificate))
+				payload.sendEmail = yesNoAnswer(reply); 
 			else
-			{
-				return questions.sendEmail;
-			}
+				payload.plan = yesNoAnswer(reply); 
+		},
+		nextQuestion: function (payload) { 
+			if (util.parseBoolean(payload.nominationCertificate))
+				if (util.parseBoolean(payload.sendEmail))
+					return questions.askEmail;
+				else
+					if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest != 0 && !util.parseBoolean(payload.nominationCertificate))
+						return questions.invertRoles;
+					else
+						return questions.startOver;
+			else
+				if (util.parseBoolean(payload.plan))
+					return questions.plan;
+				else
+					return questions.sendEmail;
 		},
 	},
 	plan: {

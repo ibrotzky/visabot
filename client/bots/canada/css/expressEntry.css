@@ -281,7 +281,6 @@
 
     div.scoreDetails
     {
-        background-color: #ffcc00;
         display: flex; 
         display: -webkit-flex; 
         flex-direction: row;
@@ -335,6 +334,7 @@
         {
             padding: 5px 20px;
             text-align: center;
+            width: 60px;
         }
 
     @media (max-width: 767px)
@@ -375,8 +375,8 @@
     {
         table.scoreDetails
         {
-            margin: 0px 5% 20px 0px;
-            width: 45%;
+            margin: 0px 20px 20px 0px;
+            width: 299px;
         }
 
         table.scoreDetails.coreHumanCapitalFactors
@@ -386,7 +386,8 @@
         
         table.scoreDetails.spouseFactors
         {
-            order: 3;
+            margin-top: -92px;
+            order: 4;
         }
         
         table.scoreDetails.skillTransferabilityFactors
@@ -397,19 +398,76 @@
         
         table.scoreDetails.additionalPoints
         {
-            margin-right: 0px;
-            order: 4;
+            margin: 58px 0px 0px -319px;
+            order: 5;
         }
         
         table.scoreDetails.total
         {
-            margin-right: 0px;
+            margin: -34px 0px 0px 319px;
             order: 5;
-            width: 100%;
         }
     }
 
-    
+    table.analysis
+    {
+        border: 2px solid #ffffff;
+    }
+
+        table.analysis, table.analysis th, table.analysis td
+        {
+            border: 2px solid #ffffff;
+        }
+
+        table.analysis th, table.analysis td
+        {
+            border: 2px solid #ffffff;
+            padding: 5px 10px;
+        }
+
+        table.analysis thead
+        {
+            background-color: #3f3f3f;
+            color: #ffffff;
+            padding: 5px 10px;
+        }
+
+        table.analysis tbody
+        {
+            background-color: #ffffff;
+            padding: 5px 10px;
+        }
+
+        table.analysis tbody td.space
+        {
+            background-color: #ffffff;
+        }
+
+        table.analysis tbody tr:nth-child(even)
+        {
+            background-color: #a8a8a8;
+            color: #ffffff;
+        }
+
+        table.analysis tbody tr:nth-child(odd)
+        {
+            background-color: #636363;
+            color: #ffffff;
+        }
+
+        table.analysis .ident
+        {
+            background-color: #a8a8a8;
+            color: #ffffff;
+            padding: 5px 10px 5px 20px;
+        }
+
+        table.analysis .score
+        {
+            padding: 5px 20px;
+            text-align: center;
+            width: 60px;
+        }
 
 /* REMARKS */
 

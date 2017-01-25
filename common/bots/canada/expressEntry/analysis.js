@@ -9,16 +9,12 @@ function analyse(parameters, scores, title) {
 
     if (title === undefined)
     {
-        if (parameters.provincialNomination)
-            return "<br /><br />Since you were nominated by a province or territory, you already have enough points to pass the next draw. Welcome to Canada! :)";
-
         currentParameters = util.cloneObject(parameters);
         currentScore = util.cloneObject(scores);
 
         analysis += "<br />";
 
         analysis += "<table class='analysis'>";
-        analysis += "	<caption>Here is a 5-year plan with some ideas to improve your score</caption>";
         analysis += "	<thead>";
         analysis += "		<tr>";
         analysis += "			<th>Current score is: " + util.formatNumber(scores.total, 0) + "</th>";
@@ -43,6 +39,10 @@ function analyse(parameters, scores, title) {
     }
     else
     {
+        analysis += "		<tr>";
+        analysis += "			<td  colspan='7' class='space'>";
+        analysis += "		</tr>";
+
         analysis += "	<thead>";
         analysis += "		<tr>";
         analysis += "			<th colspan='7' class='section'>" + title + "</th>";
@@ -54,6 +54,7 @@ function analyse(parameters, scores, title) {
         analysis += "			<th colspan='7'>Core/Human capital factors</th>";
         analysis += "		</tr>";
         analysis += "	</thead>";
+        analysis += "	<tbody>";
 
         analysis += age(util.cloneObject(parameters));
 
@@ -75,6 +76,8 @@ function analyse(parameters, scores, title) {
         analysis += canadianWorkExperience(util.cloneObject(parameters));
 
         analysis += secondOfficialLanguage(util.cloneObject(parameters));
+        
+        analysis += "	</tbody>";
 
         if (parameters.spouseCommingAlong)
         {
@@ -114,10 +117,9 @@ function analyse(parameters, scores, title) {
             analysis += "			<th colspan='7'>Skill transferability factors</th>";
             analysis += "		</tr>";
             analysis += "	</thead>";
-            analysis += "	<tbody>";
             analysis += "		<tr>";
-            analysis += "			<td>Education</th>";
-            analysis += "	</tbody>";
+            analysis += "			<td colspan='7'>Education</th>";
+            analysis += "	    </tr>";
 
             analysis += firstOfficialLanguage(util.cloneObject(parameters));
         }
@@ -166,7 +168,6 @@ function analyse(parameters, scores, title) {
 function age(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Age</th>";
 
@@ -179,15 +180,12 @@ function age(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function educationHighSchool(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: High School</th>";
 
@@ -201,15 +199,12 @@ function educationHighSchool(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function educationOneYearDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: One-year program</th>";
 
@@ -223,15 +218,12 @@ function educationOneYearDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function educationTwoYearDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two-year program</th>";
 
@@ -245,15 +237,12 @@ function educationTwoYearDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function educationBachelorsDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Bachelor\'s degree</th>";
 
@@ -267,15 +256,12 @@ function educationBachelorsDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function educationTwoOrMoreDegress(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two or more degrees (One is a Bachelor's)</th>";
 
@@ -288,8 +274,6 @@ function educationTwoOrMoreDegress(parameters) {
 
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
-
-    simulation += "	</tbody>";
 
     return simulation;
 }
@@ -311,7 +295,6 @@ function secondOfficialLanguage(parameters) {
         parameters.secondLanguage.reading < 5 ||
         parameters.secondLanguage.writing < 5)
     {
-        simulation += "	<tbody>";
         simulation += "		<tr>";
         simulation += "			<td>Second Official Language to CLB 5 or 6</th>";
 
@@ -327,8 +310,6 @@ function secondOfficialLanguage(parameters) {
 
             simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
         }
-
-        simulation += "	</tbody>";
     }
 
     if (parameters.secondLanguage.speaking >= 5 && parameters.secondLanguage.speaking < 7 ||
@@ -336,7 +317,6 @@ function secondOfficialLanguage(parameters) {
         parameters.secondLanguage.reading >= 5 && parameters.secondLanguage.reading < 7 ||
         parameters.secondLanguage.writing >= 5 && parameters.secondLanguage.writing < 7)
     {
-        simulation += "	<tbody>";
         simulation += "		<tr>";
         simulation += "			<td>Second Official Language to CLB 7 or 8</th>";
 
@@ -352,8 +332,6 @@ function secondOfficialLanguage(parameters) {
 
             simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
         }
-
-        simulation += "	</tbody>";
     }
 
     if (parameters.secondLanguage.speaking >= 7 && parameters.secondLanguage.speaking < 9 ||
@@ -361,7 +339,6 @@ function secondOfficialLanguage(parameters) {
         parameters.secondLanguage.reading >= 7 && parameters.secondLanguage.reading < 9 ||
         parameters.secondLanguage.writing >= 7 && parameters.secondLanguage.writing < 9)
     {
-        simulation += "	<tbody>";
         simulation += "		<tr>";
         simulation += "			<td>Second Official Language to CLB 9</th>";
 
@@ -377,8 +354,6 @@ function secondOfficialLanguage(parameters) {
 
             simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
         }
-
-        simulation += "	</tbody>";
     }
 
     return simulation;
@@ -387,7 +362,6 @@ function secondOfficialLanguage(parameters) {
 function canadianWorkExperience(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Canadian work experience</th>";
 
@@ -401,15 +375,12 @@ function canadianWorkExperience(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function spouseEducationHighSchool(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: High School</th>";
 
@@ -423,15 +394,12 @@ function spouseEducationHighSchool(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function spouseEducationOneYearDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: One-year program</th>";
 
@@ -445,15 +413,12 @@ function spouseEducationOneYearDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function spouseEducationTwoYearDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two-year program</th>";
 
@@ -467,15 +432,12 @@ function spouseEducationTwoYearDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function spouseEducationBachelorsDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Bachelor\'s degree</th>";
 
@@ -489,15 +451,12 @@ function spouseEducationBachelorsDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function spouseEducationTwoOrMoreDegress(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two or more degrees (One is a Bachelor's)</th>";
 
@@ -510,8 +469,6 @@ function spouseEducationTwoOrMoreDegress(parameters) {
 
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
-
-    simulation += "	</tbody>";
 
     return simulation;
 }
@@ -526,7 +483,6 @@ function spouseFirstOfficialLanguage(parameters) {
             parameters.spouseLanguage.reading < 7 ||
             parameters.spouseLanguage.writing < 7)
         {
-            simulation += "	<tbody>";
             simulation += "		<tr>";
             simulation += "			<td>First Official Language to CLB 7</th>";
 
@@ -542,8 +498,6 @@ function spouseFirstOfficialLanguage(parameters) {
 
                 simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
             }
-
-            simulation += "	</tbody>";
         }
 
         if (parameters.spouseLanguage.speaking >= 7 && parameters.spouseLanguage.speaking < 9 ||
@@ -551,7 +505,6 @@ function spouseFirstOfficialLanguage(parameters) {
             parameters.spouseLanguage.reading >= 7 && parameters.spouseLanguage.reading < 9 ||
             parameters.spouseLanguage.writing >= 7 && parameters.spouseLanguage.writing < 9)
         {
-            simulation += "	<tbody>";
             simulation += "		<tr>";
             simulation += "			<td>First Official Language to CLB 9</th>";
 
@@ -567,8 +520,6 @@ function spouseFirstOfficialLanguage(parameters) {
 
                 simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
             }
-
-            simulation += "	</tbody>";
         }
     }
 
@@ -578,7 +529,6 @@ function spouseFirstOfficialLanguage(parameters) {
 function spouseCanadianWorkExperience(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Canadian work experience</th>";
 
@@ -592,15 +542,12 @@ function spouseCanadianWorkExperience(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function studyInCanadaOneTwoYearDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Study in Canada One-year or two-year program</th>";
 
@@ -614,15 +561,12 @@ function studyInCanadaOneTwoYearDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
 function studyInCanadaThreeOrMoreYearsDegree(parameters) {
     var simulation = "";
 
-    simulation += "	<tbody>";
     simulation += "		<tr>";
     simulation += "			<td>Study in Canada Three or more years program</th>";
 
@@ -636,8 +580,6 @@ function studyInCanadaThreeOrMoreYearsDegree(parameters) {
         simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
     }
 
-    simulation += "	</tbody>";
-
     return simulation;
 }
 
@@ -649,7 +591,6 @@ function firstOfficialLanguage(parameters) {
         parameters.firstLanguage.reading < 7 ||
         parameters.firstLanguage.writing < 7)
     {
-        simulation += "	<tbody>";
         simulation += "		<tr>";
         simulation += "			<td>First Official Language to CLB 7</th>";
 
@@ -665,8 +606,6 @@ function firstOfficialLanguage(parameters) {
 
             simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
         }
-
-        simulation += "	</tbody>";
     }
 
     if (parameters.firstLanguage.speaking >= 7 && parameters.firstLanguage.speaking < 9 ||
@@ -674,7 +613,6 @@ function firstOfficialLanguage(parameters) {
         parameters.firstLanguage.reading >= 7 && parameters.firstLanguage.reading < 9 ||
         parameters.firstLanguage.writing >= 7 && parameters.firstLanguage.writing < 9)
     {
-        simulation += "	<tbody>";
         simulation += "		<tr>";
         simulation += "			<td>First Official Language to CLB 9</th>";
 
@@ -690,8 +628,6 @@ function firstOfficialLanguage(parameters) {
 
             simulation += "			<td class='score'>" + util.formatNumber(calculator.scores.total) + scoreDifferente(calculator.scores.total, currentScore.total) + "</td>";
         }
-
-        simulation += "	</tbody>";
     }
 
     return simulation;
