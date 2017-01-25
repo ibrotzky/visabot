@@ -4,6 +4,8 @@ var util = require("../../../util");
 var currentParameters;
 var currentScore;
 
+var planSize = 3;
+
 function analyse(parameters, scores, title) {
     var analysis = "";
 
@@ -19,11 +21,12 @@ function analyse(parameters, scores, title) {
         analysis += "		<tr>";
         analysis += "			<th>Current score is: " + util.formatNumber(scores.total, 0) + "</th>";
         analysis += "			<th>This year</th>";
-        analysis += "			<th>1 year</th>";
-        analysis += "			<th>2 years</th>";
-        analysis += "			<th>3 years</th>";
-        analysis += "			<th>4 years</th>";
-        analysis += "			<th>5 years</th>";
+
+        for (i = 1; i <= planSize; i++)
+        {
+            analysis += "			<th>" + i +" year" + (i === 1 ? "" : "s")  + "</th>";
+        }
+
         analysis += "		</tr>";
         analysis += "	</thead>";
 
@@ -171,7 +174,7 @@ function age(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Age</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
 
@@ -189,7 +192,7 @@ function educationHighSchool(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: High School</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.educationLevel = calculator.educationLevel.Secondary;
@@ -208,7 +211,7 @@ function educationOneYearDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: One-year program</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.educationLevel = calculator.educationLevel.OneYearDegree;
@@ -227,7 +230,7 @@ function educationTwoYearDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two-year program</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.educationLevel = calculator.educationLevel.TwoYearDegree;
@@ -246,7 +249,7 @@ function educationBachelorsDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Bachelor\'s degree</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.educationLevel = calculator.educationLevel.BachelorsDegree;
@@ -265,7 +268,7 @@ function educationTwoOrMoreDegress(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two or more degrees (One is a Bachelor's)</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.educationLevel = calculator.educationLevel.BachelorsDegree;
@@ -298,7 +301,7 @@ function secondOfficialLanguage(parameters) {
         simulation += "		<tr>";
         simulation += "			<td>Second Official Language to CLB 5 or 6</th>";
 
-        for (i = 0; i <= 5; i++)
+        for (i = 0; i <= planSize; i++)
         {
             parameters.age = currentParameters.age + i;
             parameters.secondLanguage.speaking = 5;
@@ -320,7 +323,7 @@ function secondOfficialLanguage(parameters) {
         simulation += "		<tr>";
         simulation += "			<td>Second Official Language to CLB 7 or 8</th>";
 
-        for (i = 0; i <= 5; i++)
+        for (i = 0; i <= planSize; i++)
         {
             parameters.age = currentParameters.age + i;
             parameters.secondLanguage.speaking = 7;
@@ -342,7 +345,7 @@ function secondOfficialLanguage(parameters) {
         simulation += "		<tr>";
         simulation += "			<td>Second Official Language to CLB 9</th>";
 
-        for (i = 0; i <= 5; i++)
+        for (i = 0; i <= planSize; i++)
         {
             parameters.age = currentParameters.age + i;
             parameters.secondLanguage.speaking = 9;
@@ -365,7 +368,7 @@ function canadianWorkExperience(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Canadian work experience</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.workInCanada += i;
@@ -384,7 +387,7 @@ function spouseEducationHighSchool(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: High School</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseEducationLevel = calculator.educationLevel.Secondary;
@@ -403,7 +406,7 @@ function spouseEducationOneYearDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: One-year program</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseEducationLevel = calculator.educationLevel.OneYearDegree;
@@ -422,7 +425,7 @@ function spouseEducationTwoYearDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two-year program</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseEducationLevel = calculator.educationLevel.TwoYearDegree;
@@ -441,7 +444,7 @@ function spouseEducationBachelorsDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Bachelor\'s degree</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseEducationLevel = calculator.educationLevel.BachelorsDegree;
@@ -460,7 +463,7 @@ function spouseEducationTwoOrMoreDegress(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Level of education: Two or more degrees (One is a Bachelor's)</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseEducationLevel = calculator.educationLevel.BachelorsDegree;
@@ -486,7 +489,7 @@ function spouseFirstOfficialLanguage(parameters) {
             simulation += "		<tr>";
             simulation += "			<td>First Official Language to CLB 7</th>";
 
-            for (i = 0; i <= 5; i++)
+            for (i = 0; i <= planSize; i++)
             {
                 parameters.age = currentParameters.age + i;
                 parameters.spouseLanguage.speaking = 7;
@@ -508,7 +511,7 @@ function spouseFirstOfficialLanguage(parameters) {
             simulation += "		<tr>";
             simulation += "			<td>First Official Language to CLB 9</th>";
 
-            for (i = 0; i <= 5; i++)
+            for (i = 0; i <= planSize; i++)
             {
                 parameters.age = currentParameters.age + i;
                 parameters.spouseLanguage.speaking = 9;
@@ -532,7 +535,7 @@ function spouseCanadianWorkExperience(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Canadian work experience</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseWorkInCanada += i;
@@ -551,7 +554,7 @@ function studyInCanadaOneTwoYearDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Study in Canada One-year or two-year program</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseWorkInCanada += i;
@@ -570,7 +573,7 @@ function studyInCanadaThreeOrMoreYearsDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Study in Canada Three or more years program</th>";
 
-    for (i = 0; i <= 5; i++)
+    for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
         parameters.spouseWorkInCanada += i;
@@ -594,7 +597,7 @@ function firstOfficialLanguage(parameters) {
         simulation += "		<tr>";
         simulation += "			<td>First Official Language to CLB 7</th>";
 
-        for (i = 0; i <= 5; i++)
+        for (i = 0; i <= planSize; i++)
         {
             parameters.age = currentParameters.age + i;
             parameters.firstLanguage.speaking = 7;
@@ -616,7 +619,7 @@ function firstOfficialLanguage(parameters) {
         simulation += "		<tr>";
         simulation += "			<td>First Official Language to CLB 9</th>";
 
-        for (i = 0; i <= 5; i++)
+        for (i = 0; i <= planSize; i++)
         {
             parameters.age = currentParameters.age + i;
             parameters.firstLanguage.speaking = 9;
