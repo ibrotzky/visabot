@@ -761,7 +761,7 @@ var questions = {
 		},
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
 		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply) + 3; },
-		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceLastTenYears : questions.spouseSecondLanguageTest) },
+		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest < 2 ? questions.spouseWorkExperienceLastTenYears : questions.spouseSecondLanguageTest) },
 	},
 	spouseSecondLanguageTest: {
 		id: null,
