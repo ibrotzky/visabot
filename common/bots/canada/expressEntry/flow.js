@@ -1,6 +1,12 @@
+var util = require("../../../util");
+
 var calculator = require("./calculator");
 var analysis = require("./analysis");
-var util = require("../../../util");
+
+var db = require("./db");
+var email = require("./email");
+
+var nextQuote;
 
 /**
  * Enum for Language Ability
@@ -52,6 +58,8 @@ function educationLevelOptions(payload) {
 }
 
 function languageQuestion(test, testQuestion, payload, ability, principalApplicant) {
+	var questionText = [];
+
 	var abilityName;
 	var testName;
 	var testSectionName;
@@ -63,19 +71,19 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 		switch (ability)
 		{
 			case languageAbility.speaking:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve d'expression orale?";
+				questionText.push("{QUOTE_FRENCH}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve d'expression orale?");
 				break;
 
 			case languageAbility.listening:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve de compréhension orale?";
+				questionText.push("{QUOTE_FRENCH}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve de compréhension orale?");
 				break;
 
 			case languageAbility.reading:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve de compréhension écrite?";
+				questionText.push("{QUOTE_FRENCH}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve de compréhension écrite?");
 				break;
 
 			case languageAbility.writing:
-				return "{QUOTE}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve d'expression écrite?";
+				questionText.push("{QUOTE_FRENCH}Quel est" + (principalApplicant ? " votre score " : " le score de votre époux ou conjoint de fait ") + "sur l’épreuve d'expression écrite?");
 				break;
 		}
 	else
@@ -107,18 +115,50 @@ function languageQuestion(test, testQuestion, payload, ability, principalApplica
 		{
 			case answerIndex(testQuestion, payload, 'CELPIP'):
 				testName = "CELPIP";
+
+				questionText.push("{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?");
 				break;
 
 			case answerIndex(testQuestion, payload, 'IELTS'):
 				testName = "IELTS";
+
+				questionText.push("{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?");
 				break;
 
 			default:
-				return "{QUOTE}How well can you" + (principalApplicant ? " " : "r spouse or common-law partner ") + abilityName + " English or French?";
-		}
+				switch (ability)
+				{
+					case languageAbility.speaking:
+						if (principalApplicant)
+						{
+							questionText.push("Hmm... I am sorry to tell you this but in order to be eligible to Express Entry you must take an English or French language test first, ok?");
+							questionText.push("But since we are here, let's make a simulation about your language skills, shall we?");
+						}
+						else
+						{
+							questionText.push("Hmm... I am sorry to tell you this but in order to benefit from the points of your spouse or common-law partner language test, it had to be taken within the last two years, ok?");
+							questionText.push("But since we are here, let's make a simulation about your spouse or common-law partner language skills, shall we?");
+						}
 
-		return "{QUOTE}What is your" + (principalApplicant ? " " : " spouse or common-law partner's ") + testSectionName + " score on the " + testName + " test?";
+						questionText.push("How well do you think you" + (principalApplicant ? " " : "r spouse or common-law partner ") + "can speak English or French?");
+						break;
+
+					case languageAbility.listening:
+						questionText.push("And what about your" + (principalApplicant ? " " : " spouse or common-law partner ") + "listening skills in English or French?");
+						break;
+
+					case languageAbility.reading:
+						questionText.push("About your" + (principalApplicant ? " " : " spouse or common-law partner ") + "reading skills in English or French, how good are they?");
+						break;
+
+					case languageAbility.writing:
+						questionText.push("Ok. How would you rate your" + (principalApplicant ? " " : " spouse or common-law partner ") + "writting skills in English or French?");
+						break;
+				}
+		}
 	}
+
+	return questionText;
 }
 
 function languageOptions(test, testQuestion, payload, ability, principalApplicant) {
@@ -238,14 +278,14 @@ var questions = {
 	},
 	age: {
 		id: null,
-		question: function (payload) { return "{QUOTE}How old are you?" },
+		question: function (payload) { return "Hi " + payload.name + ". How old are you?" },
 		options: ageOptions,
 		processReply: function (payload, reply) { payload.age = answerIndex(this, payload, reply) + 17; },
 		nextQuestion: function (payload) { return questions.educationLevel },
 	},
 	educationLevel: {
 		id: null,
-		question: function (payload) { 
+		question: function (payload) {
 			var questionText = [];
 
 			if (parseInt(payload.age) <= 17)
@@ -270,8 +310,8 @@ var questions = {
 			questionText.push("What is your education level?");
 
 			return questionText;
-			
-			
+
+
 			//return ["Great! Hope you don't mind, I'm telling everyone!", "Just Kidding...", "What is your education level?"] 
 		},
 		options: educationLevelOptions,
@@ -280,21 +320,30 @@ var questions = {
 	},
 	canadianDegreeDiplomaCertificate: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Have you earned a Canadian degree, diploma or certificate?" },
+		question: function (payload) { return "Since we are talking about education, have you earned a Canadian degree, diploma or certificate?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.canadianDegreeDiplomaCertificate = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return (payload.canadianDegreeDiplomaCertificate ? questions.canadianEducationLevel : questions.firstLanguageTest) },
 	},
 	canadianEducationLevel: {
 		id: null,
-		question: function (payload) { return "{QUOTE}What is your education level in Canada?" },
+		question: function (payload) { return "Cool! What is your education level in Canada?" },
 		options: canadianEducationLevelOptions,
 		processReply: function (payload, reply) { payload.canadianEducationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.firstLanguageTest },
 	},
 	firstLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Did you take a language test?" },
+		question: function (payload) {
+			var questionText = [];
+
+			if (!util.parseBoolean(payload.canadianEducationLevel))
+				questionText.push("All right, let's move on then.");
+
+			questionText.push("Did you take a language test over the last 2 years?");
+
+			return questionText;
+		},
 		options: function (payload) {
 			return ['No',
 				'CELPIP',
@@ -330,11 +379,47 @@ var questions = {
 		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
 		processReply: function (payload, reply) { payload.firstLanguageWriting = answerIndex(this, payload, reply) + 3; },
-		nextQuestion: function (payload) { return (payload.firstLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageTest) },
+		nextQuestion: function (payload) { return (payload.firstLanguageTest == 0 ? questions.workExperienceLastTenYears : questions.secondLanguageTest) },
 	},
 	secondLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Did you take a second language test?" },
+		question: function (payload) {
+			var questionText = [];
+
+			if (parseInt(payload.firstLanguageSpeaking) >= 9 &&
+				parseInt(payload.firstLanguageListening) >= 9 &&
+				parseInt(payload.firstLanguageReading) >= 9 &&
+				parseInt(payload.firstLanguageWriting) >= 9)
+			{
+				var languageQuestion = questions['firstLanguageTest'];
+
+				switch (parseInt(payload.firstLanguageTest))
+				{
+					case answerIndex(languageQuestion, payload, 'CELPIP'):
+					case answerIndex(languageQuestion, payload, 'IELTS'):
+						questionText.push("You are a Canadian already, eh?");
+						questionText.push("Amazing score!");
+						questionText.push("Wow! You must be proud!");
+						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
+						questionText.push("{QUOTE}Did you take a second language test?");
+						break;
+
+					case answerIndex(languageQuestion, payload, 'TEF'):
+						questionText.push("Vous êtes déjà un Canadien, n'est pas?");
+						questionText.push("Un score étonnant!");
+						questionText.push("Hou la la! Vous devez être fier de vous!");
+						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
+						questionText.push("{QUOTE_FRENCH}Avez-vous fait un test de la langue seconde?");
+						break;
+
+					default:
+						questionText.push("{QUOTE}Did you take a second language test?");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) {
 			return (payload.firstLanguageTest == 3 ? ['No',
 				'CELPIP',
@@ -342,7 +427,7 @@ var questions = {
 					'TEF']);
 		},
 		processReply: function (payload, reply) { payload.secondLanguageTest = answerIndex(this, payload, reply); },
-		nextQuestion: function (payload) { return (payload.secondLanguageTest == 0 ? questions.workExperienceInCanada : questions.secondLanguageSpeaking) },
+		nextQuestion: function (payload) { return (payload.secondLanguageTest == 0 ? questions.workExperienceLastTenYears : questions.secondLanguageSpeaking) },
 	},
 	secondLanguageSpeaking: {
 		id: null,
@@ -370,20 +455,61 @@ var questions = {
 		question: function (payload) { return languageQuestion(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.writing); },
 		options: function (payload) { return languageOptions(payload.secondLanguageTest, questions.secondLanguageTest, payload, languageAbility.writing); },
 		processReply: function (payload, reply) { payload.secondLanguageWriting = answerIndex(this, payload, reply) + 3; },
-		nextQuestion: function (payload) { return questions.workExperienceInCanada },
-	},
-	workExperienceInCanada: {
-		id: null,
-		question: function (payload) { return "{QUOTE}In the last ten years, how many years of skilled work experience in Canada do you have?" },
-		options: workExperienceInCanadaOptions,
-		processReply: function (payload, reply) { payload.workExperienceInCanada = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.workExperienceLastTenYears },
 	},
 	workExperienceLastTenYears: {
 		id: null,
-		question: function (payload) { return "{QUOTE}In the last 10 years, how many years of skilled work experience do you have?" },
+		question: function (payload) { 
+			var questionText = [];
+
+			if (parseInt(payload.secondLanguageSpeaking) >= 9 &&
+				parseInt(payload.secondLanguageListening) >= 9 &&
+				parseInt(payload.secondLanguageReading) >= 9 &&
+				parseInt(payload.secondLanguageWriting) >= 9)
+			{
+				var languageQuestion = questions['secondLanguageTest'];
+
+				switch (parseInt(payload.secondLanguageTest))
+				{
+					case answerIndex(languageQuestion, payload, 'CELPIP'):
+					case answerIndex(languageQuestion, payload, 'IELTS'):
+						questionText.push("You are a Canadian already, eh?");
+						questionText.push("Amazing score!");
+						questionText.push("Wow! You must be proud!");
+						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
+						break;
+
+					case answerIndex(languageQuestion, payload, 'TEF'):
+						questionText.push("Vous êtes déjà un Canadien, n'est pas?");
+						questionText.push("Un score étonnant!");
+						questionText.push("Hou la la! Vous devez être fier de vous!");
+						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
+						break;
+				}
+			}
+
+			questionText.push("Ok, let's talk about your work experience. In the last 10 years, how many years of skilled work experience do you have?");
+			
+			return questionText
+		},
 		options: workExperienceLastTenYearsOptions,
 		processReply: function (payload, reply) { payload.workExperienceLastTenYears = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.workExperienceInCanada },
+	},
+	workExperienceInCanada: {
+		id: null,
+		question: function (payload) {
+			var questionText = [];
+
+			if (parseInt(payload.workExperienceLastTenYears) >= 6)
+				questionText.push("It looks like we have an expert over here! Canada is eager for senior level professionals!");
+
+			questionText.push("What about in Canada?");
+
+			return questionText;
+		},
+		options: workExperienceInCanadaOptions,
+		processReply: function (payload, reply) { payload.workExperienceInCanada = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.certificateQualificationProvince },
 	},
 	certificateQualificationProvince: {
@@ -402,7 +528,7 @@ var questions = {
 	},
 	nocJobOffer: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Which NOC skill type or level is the job offer?" },
+		question: function (payload) { return "Good! Which NOC skill type or level is this job offer?" },
 		options: nocJobOfferOptions,
 		processReply: function (payload, reply) { payload.nocJobOffer = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.nominationCertificate },
@@ -412,20 +538,27 @@ var questions = {
 		question: function (payload) { return "{QUOTE}Do you have a nomination certificate from a province or territory?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.nominationCertificate = yesNoAnswer(reply); },
-		nextQuestion: function (payload) { return questions.married
+		nextQuestion: function (payload) {
+			return questions.married
 			//return (util.parseBoolean(payload.married) && !util.parseBoolean(payload.spouseCanadianCitizen) && util.parseBoolean(payload.spouseCommingAlong) ? questions.spouseAge : questions.calculation) 
 		},
 	},
 	married: {
 		id: null,
-		question: function (payload) { return "Are you married or have a common-law partner?" },
+		question: function (payload) { return "And one last question. Are you married or have a common-law partner? By the way, same-sex marriages are legally recognized in all provinces and territories in Canada." },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.married = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return (payload.married ? questions.spouseCanadianCitizen : questions.calculation) },
 	},
 	spouseCanadianCitizen: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Is your spouse or common-law partner a citizen or permanent resident of Canada?" },
+		question: function (payload) {
+			var questionText = ["Love is in the air...",
+				"Ok, now I am going to ask some questions about your partner.",
+				"Is your spouse or common-law partner a citizen or permanent resident of Canada?"];
+
+			return questionText;
+		},
 		options: yesNo,
 		processReply: function (payload, reply) { payload.spouseCanadianCitizen = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return (payload.spouseCanadianCitizen ? questions.calculation : questions.spouseCommingAlong) },
@@ -454,21 +587,30 @@ var questions = {
 	},
 	spouseCanadianDegreeDiplomaCertificate: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Have your spouse or common-law partner earned a Canadian degree, diploma or certificate?" },
+		question: function (payload) { return "Since we are talking about education, have your spouse or common-law partner earned a Canadian degree, diploma or certificate?" },
 		options: yesNo,
 		processReply: function (payload, reply) { payload.spouseCanadianDegreeDiplomaCertificate = yesNoAnswer(reply); },
 		nextQuestion: function (payload) { return (payload.spouseCanadianDegreeDiplomaCertificate ? questions.spouseCanadianEducationLevel : questions.spouseFirstLanguageTest) },
 	},
 	spouseCanadianEducationLevel: {
 		id: null,
-		question: function (payload) { return "{QUOTE}What is your spouse or common-law partner's education level in Canada?" },
+		question: function (payload) { return "Cool! What is your spouse or common-law partner's education level in Canada?" },
 		options: canadianEducationLevelOptions,
 		processReply: function (payload, reply) { payload.spouseCanadianEducationLevel = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageTest },
 	},
 	spouseFirstLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a language test?" },
+		question: function (payload) {
+			var questionText = [];
+
+			if (!util.parseBoolean(payload.spouseCanadianEducationLevel))
+				questionText.push("All right, let's move on then.");
+
+			questionText.push("Did your spouse or common-law partner take a language test over the last 2 years?");
+
+			return questionText;
+		},
 		options: function (payload) {
 			return ['No, and won\'t',
 				'No, but will',
@@ -481,7 +623,7 @@ var questions = {
 		},
 		nextQuestion: function (payload) {
 			if (payload.spouseFirstLanguageTest == 0)
-				return questions.spouseWorkExperienceInCanada;
+				return questions.spouseWorkExperienceLastTenYears;
 			else
 			{
 				return questions.spouseFirstLanguageSpeaking;
@@ -518,7 +660,43 @@ var questions = {
 	},
 	spouseSecondLanguageTest: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Did your spouse or common-law partner take a second language test?" },
+		question: function (payload) {
+			var questionText = [];
+
+			if (parseInt(payload.spouseFirstLanguageSpeaking) >= 9 &&
+				parseInt(payload.spouseFirstLanguageListening) >= 9 &&
+				parseInt(payload.spouseFirstLanguageReading) >= 9 &&
+				parseInt(payload.spouseFirstLanguageWriting) >= 9)
+			{
+				var languageQuestion = questions['spouseFirstLanguageTest'];
+				
+				switch (parseInt(payload.spouseFirstLanguageTest))
+				{
+					case answerIndex(languageQuestion, payload, 'CELPIP'):
+					case answerIndex(languageQuestion, payload, 'IELTS'):
+						questionText.push("Your spouse or common-law partner is a Canadian already, eh?");
+						questionText.push("Amazing score!");
+						questionText.push("Wow! Your spouse or common-law partner must be proud!");
+						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
+						questionText.push("{QUOTE}Did your spouse or common-law partner take a second language test?");
+						break;
+
+					case answerIndex(languageQuestion, payload, 'TEF'):
+						questionText.push("Votre époux ou conjoint êtes déjà un(e) Canadien(ne), n'est pas?");
+						questionText.push("Un score étonnant!");
+						questionText.push("Hou la la! Vous devez être fier de vous!");
+						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
+						questionText.push("{QUOTE_FRENCH}Est-ce que votre époux ou conjoint de fait a passé un test de la langue seconde?");
+						break;
+
+					default:
+						questionText.push("{QUOTE}Did your spouse or common-law partner take a second language test?");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) {
 			return (payload.spouseFirstLanguageTest == 4 ? ['No',
 				'CELPIP',
@@ -526,7 +704,7 @@ var questions = {
 					'TEF']);
 		},
 		processReply: function (payload, reply) { payload.spouseSecondLanguageTest = answerIndex(this, payload, reply); },
-		nextQuestion: function (payload) { return (payload.spouseSecondLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseSecondLanguageSpeaking) },
+		nextQuestion: function (payload) { return (payload.spouseSecondLanguageTest == 0 ? questions.spouseWorkExperienceLastTenYears : questions.spouseSecondLanguageSpeaking) },
 	},
 	spouseSecondLanguageSpeaking: {
 		id: null,
@@ -554,20 +732,61 @@ var questions = {
 		question: function (payload) { return languageQuestion(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.writing, false); },
 		options: function (payload) { return languageOptions(payload.spouseSecondLanguageTest, questions.spouseSecondLanguageTest, payload, languageAbility.writing); },
 		processReply: function (payload, reply) { payload.spouseSecondLanguageWriting = answerIndex(this, payload, reply) + 3; },
-		nextQuestion: function (payload) { return questions.spouseWorkExperienceInCanada },
-	},
-	spouseWorkExperienceInCanada: {
-		id: null,
-		question: function (payload) { return "{QUOTE}In the last ten years, how many years of skilled work experience in Canada does your spouse or common-law partner have?" },
-		options: workExperienceInCanadaOptions,
-		processReply: function (payload, reply) { payload.spouseWorkExperienceInCanada = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseWorkExperienceLastTenYears },
 	},
 	spouseWorkExperienceLastTenYears: {
 		id: null,
-		question: function (payload) { return "{QUOTE}In the last 10 years, how many years of skilled work experience does your spouse or common-law partner have?" },
+		question: function (payload) { 
+			var questionText = [];
+
+			if (parseInt(payload.spouseSecondLanguageSpeaking) >= 9 &&
+				parseInt(payload.spouseSecondLanguageListening) >= 9 &&
+				parseInt(payload.spouseSecondLanguageReading) >= 9 &&
+				parseInt(payload.spouseSecondLanguageWriting) >= 9)
+			{
+				var languageQuestion = questions['spouseSecondLanguageTest'];
+
+				switch (parseInt(payload.spouseSecondLanguageTest))
+				{
+					case answerIndex(languageQuestion, payload, 'CELPIP'):
+					case answerIndex(languageQuestion, payload, 'IELTS'):
+						questionText.push("Your spouse or common-law partner is a Canadian already, eh?");
+						questionText.push("Amazing score!");
+						questionText.push("Wow! Your spouse or common-law partner must be proud!");
+						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
+						break;
+
+					case answerIndex(languageQuestion, payload, 'TEF'):
+						questionText.push("Votre époux ou conjoint êtes déjà un(e) Canadien(ne), n'est pas?");
+						questionText.push("Un score étonnant!");
+						questionText.push("Hou la la! Vous devez être fier de vous!");
+						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
+						break;
+				}
+			}
+
+			questionText.push("Ok, let's talk about your your spouse or common-law partner work experience. In the last 10 years, how many years of skilled work experience does your spouse or common-law partner have?");
+
+			return questionText;
+		},
 		options: workExperienceLastTenYearsOptions,
 		processReply: function (payload, reply) { payload.spouseWorkExperienceLastTenYears = answerIndex(this, payload, reply); },
+		nextQuestion: function (payload) { return questions.spouseWorkExperienceInCanada },
+	},
+	spouseWorkExperienceInCanada: {
+		id: null,
+		question: function (payload) {
+			var questionText = [];
+
+			if (parseInt(payload.spouseWorkExperienceLastTenYears) >= 6)
+				questionText.push("It looks like we have an expert over here! Canada is eager for senior level professionals!");
+
+			questionText.push("What about in Canada?");
+
+			return questionText;
+		},
+		options: workExperienceInCanadaOptions,
+		processReply: function (payload, reply) { payload.spouseWorkExperienceInCanada = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseCertificateQualificationProvince },
 	},
 	spouseCertificateQualificationProvince: {
@@ -586,7 +805,7 @@ var questions = {
 	},
 	spouseNocJobOffer: {
 		id: null,
-		question: function (payload) { return "{QUOTE}Which NOC skill type or level is the job offer?" },
+		question: function (payload) { return "Good! Which NOC skill type or level is the job offer?" },
 		options: nocJobOfferOptions,
 		processReply: function (payload, reply) { payload.spouseNocJobOffer = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseNominationCertificate },
@@ -601,8 +820,8 @@ var questions = {
 
 	calculation: {
 		id: null,
-		question: function (payload) { 
-			var scores = calculate(payload); 
+		question: function (payload) {
+			var scores = calculate(payload);
 
 			payload.remarks = calculator.report(scores);
 
@@ -611,16 +830,16 @@ var questions = {
 			else
 				payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
 
-			return "{QUOTE}Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details:";
+			return ["{QUOTE}Let me check your score...", "Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details:"];
 		},
 		options: yesNo,
-		processReply: function (payload, reply) { 
+		processReply: function (payload, reply) {
 			if (util.parseBoolean(payload.nominationCertificate))
-				payload.sendEmail = yesNoAnswer(reply); 
+				payload.sendEmail = yesNoAnswer(reply);
 			else
-				payload.plan = yesNoAnswer(reply); 
+				payload.plan = yesNoAnswer(reply);
 		},
-		nextQuestion: function (payload) { 
+		nextQuestion: function (payload) {
 			if (util.parseBoolean(payload.nominationCertificate))
 				if (util.parseBoolean(payload.sendEmail))
 					return questions.askEmail;
@@ -638,14 +857,22 @@ var questions = {
 	},
 	plan: {
 		id: null,
-		question: function (payload) { 
+		question: function (payload) {
 			payload.remarks = plan(payload);
 			payload.questionAfterRemarks = "{QUOTE}I can send this analysis to your e-mail. Would you like me to?";
 
 			return "{QUOTE}Here are the details for your 3-year plan:";
 		},
 		options: yesNo,
-		processReply: function (payload, reply) { payload.sendEmail = yesNoAnswer(reply); },
+		processReply: function (payload, reply) {
+			payload.sendEmail = yesNoAnswer(reply);
+
+			if (!util.parseBoolean(payload.sendEmail))
+			{
+				var scores = calculate(payload);
+				db.saveChat(payload, scores.total);
+			}
+		},
 		nextQuestion: function (payload) {
 			if (util.parseBoolean(payload.sendEmail))
 				return questions.askEmail;
@@ -660,7 +887,15 @@ var questions = {
 		id: null,
 		question: function (payload) { return "{QUOTE}I can send this analysis to your e-mail. Would you like me to?" },
 		options: yesNo,
-		processReply: function (payload, reply) { payload.sendEmail = yesNoAnswer(reply); },
+		processReply: function (payload, reply) {
+			payload.sendEmail = yesNoAnswer(reply);
+
+			if (!util.parseBoolean(payload.sendEmail))
+			{
+				var scores = calculate(payload);
+				db.saveChat(payload, scores.total);
+			}
+		},
 		nextQuestion: function (payload) {
 			if (util.parseBoolean(payload.sendEmail))
 				return questions.askEmail;
@@ -676,10 +911,13 @@ var questions = {
 		question: function (payload) { return "{QUOTE}What is your e-mail?" },
 		options: function (payload) { return null },
 		replyType: { type: replyType.email },
-		processReply: function (payload, reply) { 
-			payload.email = reply; 
-			
-			//Send e-mail
+		processReply: function (payload, reply) {
+			payload.email = reply;
+
+			var scores = calculate(payload);
+			db.saveChat(payload, scores.total);
+
+			sendEmail(payload);
 		},
 		nextQuestion: function (payload) {
 			return questions.emailSent;
@@ -687,13 +925,13 @@ var questions = {
 	},
 	emailSent: {
 		id: null,
-		question: function (payload) { 
-			var questionText =  ["{QUOTE}I'm sending it right now and you should receive it soon.", "If you don't receive it, make sure it's not on your spam folder, sometimes it happens."]
-	
+		question: function (payload) {
+			var questionText = ["{QUOTE}I'm sending it right now and you should receive it soon.", "If you don't receive it, make sure it's not on your spam folder, sometimes it happens."]
+
 			if (util.parseBoolean(payload.spouseCommingAlong) && payload.spouseFirstLanguageTest != 0 && !util.parseBoolean(payload.nominationCertificate))
-				questionText.push ("Oh, I can do this analysis invertion your role with you spouse or common-law partner. Would you like me to do it?");
+				questionText.push("Oh, I can do this analysis invertion your role with you spouse or common-law partner. Would you like me to do it?");
 			else
-				questionText.push ("Would you like to start over?");
+				questionText.push("Would you like to start over?");
 
 			return questionText;
 		},
@@ -737,9 +975,9 @@ var questions = {
 	},
 	calculationInverted: {
 		id: null,
-		question: function (payload) { 
-			var scores = calculateInverted(payload); 
-			
+		question: function (payload) {
+			var scores = calculateInverted(payload);
+
 			payload.remarks = calculator.report(scores);
 			payload.questionAfterRemarks = "I can show you some ideas on how to improve your score with your roles inverted over the next 3 years.<br />Would you like to see them?";
 
@@ -758,7 +996,7 @@ var questions = {
 	},
 	planInverted: {
 		id: null,
-		question: function (payload) { 
+		question: function (payload) {
 			payload.remarks = planInverted(payload);
 			payload.questionAfterRemarks = "{QUOTE}I can send this analysis to your e-mail. Would you like me to?";
 
@@ -778,10 +1016,10 @@ var questions = {
 		question: function (payload) { return "{QUOTE}What is your e-mail?" },
 		options: function (payload) { return null },
 		replyType: { type: replyType.email },
-		processReply: function (payload, reply) { 
-			payload.emailInverted = reply; 
-			
-			//Send e-mail
+		processReply: function (payload, reply) {
+			payload.emailInverted = reply;
+
+			sendEmailInverted(payload);
 		},
 		nextQuestion: function (payload) {
 			return questions.emailInvertedSent;
@@ -853,7 +1091,7 @@ function validateAnswer(question, payload, reply) {
 					break;
 
 				case replyType.email:
-				return util.validateEmail(reply);
+					return util.validateEmail(reply);
 					break;
 			}
 		}
@@ -953,8 +1191,7 @@ function questionFlow(payload, reply, back, callback) {
 	return responseJSON;
 }
 
-function parameters(payload)
-{
+function parameters(payload) {
 	var parameters = {};
 
 	parameters.married = util.parseBoolean(payload.married);
@@ -992,8 +1229,7 @@ function parameters(payload)
 	return parameters;
 }
 
-function parametersInverted(payload)
-{
+function parametersInverted(payload) {
 	var parameters = {};
 
 	parameters.married = util.parseBoolean(payload.married);
@@ -1032,7 +1268,6 @@ function parametersInverted(payload)
 }
 
 function calculate(payload) {
-	console.log('parameters: ', parameters(payload));
 	return calculator.calculate(parameters(payload));
 }
 
@@ -1052,6 +1287,26 @@ function planInverted(payload) {
 	var scores = calculator.calculate(calculationParameters);
 
 	return analysis.analyse(calculationParameters, scores);
+}
+
+function sendEmail(payload) {
+	var scores = calculate(payload);
+
+	var remarks = calculator.report(scores);
+
+	var analysis = plan(payload);
+
+	email.sendEmail(payload.email, remarks, analysis);
+}
+
+function sendEmailInverted(payload) {
+	var scores = calculateInverted(payload);
+
+	var remarks = calculator.report(scores);
+
+	var analysis = planInverted(payload);
+
+	email.sendEmail(payload.emailInverted, remarks, analysis);
 }
 
 function clearPayload(payload, startingQuestion) {
@@ -1077,16 +1332,40 @@ function clearPayload(payload, startingQuestion) {
 	}
 }
 
-function quote(text) {
+function quote(text, english) {
+	var quotes = ['Ok. ',
+		'Cool! ',
+		'Awesome! ',
+		'All right, ',
+		'Nice! ',
+		'Now, tell me something. '];
+
+	var quotesFrench = ['Ok. ',
+		'Chouette! ',
+		'Génial! ',
+		'D\'accord, ',
+		'Sympa! ',
+		'Voilá, dites-moi. '];
+
+	if (nextQuote === undefined)
+		nextQuote = 0;
+	else
+	{
+		nextQuote += 1;
+
+		if (nextQuote >= quotes.length)
+			nextQuote = 0;
+	}
+
 	if (typeof (text) === 'string')
-		return text.replace('{QUOTE}', '');
+		return text.replace('{QUOTE}', quotes[nextQuote]).replace('{QUOTE_FRENCH}', quotesFrench[nextQuote]);
 	else
 	{
 		for (t = 0; t < text.length; t++)
 		{
-			text[t] = text[t].replace('{QUOTE}', '');
+			text[t] = text[t].replace('{QUOTE}', quotes[nextQuote]).replace('{QUOTE_FRENCH}', quotesFrench[nextQuote]);
 		}
-	
+
 		return text;
 	}
 }

@@ -18,7 +18,8 @@
     "loopback-datasource-juggler": "^2.39.0",
     "node-php-server": "^0.1.2",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^1.0.1"
+    "strong-error-handler": "^1.0.1",
+    "sendgrid": "^4.2.0"
   },
   "devDependencies": {
     "eslint": "^2.5.3",

@@ -28,7 +28,7 @@ function answerQuestion(answer, post) {
         "reply": answer
     }
 
-    console.log('Request:', request);
+    //console.log('Request:', request);
 
     $.ajax({
         type: 'GET',
@@ -154,9 +154,9 @@ function showQuestion(responseJSON, show) {
 
         typed(question.find(".balloon span"), responseJSON.question, typedCallback);
 
-        console.log('question:', payload.question);
-        console.log('responseJSON:', responseJSON);
-        console.log('payload:', JSON.stringify(payload));
+        //console.log('question:', payload.question);
+        //console.log('responseJSON:', responseJSON);
+        //console.log('payload:', JSON.stringify(payload));
     }
 }
 
@@ -266,7 +266,7 @@ function backQuestion(e) {
             "back": id
         }
 
-        console.log('Request:', request);
+        //console.log('Request:', request);
 
         $.ajax({
             type: 'GET',
