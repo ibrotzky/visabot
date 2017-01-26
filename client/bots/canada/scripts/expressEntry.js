@@ -203,10 +203,12 @@ function configureOptions(responseJSON, scrollDown) {
         });
 
         replyNode.find("#reply").click(function () {
-            var name = $("#replyInput").val().trim();
+            var text = $($.parseHTML($("#replyInput").val().trim())).text();
 
-            if (name.length > 0)
-                answerQuestion(name);
+            if (text.length > 0)
+            {
+                answerQuestion(text);
+            }
         });
 
         reply.html(replyNode);
