@@ -761,7 +761,7 @@ var questions = {
 		},
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
 		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply) + 3; },
-		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseSecondLanguageTest) },
+		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceLastTenYears : questions.spouseSecondLanguageTest) },
 	},
 	spouseSecondLanguageTest: {
 		id: null,
@@ -772,6 +772,7 @@ var questions = {
 
 			switch (parseInt(payload.spouseFirstLanguageTest))
 			{
+				case answerIndex(languageQuestionObject, payload, 'No, but will'):
 				case answerIndex(languageQuestionObject, payload, 'CELPIP'):
 				case answerIndex(languageQuestionObject, payload, 'IELTS'):
 					if (parseInt(payload.spouseFirstLanguageWriting) >= 9)
@@ -891,7 +892,7 @@ var questions = {
 			else
 				payload.questionAfterRemarks = "I can show you some ideas on how to improve your score over the next 3 years.<br />Would you like to see them?";
 
-			return ["{QUOTE}Let me check your score...", "Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details:"];
+			return ["Ok, I got all the info! Let me check your score...", "Your score is " + util.formatNumber(scores.total, 0) + "! Here are the details:"];
 		},
 		options: yesNo,
 		processReply: function (payload, reply) {
@@ -1433,5 +1434,6 @@ function quote(text, english) {
 
 module.exports = {
 	questionFlow: questionFlow,
-	questions: questions
+	questions: questions,
+	questionsArray: questionsArray
 };

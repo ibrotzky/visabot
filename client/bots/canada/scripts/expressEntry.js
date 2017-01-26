@@ -153,10 +153,10 @@ function showQuestion(responseJSON, show) {
             responseJSON.question = [responseJSON.question];
 
         typed(question.find(".balloon span"), responseJSON.question, typedCallback);
-
-        //console.log('question:', payload.question);
-        //console.log('responseJSON:', responseJSON);
-        //console.log('payload:', JSON.stringify(payload));
+        
+        /*console.log('question:', payload.question);
+        console.log('responseJSON:', responseJSON);
+        console.log('payload:', JSON.stringify(payload));*/
     }
 }
 
@@ -332,7 +332,21 @@ function questionIndex(name)
     }).error(function (jqXHR, textStatus, errorThrown) {
         console.log('Error: ', jqXHR.responseText);
     });
+}
 
+function questionName(id)
+{
+    $.ajax({
+        type: 'GET',
+        url: '/api/canada/expressEntryQuestionName',
+        cache: false,
+        dataType: 'json',
+        data: {id: id}
+    }).success(function (data, textStatus, jqXHR) {
+        console.log('Data: ', data);
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log('Error: ', jqXHR.responseText);
+    });
 }
 
 $(window).load(function () {

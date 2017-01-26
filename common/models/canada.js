@@ -15,9 +15,19 @@ var expressEntryQuestionIndex = function(name, callback)
     callback(null, question);
 }
 
+var expressEntryQuestionName = function(id, callback)
+{
+    var flow = require('../bots/canada/expressEntry/flow');
+
+    var question = { name: flow.questionsArray[id] };
+
+    callback(null, question);
+}
+
 module.exports = function(canada) {
     canada.expressEntry = expressEntry;
     canada.expressEntryQuestionIndex = expressEntryQuestionIndex;
+    canada.expressEntryQuestionName = expressEntryQuestionName;
 
     canada.remoteMethod(
         'expressEntry', {
@@ -42,6 +52,19 @@ module.exports = function(canada) {
             },
             accepts: [
                 { arg: 'name', type: 'string', required: true }
+            ],
+            returns: { arg: 'question', type: 'object'}
+        }
+    );
+
+    canada.remoteMethod(
+        'expressEntryQuestionName', {
+            http: {
+                path: '/expressEntryQuestionName',
+                verb: 'get'
+            },
+            accepts: [
+                { arg: 'id', type: 'number', required: true }
             ],
             returns: { arg: 'question', type: 'object'}
         }
