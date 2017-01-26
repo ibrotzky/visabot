@@ -362,21 +362,84 @@ var questions = {
 	},
 	firstLanguageListening: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
+		question: function (payload) {
+			var questionText = languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening);
+
+			if (parseInt(payload.firstLanguageSpeaking) >= 9)
+			{
+				var languageQuestionObject = questions.firstLanguageTest;
+
+				switch (parseInt(payload.firstLanguageTest))
+				{
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
+						questionText.unshift("You are a Canadian already, eh?");
+						break;
+
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
+						questionText.unshift("Vous êtes déjà un Canadien, n'est pas?");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.listening); },
 		processReply: function (payload, reply) { payload.firstLanguageListening = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.firstLanguageReading },
 	},
 	firstLanguageReading: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
+		question: function (payload) {
+			var questionText = languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading);
+
+			if (parseInt(payload.firstLanguageListening) >= 9)
+			{
+				var languageQuestionObject = questions.firstLanguageTest;
+
+				switch (parseInt(payload.firstLanguageTest))
+				{
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
+						questionText.unshift("Amazing score!");
+						break;
+
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
+						questionText.unshift("Un score étonnant!");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.reading); },
 		processReply: function (payload, reply) { payload.firstLanguageReading = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.firstLanguageWriting },
 	},
 	firstLanguageWriting: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
+		question: function (payload) {
+			var questionText = languageQuestion(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing);
+
+			if (parseInt(payload.firstLanguageReading) >= 9)
+			{
+				var languageQuestionObject = questions.firstLanguageTest;
+
+				switch (parseInt(payload.firstLanguageTest))
+				{
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
+						questionText.unshift("Wow! You must be proud!");
+						break;
+
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
+						questionText.unshift("Hou la la! Vous devez être fier de vous!");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) { return languageOptions(payload.firstLanguageTest, questions.firstLanguageTest, payload, languageAbility.writing); },
 		processReply: function (payload, reply) { payload.firstLanguageWriting = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return (payload.firstLanguageTest == 0 ? questions.workExperienceLastTenYears : questions.secondLanguageTest) },
@@ -386,36 +449,24 @@ var questions = {
 		question: function (payload) {
 			var questionText = [];
 
-			if (parseInt(payload.firstLanguageSpeaking) >= 9 &&
-				parseInt(payload.firstLanguageListening) >= 9 &&
-				parseInt(payload.firstLanguageReading) >= 9 &&
-				parseInt(payload.firstLanguageWriting) >= 9)
+			var languageQuestionObject = questions.firstLanguageTest;
+
+			switch (parseInt(payload.firstLanguageTest))
 			{
-				var languageQuestion = questions['firstLanguageTest'];
-
-				switch (parseInt(payload.firstLanguageTest))
-				{
-					case answerIndex(languageQuestion, payload, 'CELPIP'):
-					case answerIndex(languageQuestion, payload, 'IELTS'):
-						questionText.push("You are a Canadian already, eh?");
-						questionText.push("Amazing score!");
-						questionText.push("Wow! You must be proud!");
+				case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+				case answerIndex(languageQuestionObject, payload, 'IELTS'):
+					if (parseInt(payload.firstLanguageWriting) >= 9)
 						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
-						questionText.push("{QUOTE}Did you take a second language test?");
-						break;
 
-					case answerIndex(languageQuestion, payload, 'TEF'):
-						questionText.push("Vous êtes déjà un Canadien, n'est pas?");
-						questionText.push("Un score étonnant!");
-						questionText.push("Hou la la! Vous devez être fier de vous!");
+					questionText.push("{QUOTE}Did you take a second language test?");
+					break;
+
+				case answerIndex(languageQuestionObject, payload, 'TEF'):
+					if (parseInt(payload.firstLanguageWriting) >= 9)
 						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
-						questionText.push("{QUOTE_FRENCH}Avez-vous fait un test de la langue seconde?");
-						break;
 
-					default:
-						questionText.push("{QUOTE}Did you take a second language test?");
-						break;
-				}
+					questionText.push("{QUOTE_FRENCH}Avez-vous fait un test de la langue seconde?");
+					break;
 			}
 
 			return questionText;
@@ -459,38 +510,29 @@ var questions = {
 	},
 	workExperienceLastTenYears: {
 		id: null,
-		question: function (payload) { 
+		question: function (payload) {
 			var questionText = [];
 
-			if (parseInt(payload.secondLanguageSpeaking) >= 9 &&
-				parseInt(payload.secondLanguageListening) >= 9 &&
-				parseInt(payload.secondLanguageReading) >= 9 &&
-				parseInt(payload.secondLanguageWriting) >= 9)
-			{
-				var languageQuestion = questions['secondLanguageTest'];
+			var languageQuestionObject = questions.secondLanguageTest;
 
+			if (parseInt(payload.secondLanguageWriting) >= 9)
+			{
 				switch (parseInt(payload.secondLanguageTest))
 				{
-					case answerIndex(languageQuestion, payload, 'CELPIP'):
-					case answerIndex(languageQuestion, payload, 'IELTS'):
-						questionText.push("You are a Canadian already, eh?");
-						questionText.push("Amazing score!");
-						questionText.push("Wow! You must be proud!");
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
 						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
 						break;
 
-					case answerIndex(languageQuestion, payload, 'TEF'):
-						questionText.push("Vous êtes déjà un Canadien, n'est pas?");
-						questionText.push("Un score étonnant!");
-						questionText.push("Hou la la! Vous devez être fier de vous!");
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
 						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
 						break;
 				}
 			}
 
 			questionText.push("Ok, let's talk about your work experience. In the last 10 years, how many years of skilled work experience do you have?");
-			
-			return questionText
+
+			return questionText;
 		},
 		options: workExperienceLastTenYearsOptions,
 		processReply: function (payload, reply) { payload.workExperienceLastTenYears = answerIndex(this, payload, reply); },
@@ -639,21 +681,84 @@ var questions = {
 	},
 	spouseFirstLanguageListening: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening, false); },
+		question: function (payload) { 
+			var questionText = languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening, false);
+
+			if (parseInt(payload.spouseFirstLanguageSpeaking) >= 9)
+			{
+				var languageQuestionObject = questions.spouseFirstLanguageTest;
+
+				switch (parseInt(payload.spouseFirstLanguageTest))
+				{
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
+						questionText.unshift("Your spouse or common-law partner is a Canadian already, eh?");
+						break;
+
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
+						questionText.unshift("Votre époux ou conjoint êtes déjà un(e) Canadien(ne), n'est pas?");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.listening, false); },
 		processReply: function (payload, reply) { payload.spouseFirstLanguageListening = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageReading },
 	},
 	spouseFirstLanguageReading: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading, false); },
+		question: function (payload) { 
+			var questionText = languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading, false);
+
+			if (parseInt(payload.spouseFirstLanguageListening) >= 9)
+			{
+				var languageQuestionObject = questions.spouseFirstLanguageTest;
+
+				switch (parseInt(payload.spouseFirstLanguageTest))
+				{
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
+						questionText.unshift("Amazing score!");
+						break;
+
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
+						questionText.unshift("Un score étonnant!");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.reading, false); },
 		processReply: function (payload, reply) { payload.spouseFirstLanguageReading = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return questions.spouseFirstLanguageWriting },
 	},
 	spouseFirstLanguageWriting: {
 		id: null,
-		question: function (payload) { return languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
+		question: function (payload) { 
+			var questionText = languageQuestion(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false);
+
+			if (parseInt(payload.spouseFirstLanguageReading) >= 9)
+			{
+				var languageQuestionObject = questions.spouseFirstLanguageTest;
+
+				switch (parseInt(payload.spouseFirstLanguageTest))
+				{
+					case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+					case answerIndex(languageQuestionObject, payload, 'IELTS'):
+						questionText.unshift("Wow! Your spouse or common-law partner must be proud!");
+						break;
+
+					case answerIndex(languageQuestionObject, payload, 'TEF'):
+						questionText.unshift("Hou la la! Vous devez être fier de vous!");
+						break;
+				}
+			}
+
+			return questionText;
+		},
 		options: function (payload) { return languageOptions(payload.spouseFirstLanguageTest, questions.spouseFirstLanguageTest, payload, languageAbility.writing, false); },
 		processReply: function (payload, reply) { payload.spouseFirstLanguageWriting = answerIndex(this, payload, reply) + 3; },
 		nextQuestion: function (payload) { return (payload.spouseFirstLanguageTest == 0 ? questions.spouseWorkExperienceInCanada : questions.spouseSecondLanguageTest) },
@@ -663,36 +768,24 @@ var questions = {
 		question: function (payload) {
 			var questionText = [];
 
-			if (parseInt(payload.spouseFirstLanguageSpeaking) >= 9 &&
-				parseInt(payload.spouseFirstLanguageListening) >= 9 &&
-				parseInt(payload.spouseFirstLanguageReading) >= 9 &&
-				parseInt(payload.spouseFirstLanguageWriting) >= 9)
+			var languageQuestionObject = questions.spouseFirstLanguageTest;
+
+			switch (parseInt(payload.spouseFirstLanguageTest))
 			{
-				var languageQuestion = questions['spouseFirstLanguageTest'];
-				
-				switch (parseInt(payload.spouseFirstLanguageTest))
-				{
-					case answerIndex(languageQuestion, payload, 'CELPIP'):
-					case answerIndex(languageQuestion, payload, 'IELTS'):
-						questionText.push("Your spouse or common-law partner is a Canadian already, eh?");
-						questionText.push("Amazing score!");
-						questionText.push("Wow! Your spouse or common-law partner must be proud!");
+				case answerIndex(languageQuestionObject, payload, 'CELPIP'):
+				case answerIndex(languageQuestionObject, payload, 'IELTS'):
+					if (parseInt(payload.spouseFirstLanguageWriting) >= 9)
 						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
-						questionText.push("{QUOTE}Did your spouse or common-law partner take a second language test?");
-						break;
 
-					case answerIndex(languageQuestion, payload, 'TEF'):
-						questionText.push("Votre époux ou conjoint êtes déjà un(e) Canadien(ne), n'est pas?");
-						questionText.push("Un score étonnant!");
-						questionText.push("Hou la la! Vous devez être fier de vous!");
+					questionText.push("{QUOTE}Did your spouse or common-law partner take a second language test?");
+					break;
+
+				case answerIndex(languageQuestionObject, payload, 'TEF'):
+					if (parseInt(payload.spouseFirstLanguageWriting) >= 9)
 						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
-						questionText.push("{QUOTE_FRENCH}Est-ce que votre époux ou conjoint de fait a passé un test de la langue seconde?");
-						break;
 
-					default:
-						questionText.push("{QUOTE}Did your spouse or common-law partner take a second language test?");
-						break;
-				}
+					questionText.push("{QUOTE_FRENCH}Est-ce que votre époux ou conjoint de fait a passé un test de la langue seconde?");
+					break;
 			}
 
 			return questionText;
@@ -736,39 +829,7 @@ var questions = {
 	},
 	spouseWorkExperienceLastTenYears: {
 		id: null,
-		question: function (payload) { 
-			var questionText = [];
-
-			if (parseInt(payload.spouseSecondLanguageSpeaking) >= 9 &&
-				parseInt(payload.spouseSecondLanguageListening) >= 9 &&
-				parseInt(payload.spouseSecondLanguageReading) >= 9 &&
-				parseInt(payload.spouseSecondLanguageWriting) >= 9)
-			{
-				var languageQuestion = questions['spouseSecondLanguageTest'];
-
-				switch (parseInt(payload.spouseSecondLanguageTest))
-				{
-					case answerIndex(languageQuestion, payload, 'CELPIP'):
-					case answerIndex(languageQuestion, payload, 'IELTS'):
-						questionText.push("Your spouse or common-law partner is a Canadian already, eh?");
-						questionText.push("Amazing score!");
-						questionText.push("Wow! Your spouse or common-law partner must be proud!");
-						questionText.push("Did you know that even some native speakers can't score that high? Congratulations!");
-						break;
-
-					case answerIndex(languageQuestion, payload, 'TEF'):
-						questionText.push("Votre époux ou conjoint êtes déjà un(e) Canadien(ne), n'est pas?");
-						questionText.push("Un score étonnant!");
-						questionText.push("Hou la la! Vous devez être fier de vous!");
-						questionText.push("Saviez-vous que même certains natives ne peuvent pas marquer aussi haut? Félicitations à vous!");
-						break;
-				}
-			}
-
-			questionText.push("Ok, let's talk about your your spouse or common-law partner work experience. In the last 10 years, how many years of skilled work experience does your spouse or common-law partner have?");
-
-			return questionText;
-		},
+		question: function (payload) { return "Ok, let's talk about your your spouse or common-law partner work experience. In the last 10 years, how many years of skilled work experience does your spouse or common-law partner have?"; },
 		options: workExperienceLastTenYearsOptions,
 		processReply: function (payload, reply) { payload.spouseWorkExperienceLastTenYears = answerIndex(this, payload, reply); },
 		nextQuestion: function (payload) { return questions.spouseWorkExperienceInCanada },

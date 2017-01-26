@@ -127,16 +127,20 @@ function analyse(parameters, scores, title) {
             analysis += firstOfficialLanguage(util.cloneObject(parameters));
         }
 
+        if (parameters.educationInCanada === undefined || parameters.educationInCanada < 2)
+        {
+            analysis += "	<thead>";
+            analysis += "		<tr>";
+            analysis += "			<th colspan='7'>Additional points</th>";
+            analysis += "		</tr>";
+            analysis += "	</thead>";
 
-        analysis += "	<thead>";
-        analysis += "		<tr>";
-        analysis += "			<th colspan='7'>Additional points</th>";
-        analysis += "		</tr>";
-        analysis += "	</thead>";
+            if (parameters.educationInCanada === undefined || parameters.educationInCanada == 0)
+                analysis += studyInCanadaOneTwoYearDegree(util.cloneObject(parameters));
 
-        analysis += studyInCanadaOneTwoYearDegree(util.cloneObject(parameters));
-
-        analysis += studyInCanadaThreeOrMoreYearsDegree(util.cloneObject(parameters));
+            if (parameters.educationInCanada === undefined || parameters.educationInCanada == 1)
+                analysis += studyInCanadaThreeOrMoreYearsDegree(util.cloneObject(parameters));
+        }
 
         if (parameters.firstLanguage.speaking < 7 ||
             parameters.firstLanguage.listening < 7 ||
@@ -554,10 +558,11 @@ function studyInCanadaOneTwoYearDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Study in Canada One-year or two-year program</th>";
 
+    parameters.educationInCanada = 1;
+
     for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
-        parameters.spouseWorkInCanada += i;
 
         calculator.calculate(parameters);
 
@@ -573,10 +578,11 @@ function studyInCanadaThreeOrMoreYearsDegree(parameters) {
     simulation += "		<tr>";
     simulation += "			<td>Study in Canada Three or more years program</th>";
 
+    parameters.educationInCanada = 2;
+
     for (i = 0; i <= planSize; i++)
     {
         parameters.age = currentParameters.age + i;
-        parameters.spouseWorkInCanada += i;
 
         calculator.calculate(parameters);
 
