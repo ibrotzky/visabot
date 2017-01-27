@@ -1,0 +1,150 @@
+<manifest alg="2" build="2017.0.1.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster" exportTarget="other" domain="nid-pi.com.br/clients/CB" resolutions="1x" timestamp="1485542312318">
+  <folder name="css">
+    <file name="site_global.css" crc="443350757"/>
+    <file name="index.css" crc="3811354123" ref="index"/>
+  </folder>
+  <folder name="fonts">
+    <file name="yummo w03 regular.woff" crc="189881019"/>
+    <file name="yummo w03 regular.eot" crc="4109347845"/>
+    <file name="yummo w03 regular.svg" crc="489839725"/>
+    <file name="yummo w03 bold.woff" crc="24422548"/>
+    <file name="yummo w03 bold.eot" crc="120763609"/>
+    <file name="yummo w03 bold.svg" crc="106264437"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="phone>index:index"/>
+    <file name="museutils.js" crc="4148063285" ref="phone>index:index"/>
+    <file name="whatinput.js" crc="86476730" ref="phone>index:index"/>
+    <file name="museconfig.js" crc="172512987" ref="phone>index:index"/>
+    <file name="jquery.watch.js" crc="437028206" ref="phone>index:index"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="4001026563" ref="phone>index:index"/>
+    <file name="require.js" crc="4159430777" ref="phone>index:index"/>
+    <file name="webpro.js" crc="3986320349" ref="index"/>
+    <file name="form_check.php" crc="303648844" ref="index"/>
+    <file name="form_throttle.php" crc="236764551" ref="index"/>
+    <file name="form_process.php" crc="4272079531" ref="index"/>
+    <file name="form-u604.php" crc="3841321002" ref="index"/>
+    <file name="jquery.scrolleffects.js" crc="3801019579" ref="index"/>
+  </folder>
+  <folder name="images">
+    <file name="pasted-svg-274.svg" crc="3830165347" seo="true" ref="phone>index"/>
+    <file name="pasted svg 274_poster_.png" crc="3799793241" ref="phone>index"/>
+    <file name="header.jpg" crc="81947584" ref="phone>index:index"/>
+    <file name="pasted-svg-568892x877.svg" crc="4103028495" seo="true" ref="phone>index"/>
+    <file name="pasted svg 568892x877_poster_.png" crc="4061546573" ref="phone>index"/>
+    <file name="pasted-svg-400x80.svg" crc="4042739817" seo="true" ref="phone>index"/>
+    <file name="pasted svg 400x80_poster_.png" crc="206575964" ref="phone>index"/>
+    <file name="pasted-svg-645377x695.svg" crc="8118250" seo="true" ref="phone>index"/>
+    <file name="pasted svg 645377x695_poster_.png" crc="69272970" ref="phone>index"/>
+    <file name="pasted-svg-285188x762.svg" crc="4026108176" seo="true" ref="phone>index"/>
+    <file name="pasted svg 285188x762_poster_.png" crc="4262182509" ref="phone>index"/>
+    <file name="pasted-svg-623692x1758.svg" crc="409333029" seo="true" ref="phone>index"/>
+    <file name="pasted svg 623692x1758_poster_.png" crc="488407585" ref="phone>index"/>
+    <file name="pasted-svg-649992x208.svg" crc="131236493" seo="true" ref="phone>index"/>
+    <file name="pasted svg 649992x208_poster_.png" crc="3823182913" ref="phone>index"/>
+    <file name="iphone-6-designer-desk.jpg" crc="3948938451" ref="phone>index:index"/>
+    <file name="pasted-svg-198217x246.svg" crc="430277082" seo="true" ref="phone>index"/>
+    <file name="pasted svg 198217x246_poster_.png" crc="33026893" ref="phone>index"/>
+    <file name="pasted-svg-191485x361.svg" crc="325137711" seo="true" ref="phone>index"/>
+    <file name="pasted svg 191485x361_poster_.png" crc="23168700" ref="phone>index"/>
+    <file name="bot.svg" crc="178479145" ref="phone>index"/>
+    <file name="bot_poster_u1415.png" crc="300170954" ref="phone>index"/>
+    <file name="pasted-svg-593779x771.svg" crc="536734827" seo="true" ref="phone>index"/>
+    <file name="pasted svg 593779x771_poster_.png" crc="350250646" ref="phone>index"/>
+    <file name="pasted-svg-651623x1253.svg" crc="4270729754" seo="true" ref="phone>index"/>
+    <file name="pasted svg 651623x1253_poster_.png" crc="300321932" ref="phone>index"/>
+    <file name="pasted-svg-285188x792.svg" crc="4219898907" seo="true" ref="phone>index"/>
+    <file name="pasted svg 285188x792_poster_.png" crc="3777784221" ref="phone>index"/>
+    <file name="pasted-svg-603918x808.svg" crc="439749413" seo="true" ref="phone>index"/>
+    <file name="pasted svg 603918x808_poster_.png" crc="431468283" ref="phone>index"/>
+    <file name="pasted-svg-285188x7922.svg" crc="42134750" seo="true" ref="phone>index"/>
+    <file name="pasted svg 285188x792_poster_2.png" crc="4027092778" ref="phone>index"/>
+    <file name="form.jpg" crc="4062710371" ref="phone>index:index"/>
+    <file name="pasted-svg-649086x698.svg" crc="75124320" seo="true" ref="phone>index"/>
+    <file name="pasted svg 649086x698_poster_.png" crc="470047406" ref="phone>index"/>
+    <file name="pasted-svg-64732x329.svg" crc="491212859" seo="true" ref="phone>index"/>
+    <file name="pasted svg 64732x329_poster_.png" crc="4046377775" ref="phone>index"/>
+    <file name="pasted-svg-588228x1108.svg" crc="123562034" seo="true" ref="phone>index"/>
+    <file name="pasted svg 588228x1108_poster_.png" crc="201637191" ref="phone>index"/>
+    <file name="asset5.jpg" crc="503478035" seo="true" ref="phone>index"/>
+    <file name="pasted-svg-511536x1225.svg" crc="3970985979" seo="true" ref="phone>index"/>
+    <file name="pasted svg 511536x1225_poster_.png" crc="4198096374" ref="phone>index"/>
+    <file name="pasted-svg-582134x506.svg" crc="519204863" seo="true" ref="index"/>
+    <file name="pasted svg 582134x506_poster_.png" crc="3852356723" ref="index"/>
+    <file name="pasted-svg-93774x17.svg" crc="4131283548" seo="true" ref="index"/>
+    <file name="pasted svg 93774x17_poster_.png" crc="3954673673" ref="index"/>
+    <file name="pasted-svg-83085x17.svg" crc="4219401336" seo="true" ref="index"/>
+    <file name="pasted svg 83085x17_poster_.png" crc="3912604506" ref="index"/>
+    <file name="pasted-svg-85502x17.svg" crc="3876002818" seo="true" ref="index"/>
+    <file name="pasted svg 85502x17_poster_.png" crc="133210437" ref="index"/>
+    <file name="pasted-svg-115646x17.svg" crc="3850520284" seo="true" ref="index"/>
+    <file name="pasted svg 115646x17_poster_.png" crc="4157088643" ref="index"/>
+    <file name="pasted-svg-56959x17.svg" crc="3872810632" seo="true" ref="index"/>
+    <file name="pasted svg 56959x17_poster_.png" crc="173073059" ref="index"/>
+    <file name="pasted-svg-164.svg" crc="3893605333" seo="true" ref="index"/>
+    <file name="pasted svg 164_poster_.png" crc="131986187" ref="index"/>
+    <file name="pasted-svg-29567x17.svg" crc="3794270600" seo="true" ref="index"/>
+    <file name="pasted svg 29567x17_poster_.png" crc="4050586503" ref="index"/>
+    <file name="pasted-svg-27.svg" crc="3759248325" seo="true" ref="index"/>
+    <file name="pasted svg 27_poster_.png" crc="60434519" ref="index"/>
+    <file name="pasted-svg-341513x43.svg" crc="97154974" seo="true" ref="index"/>
+    <file name="pasted svg 341513x43_poster_.png" crc="110658507" ref="index"/>
+    <file name="pasted-svg-46441x308.svg" crc="4214087941" seo="true" ref="index"/>
+    <file name="pasted svg 46441x308_poster_.png" crc="4190927508" ref="index"/>
+    <file name="pasted-svg-272.svg" crc="3759248325" seo="true" ref="index"/>
+    <file name="pasted svg 27_poster_2.png" crc="60434519" ref="index"/>
+    <file name="pasted-svg-293573x52.svg" crc="4051847168" seo="true" ref="index"/>
+    <file name="pasted svg 293573x52_poster_.png" crc="3819786443" ref="index"/>
+    <file name="pasted-svg-423012x135.svg" crc="410364658" seo="true" ref="index"/>
+    <file name="pasted svg 423012x135_poster_.png" crc="4033606867" ref="index"/>
+    <file name="pasted-svg-45325x441.svg" crc="4032934" seo="true" ref="index"/>
+    <file name="pasted svg 45325x441_poster_.png" crc="71931588" ref="index"/>
+    <file name="pasted-svg-221336x268.svg" crc="132458369" seo="true" ref="index"/>
+    <file name="pasted svg 221336x268_poster_.png" crc="89212850" ref="index"/>
+    <file name="pasted-svg-245317x745.svg" crc="4112178063" seo="true" ref="index"/>
+    <file name="pasted svg 245317x745_poster_.png" crc="4166909001" ref="index"/>
+    <file name="pasted-svg-713446x108.svg" crc="4049419308" seo="true" ref="index"/>
+    <file name="pasted svg 713446x108_poster_.png" crc="4252447976" ref="index"/>
+    <file name="pasted-svg-177693x29.svg" crc="209111811" seo="true" ref="index"/>
+    <file name="pasted svg 177693x29_poster_.png" crc="371526293" ref="index"/>
+    <file name="pasted-svg-241509x686.svg" crc="289512114" seo="true" ref="index"/>
+    <file name="pasted svg 241509x686_poster_.png" crc="472798189" ref="index"/>
+    <file name="pasted-svg-792587x109.svg" crc="3809756741" seo="true" ref="index"/>
+    <file name="pasted svg 792587x109_poster_.png" crc="19473261" ref="index"/>
+    <file name="pasted-svg-454221x441.svg" crc="4248691128" seo="true" ref="index"/>
+    <file name="pasted svg 454221x441_poster_.png" crc="491763213" ref="index"/>
+    <file name="pasted-svg-424672x109.svg" crc="307885155" seo="true" ref="index"/>
+    <file name="pasted svg 424672x109_poster_.png" crc="137253905" ref="index"/>
+    <file name="pasted-svg-65165x99.svg" crc="448311441" seo="true" ref="index"/>
+    <file name="pasted svg 65165x99_poster_.png" crc="202843033" ref="index"/>
+    <file name="pasted-svg-958401x350.svg" crc="3989958354" seo="true" ref="index"/>
+    <file name="pasted svg 958401x350_poster_.png" crc="4066324140" ref="index"/>
+    <file name="pasted-svg-152.svg" crc="525042997" seo="true" ref="index"/>
+    <file name="pasted svg 152_poster_.png" crc="4080829201" ref="index"/>
+    <file name="pasted-svg-307595x252.svg" crc="3930409387" seo="true" ref="index"/>
+    <file name="pasted svg 307595x252_poster_.png" crc="4294853136" ref="index"/>
+    <file name="asset1.jpg" crc="4194002052" seo="true" ref="index"/>
+    <file name="pasted-svg-1642.svg" crc="412150186" seo="true" ref="index"/>
+    <file name="pasted svg 164_poster_2.png" crc="60193371" ref="index"/>
+    <file name="pasted-svg-280531x13.svg" crc="506285113" seo="true" ref="index"/>
+    <file name="pasted svg 280531x13_poster_.png" crc="3224915" ref="index"/>
+    <file name="pasted-svg-247.svg" crc="206042535" seo="true" ref="index"/>
+    <file name="pasted svg 247_poster_.png" crc="4278091379" ref="index"/>
+    <file name="pasted-svg-427511x174.svg" crc="4227590547" seo="true" ref="index"/>
+    <file name="pasted svg 427511x174_poster_.png" crc="4054009396" ref="index"/>
+    <file name="pasted-svg-261x61.svg" crc="488996914" seo="true" ref="index"/>
+    <file name="pasted svg 261x61_poster_.png" crc="379794533" ref="index"/>
+    <file name="pasted-svg-260x60.svg" crc="4174492177" seo="true" ref="index"/>
+    <file name="pasted svg 260x60_poster_.png" crc="4236779717" ref="index"/>
+    <file name="pasted-svg-166.svg" crc="77495202" seo="true" ref="index"/>
+    <file name="pasted svg 166_poster_.png" crc="122349217" ref="index"/>
+    <file name="favicon.ico" crc="27076867" ref="index"/>
+  </folder>
+  <folder name="phone">
+    <folder name="css">
+      <file name="index.css" crc="4029811000" ref="phone>index"/>
+    </folder>
+    <file name="index.html" crc="4054581831" seo="true" mt="1485538506680" redirect="true"/>
+  </folder>
+  <file name="index.html" crc="162300582" seo="true" mt="1485542296321" redirect="true"/>
+</manifest>
