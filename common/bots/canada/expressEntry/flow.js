@@ -187,7 +187,24 @@ function languageOptions(test, testQuestion, payload, ability, principalApplican
 
 		case answerIndex(testQuestion, payload, 'IELTS'):
 			if (principalApplicant)
-				return ["0 - 3.5", "4 - 4.5", "5", "5.5", "6", "6.5", "7", "7.5 - 9"];
+				switch (ability)
+				{
+					case languageAbility.speaking:
+						return ["0 - 3.5", "4 - 4.5", "5", "5.5", "6", "6.5", "7", "7.5 - 9"];
+						break;
+
+					case languageAbility.listening:
+						return ["0 - 4", "4.5", "5", "5.5", "6 - 7", "7.5", "8", "8.5 - 9"];
+						break;
+
+					case languageAbility.reading:
+						return ["0 - 3", "3.5", "4 - 4.5", "5 - 5.5", "6", "6.5", "7 - 7.5", "8 - 9"];
+						break;
+
+					case languageAbility.writing:
+						return ["0 - 3.5", "4 - 4.5", "5", "5.5", "6", "6.5", "7", "7.5 - 9"];
+						break;
+				}
 			else
 				switch (ability)
 				{
@@ -201,7 +218,7 @@ function languageOptions(test, testQuestion, payload, ability, principalApplican
 						break;
 
 					case languageAbility.reading:
-						return ["0 - 3.5", "4 - 4.5", "5", "5.5", "6", "6.5", "7", "7.5 - 9"];
+						return ["0 - 3", "3.5", "4 - 4.5", "5 - 5.5", "6", "6.5", "7 - 7.5", "8 - 9"];
 						break;
 				}
 			break;
